@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Star51 Setup Wizard - Installation Guide / Guida Installazione</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+    <style>
+      /* Minimal custom styles */
+      .split-row {
+        display: flex;
+        gap: 0;
+      }
+      .split-row > div {
+        flex: 1;
+        padding: 1.5rem;
+      }
+      .split-row .col-en {
+        border-right: 2px solid #dee2e6;
+      }
+
+      /* Header split: no border, compact padding (match ~41px height) */
+      .card-header .split-row {
+        padding: 0.5rem 0;
+      }
+      .card-header .split-row > div {
+        padding: 0 1rem;
+      }
+      .card-header .split-row .col-en {
+        border-right: none;
+      }
+
+      @media (max-width: 768px) {
+        .split-row {
+          flex-direction: column;
+        }
+        .split-row .col-en {
+          border-right: none;
+          border-bottom: 2px solid #dee2e6;
+        }
+        .card-header .split-row .col-en {
+          border-bottom: none;
+        }
+      }
+
+      @media print {
+        .no-print {
+          display: none !important;
+        }
+        .page-break {
+          page-break-before: always;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-light">
+    <!-- Header -->
+    <header class="bg-secondary text-white py-4 mb-4">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h1 class="h3 mb-1"><i class="bi bi-rocket-takeoff me-2"></i>Star51 Setup Wizard</h1>
+            <small class="opacity-75">Installation Guide / Guida Installazione - Version 2.5.0</small>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container pb-5">
+      <!-- Table of Contents -->
+      <div class="card mb-4 no-print">
+        <div class="card-header bg-white p-0">
+          <div class="split-row">
+            <div class="col-en">
+              <h5 class="mb-0"><i class="bi bi-list-ul me-2"></i>Table of Contents</h5>
+            </div>
+            <div class="col-it">
+              <h5 class="mb-0">Indice</h5>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <span class="badge bg-success mb-2">English</span>
+              <a href="#requirements" class="d-block text-decoration-none text-dark mb-2">0. Requirements</a>
+              <a href="#step1" class="d-block text-decoration-none text-dark mb-2">1. Download</a>
+              <a href="#step2" class="d-block text-decoration-none text-dark mb-2">2. Create Database</a>
+              <a href="#step3" class="d-block text-decoration-none text-dark mb-2">3. Run Wizard</a>
+              <a href="#step4" class="d-block text-decoration-none text-dark mb-2">4. Complete</a>
+              <a href="#step5" class="d-block text-decoration-none text-dark mb-2">5. Login Nova</a>
+              <a href="#troubleshooting" class="d-block text-decoration-none text-dark mb-2"><i class="bi bi-wrench me-1"></i>Troubleshooting</a>
+              <a href="#database" class="d-block text-decoration-none text-dark mb-2"><i class="bi bi-database me-1"></i>Database Tables</a>
+            </div>
+            <div class="col-md-6">
+              <span class="badge bg-primary mb-2">Italiano</span>
+              <a href="#requirements" class="d-block text-decoration-none text-dark mb-2">0. Requisiti</a>
+              <a href="#step1" class="d-block text-decoration-none text-dark mb-2">1. Scarica</a>
+              <a href="#step2" class="d-block text-decoration-none text-dark mb-2">2. Crea Database</a>
+              <a href="#step3" class="d-block text-decoration-none text-dark mb-2">3. Esegui Wizard</a>
+              <a href="#step4" class="d-block text-decoration-none text-dark mb-2">4. Completato</a>
+              <a href="#step5" class="d-block text-decoration-none text-dark mb-2">5. Login Nova</a>
+              <a href="#troubleshooting" class="d-block text-decoration-none text-dark mb-2"><i class="bi bi-wrench me-1"></i>Risoluzione Problemi</a>
+              <a href="#database" class="d-block text-decoration-none text-dark mb-2"><i class="bi bi-database me-1"></i>Tabelle Database</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Requirements -->
+      <section id="requirements" class="card mb-4">
+        <div class="card-header bg-white p-0">
+          <div class="split-row">
+            <div class="col-en">
+              <h5 class="mb-0"><i class="bi bi-gear me-2"></i>0. System Requirements</h5>
+            </div>
+            <div class="col-it">
+              <h5 class="mb-0">Requisiti di Sistema</h5>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="split-row">
+            <div class="col-en">
+              <span class="badge bg-success mb-3">English</span>
+              <p>Before starting, verify your server has:</p>
+              <ul>
+                <li><strong>PHP 8.0+</strong></li>
+                <li><strong>MySQL 8.0+</strong></li>
+                <li><strong>Web Server</strong>: Apache or Nginx with mod_rewrite</li>
+                <li><strong>Disk Space</strong>: 50 MB minimum</li>
+                <li><strong>PHP Memory</strong>: 128 MB minimum</li>
+              </ul>
+              <div class="alert alert-info">
+                <strong><i class="bi bi-info-circle me-1"></i>Required PHP Extensions:</strong><br />
+                mysqli (required), mbstring, json, fileinfo, gd (recommended)
+              </div>
+            </div>
+            <div class="col-it">
+              <span class="badge bg-primary mb-3">Italiano</span>
+              <p>Prima di iniziare, verifica che il tuo server abbia:</p>
+              <ul>
+                <li><strong>PHP 8.0+</strong></li>
+                <li><strong>MySQL 8.0+</strong></li>
+                <li><strong>Web Server</strong>: Apache o Nginx con mod_rewrite</li>
+                <li><strong>Spazio disco</strong>: 50 MB minimo</li>
+                <li><strong>Memoria PHP</strong>: 128 MB minimo</li>
+              </ul>
+              <div class="alert alert-info">
+                <strong><i class="bi bi-info-circle me-1"></i>Estensioni PHP Richieste:</strong><br />
+                mysqli (obbligatoria), mbstring, json, fileinfo, gd (consigliata)
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 1: Download -->
+      <section id="step1" class="card mb-4">
+        <div class="card-header bg-white p-0">
+          <div class="split-row">
+            <div class="col-en">
+              <h5 class="mb-0"><span class="badge bg-secondary me-2">1</span>Download Star51</h5>
+            </div>
+            <div class="col-it">
+              <h5 class="mb-0">Scarica Star51</h5>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="split-row">
+            <div class="col-en">
+              <span class="badge bg-success mb-3">English</span>
+              <ol>
+                <li>Download the <code>star51.zip</code> package</li>
+                <li>Extract to your server <strong>web root</strong></li>
+                <li>Complete package, ready to use</li>
+              </ol>
+            </div>
+            <div class="col-it">
+              <span class="badge bg-primary mb-3">Italiano</span>
+              <ol>
+                <li>Scarica il pacchetto <code>star51.zip</code></li>
+                <li>Estrai nella <strong>web root</strong> del tuo server</li>
+                <li>Pacchetto completo, pronto all'uso</li>
+              </ol>
+            </div>
+          </div>
+          <!-- Code block -->
+          <div class="bg-light border-top p-3">
+            <strong><i class="bi bi-folder me-2"></i>Package Structure / Struttura Pacchetto:</strong>
+            <pre class="bg-white border rounded p-3 mt-2 mb-0"><code>star51/
+├── nova/              ← Admin panel
+├── file_db_max/       ← Large images
+├── file_db_med/       ← Medium images
+├── file_db_min/       ← Thumbnails
+├── install/           ← Setup wizard (delete after install)
+├── index.php          ← Frontend
+└── ...</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 2: Create Database -->
+      <section id="step2" class="card mb-4">
+        <div class="card-header bg-white p-0">
+          <div class="split-row">
+            <div class="col-en">
+              <h5 class="mb-0"><span class="badge bg-secondary me-2">2</span>Create Database</h5>
+            </div>
+            <div class="col-it">
+              <h5 class="mb-0">Crea il Database</h5>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="split-row">
+            <div class="col-en">
+              <span class="badge bg-success mb-3">English</span>
+              <div class="alert alert-warning">
+                <strong><i class="bi bi-exclamation-triangle me-1"></i>IMPORTANT:</strong>
+                Database must be created <strong>before</strong> running the wizard.
+              </div>
+              <h6 class="mt-3"><i class="bi bi-pc-display me-2"></i>Localhost (MAMP/XAMPP)</h6>
+              <ol>
+                <li>Open phpMyAdmin (<code>http://localhost/phpmyadmin</code>)</li>
+                <li>Click "New" in sidebar</li>
+                <li>Database name: e.g. <code>star51_db</code></li>
+                <li>Collation: <code>utf8mb4_unicode_ci</code></li>
+                <li>Click "Create"</li>
+              </ol>
+              <h6 class="mt-3"><i class="bi bi-cloud me-2"></i>Shared Hosting (cPanel)</h6>
+              <ol>
+                <li>Login to cPanel</li>
+                <li>Go to "MySQL Databases" → "Create Database"</li>
+                <li>Name: will be prefixed (e.g. <code>user_star51</code>)</li>
+                <li>Write down full name, username and password</li>
+                <li>Assign all privileges to user</li>
+              </ol>
+            </div>
+            <div class="col-it">
+              <span class="badge bg-primary mb-3">Italiano</span>
+              <div class="alert alert-warning">
+                <strong><i class="bi bi-exclamation-triangle me-1"></i>IMPORTANTE:</strong>
+                Il database deve essere creato <strong>prima</strong> di eseguire il wizard.
+              </div>
+              <h6 class="mt-3"><i class="bi bi-pc-display me-2"></i>Localhost (MAMP/XAMPP)</h6>
+              <ol>
+                <li>Apri phpMyAdmin (<code>http://localhost/phpmyadmin</code>)</li>
+                <li>Clicca su "Nuovo" nella sidebar</li>
+                <li>Nome database: es. <code>star51_db</code></li>
+                <li>Collation: <code>utf8mb4_unicode_ci</code></li>
+                <li>Clicca "Crea"</li>
+              </ol>
+              <h6 class="mt-3"><i class="bi bi-cloud me-2"></i>Shared Hosting (cPanel)</h6>
+              <ol>
+                <li>Login a cPanel</li>
+                <li>Vai a "Database MySQL" → "Crea Database"</li>
+                <li>Nome: verrà prefissato (es. <code>user_star51</code>)</li>
+                <li>Annota nome completo, username e password</li>
+                <li>Assegna tutti i privilegi all'utente</li>
+              </ol>
+            </div>
+          </div>
+          <!-- Database Fields Reference -->
+          <div class="bg-light border-top p-3">
+            <strong><i class="bi bi-table me-2"></i>Fields Reference / Riferimento Campi:</strong>
+            <table class="table table-bordered table-sm bg-white mt-2 mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Field / Campo</th>
+                  <th>Localhost</th>
+                  <th>Shared Hosting</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Database Host</td>
+                  <td><code>localhost</code></td>
+                  <td><code>mysql.hosting.com</code></td>
+                </tr>
+                <tr>
+                  <td>Database Name</td>
+                  <td><code>star51_db</code></td>
+                  <td><code>user_star51</code></td>
+                </tr>
+                <tr>
+                  <td>Username</td>
+                  <td><code>root</code></td>
+                  <td><code>user_dbuser</code></td>
+                </tr>
+                <tr>
+                  <td>Password</td>
+                  <td><code>root</code> or empty</td>
+                  <td>From cPanel</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 3: Run Wizard -->
+      <section id="step3" class="card mb-4 page-break">
+        <div class="card-header bg-white p-0">
+          <div class="split-row">
+            <div class="col-en">
+              <h5 class="mb-0"><span class="badge bg-secondary me-2">3</span>Run Setup Wizard</h5>
+            </div>
+            <div class="col-it">
+              <h5 class="mb-0">Esegui il Setup Wizard</h5>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="split-row">
+            <div class="col-en">
+              <span class="badge bg-success mb-3">English</span>
+              <ol>
+                <li>Open your browser</li>
+                <li>Navigate to: <code>http://your-domain.com/install/</code></li>
+                <li>Fill in the installation form</li>
+              </ol>
+              <h6 class="mt-3"><i class="bi bi-database me-2"></i>Database Section</h6>
+              <p>Enter the database credentials from Step 2. Use "Test Connection" button to verify.</p>
+              <h6 class="mt-3"><i class="bi bi-person-badge me-2"></i>Super Admin Section</h6>
+              <ul>
+                <li><strong>First/Last Name:</strong> Your details</li>
+                <li><strong>Email:</strong> Used for password reset</li>
+                <li><strong>Username:</strong> For login</li>
+                <li><strong>Password:</strong> Minimum 8 characters</li>
+              </ul>
+              <h6 class="mt-3"><i class="bi bi-envelope me-2"></i>Gmail SMTP (Optional)</h6>
+              <p><strong>With SMTP:</strong> Password reset via email enabled</p>
+              <p><strong>Without SMTP:</strong> Temporary password generated, change after first login</p>
+            </div>
+            <div class="col-it">
+              <span class="badge bg-primary mb-3">Italiano</span>
+              <ol>
+                <li>Apri il browser</li>
+                <li>Vai a: <code>http://tuo-dominio.com/install/</code></li>
+                <li>Compila il form di installazione</li>
+              </ol>
+              <h6 class="mt-3"><i class="bi bi-database me-2"></i>Sezione Database</h6>
+              <p>Inserisci i dati del database creato nello Step 2. Usa il pulsante "Testa Connessione" per verificare.</p>
+              <h6 class="mt-3"><i class="bi bi-person-badge me-2"></i>Sezione Super Admin</h6>
+              <ul>
+                <li><strong>Nome/Cognome:</strong> I tuoi dati</li>
+                <li><strong>Email:</strong> Per il password reset</li>
+                <li><strong>Username:</strong> Per il login</li>
+                <li><strong>Password:</strong> Minimo 8 caratteri</li>
+              </ul>
+              <h6 class="mt-3"><i class="bi bi-envelope me-2"></i>Gmail SMTP (Facoltativo)</h6>
+              <p><strong>Con SMTP:</strong> Password reset via email attivo</p>
+              <p><strong>Senza SMTP:</strong> Password temporanea generata, da cambiare al primo login</p>
+            </div>
+          </div>
+          <!-- Gmail App Password -->
+          <div class="bg-light border-top p-3">
+            <strong><i class="bi bi-shield-lock me-2"></i>Gmail App Password Setup:</strong>
+            <div class="row mt-2">
+              <div class="col-md-6">
+                <span class="badge bg-success mb-2">English</span>
+                <ol class="small mb-0">
+                  <li>Go to <a href="https://myaccount.google.com/apppasswords" target="_blank">Google App Passwords</a></li>
+                  <li>Create a new App Password for "Mail"</li>
+                  <li>Copy the 16-character code</li>
+                  <li>Enter it in the "Gmail App Password" field</li>
+                </ol>
+                <div class="alert alert-danger py-2 mt-2 mb-0 small">
+                  <strong>DO NOT use your regular Gmail password!</strong>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <span class="badge bg-primary mb-2">Italiano</span>
+                <ol class="small mb-0">
+                  <li>Vai su <a href="https://myaccount.google.com/apppasswords" target="_blank">Google App Passwords</a></li>
+                  <li>Crea una nuova App Password per "Mail"</li>
+                  <li>Copia il codice a 16 caratteri</li>
+                  <li>Inseriscilo nel campo "Gmail App Password"</li>
+                </ol>
+                <div class="alert alert-danger py-2 mt-2 mb-0 small">
+                  <strong>NON usare la tua password Gmail normale!</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 4: Complete -->
+      <section id="step4" class="card mb-4">
+        <div class="card-header bg-white p-0">
+          <div class="split-row">
+            <div class="col-en">
+              <h5 class="mb-0"><span class="badge bg-secondary me-2">4</span>Installation Complete</h5>
+            </div>
+            <div class="col-it">
+              <h5 class="mb-0">Installazione Completata</h5>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="split-row">
+            <div class="col-en">
+              <span class="badge bg-success mb-3">English</span>
+              <div class="alert alert-success">
+                <strong><i class="bi bi-check-circle me-1"></i>Success!</strong>
+                If everything goes well, you'll see the success screen with login credentials.
+              </div>
+              <h6><i class="bi bi-file-earmark-code me-2"></i>Generated Files:</h6>
+              <ul>
+                <li><code>/nova/conf/nova_config_values.php</code></li>
+                <li>Database with 6 tables (<code>ns_*</code>)</li>
+                <li>Administrator account (level 0)</li>
+                <li><code>/.installed</code> - Lock file</li>
+              </ul>
+              <div class="alert alert-danger">
+                <strong><i class="bi bi-shield-lock me-1"></i>IMPORTANT - Security:</strong>
+                <ol class="mb-0 mt-2">
+                  <li>Write down your credentials</li>
+                  <li>
+                    Delete <code>/install/</code> folder for security:
+                    <ul class="mt-1 mb-0">
+                      <li>Via <strong>Nova Admin → Settings → Box 7</strong> (Installation Cleanup)</li>
+                      <li>Or via FTP or terminal: <code>rm -rf install/</code></li>
+                    </ul>
+                  </li>
+                </ol>
+              </div>
+            </div>
+            <div class="col-it">
+              <span class="badge bg-primary mb-3">Italiano</span>
+              <div class="alert alert-success">
+                <strong><i class="bi bi-check-circle me-1"></i>Successo!</strong>
+                Se tutto va bene, vedrai la schermata di successo con le credenziali di login.
+              </div>
+              <h6><i class="bi bi-file-earmark-code me-2"></i>File Generati:</h6>
+              <ul>
+                <li><code>/nova/conf/nova_config_values.php</code></li>
+                <li>Database con 6 tabelle (<code>ns_*</code>)</li>
+                <li>Account amministratore (level 0)</li>
+                <li><code>/.installed</code> - File lock</li>
+              </ul>
+              <div class="alert alert-danger">
+                <strong><i class="bi bi-shield-lock me-1"></i>IMPORTANTE - Sicurezza:</strong>
+                <ol class="mb-0 mt-2">
+                  <li>Annota le credenziali</li>
+                  <li>
+                    Elimina la cartella <code>/install/</code> per sicurezza:
+                    <ul class="mt-1 mb-0">
+                      <li>Via <strong>Nova Admin → Settings → Box 7</strong> (Pulizia Installazione)</li>
+                      <li>Oppure via FTP o terminale: <code>rm -rf install/</code></li>
+                    </ul>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 5: Login -->
+      <section id="step5" class="card mb-4 page-break">
+        <div class="card-header bg-white p-0">
+          <div class="split-row">
+            <div class="col-en">
+              <h5 class="mb-0"><span class="badge bg-secondary me-2">5</span>Login to Nova Admin</h5>
+            </div>
+            <div class="col-it">
+              <h5 class="mb-0">Login a Nova Admin</h5>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="split-row">
+            <div class="col-en">
+              <span class="badge bg-success mb-3">English</span>
+              <p>Login URL: <code>http://your-domain.com/nova/</code></p>
+              <h6 class="mt-3"><i class="bi bi-key me-2"></i>With SMTP Configured</h6>
+              <ol>
+                <li>Enter username and password chosen during installation</li>
+                <li>Click "Login"</li>
+                <li>Access granted!</li>
+              </ol>
+              <h6 class="mt-3"><i class="bi bi-key me-2"></i>Without SMTP</h6>
+              <ol>
+                <li>Enter username and <strong>temporary password</strong> generated by the wizard</li>
+                <li>Click "Login"</li>
+                <li>Change password after first login</li>
+              </ol>
+            </div>
+            <div class="col-it">
+              <span class="badge bg-primary mb-3">Italiano</span>
+              <p>URL Login: <code>http://tuo-dominio.com/nova/</code></p>
+              <h6 class="mt-3"><i class="bi bi-key me-2"></i>Con SMTP Configurato</h6>
+              <ol>
+                <li>Inserisci username e password scelta durante l'installazione</li>
+                <li>Clicca "Login"</li>
+                <li>Accesso effettuato!</li>
+              </ol>
+              <h6 class="mt-3"><i class="bi bi-key me-2"></i>Senza SMTP</h6>
+              <ol>
+                <li>Inserisci username e <strong>password temporanea</strong> generata dal wizard</li>
+                <li>Clicca "Login"</li>
+                <li>Cambia password dopo il primo login</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Troubleshooting -->
+      <section id="troubleshooting" class="card mb-4">
+        <div class="card-header bg-white p-0">
+          <div class="split-row">
+            <div class="col-en">
+              <h5 class="mb-0"><i class="bi bi-wrench me-2"></i>Troubleshooting</h5>
+            </div>
+            <div class="col-it">
+              <h5 class="mb-0">Risoluzione Problemi</h5>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="accordion" id="troubleshootingAccordion">
+            <!-- Problem 1 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#p1"><i class="bi bi-x-circle text-danger me-2"></i>"Cannot reach MySQL server"</button>
+              </h2>
+              <div id="p1" class="accordion-collapse collapse" data-bs-parent="#troubleshootingAccordion">
+                <div class="accordion-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <span class="badge bg-success mb-2">English</span>
+                      <ul class="small mb-0">
+                        <li>Check MySQL is running</li>
+                        <li>Check host (<code>localhost</code> or <code>127.0.0.1</code>)</li>
+                        <li>Verify port 3306 is open</li>
+                      </ul>
+                    </div>
+                    <div class="col-md-6">
+                      <span class="badge bg-primary mb-2">Italiano</span>
+                      <ul class="small mb-0">
+                        <li>Verifica che MySQL sia avviato</li>
+                        <li>Controlla host (<code>localhost</code> o <code>127.0.0.1</code>)</li>
+                        <li>Verifica porta 3306 aperta</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Problem 2 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#p2"><i class="bi bi-x-circle text-danger me-2"></i>"Access denied for user"</button>
+              </h2>
+              <div id="p2" class="accordion-collapse collapse" data-bs-parent="#troubleshootingAccordion">
+                <div class="accordion-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <span class="badge bg-success mb-2">English</span>
+                      <ul class="small mb-0">
+                        <li>Check username (case-sensitive)</li>
+                        <li>Check password (case-sensitive)</li>
+                        <li>Localhost: try <code>root/root</code> (MAMP)</li>
+                      </ul>
+                    </div>
+                    <div class="col-md-6">
+                      <span class="badge bg-primary mb-2">Italiano</span>
+                      <ul class="small mb-0">
+                        <li>Verifica username (case-sensitive)</li>
+                        <li>Verifica password (case-sensitive)</li>
+                        <li>Localhost: prova <code>root/root</code> (MAMP)</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Problem 3 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#p3"><i class="bi bi-x-circle text-danger me-2"></i>"Database not found"</button>
+              </h2>
+              <div id="p3" class="accordion-collapse collapse" data-bs-parent="#troubleshootingAccordion">
+                <div class="accordion-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <span class="badge bg-success mb-2">English</span>
+                      <ul class="small mb-0">
+                        <li>Create database BEFORE wizard</li>
+                        <li>Check exact name (case-sensitive on Linux)</li>
+                      </ul>
+                    </div>
+                    <div class="col-md-6">
+                      <span class="badge bg-primary mb-2">Italiano</span>
+                      <ul class="small mb-0">
+                        <li>Crea database PRIMA del wizard</li>
+                        <li>Verifica nome esatto (case-sensitive su Linux)</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Problem 4 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#p4"><i class="bi bi-x-circle text-danger me-2"></i>"Gmail SMTP not working"</button>
+              </h2>
+              <div id="p4" class="accordion-collapse collapse" data-bs-parent="#troubleshootingAccordion">
+                <div class="accordion-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <span class="badge bg-success mb-2">English</span>
+                      <ul class="small mb-0">
+                        <li>Enable 2-Step Verification on Google Account</li>
+                        <li>Use App Password (16 chars)</li>
+                        <li>Email must be @gmail.com</li>
+                      </ul>
+                    </div>
+                    <div class="col-md-6">
+                      <span class="badge bg-primary mb-2">Italiano</span>
+                      <ul class="small mb-0">
+                        <li>Attiva verifica in 2 passaggi su Google Account</li>
+                        <li>Usa App Password (16 caratteri)</li>
+                        <li>Email deve essere @gmail.com</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Database Tables -->
+      <section id="database" class="card mb-4">
+        <div class="card-header bg-white p-0">
+          <div class="split-row">
+            <div class="col-en">
+              <h5 class="mb-0"><i class="bi bi-database me-2"></i>Database Tables</h5>
+            </div>
+            <div class="col-it">
+              <h5 class="mb-0">Tabelle Database</h5>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered table-sm mb-0">
+            <thead class="table-light">
+              <tr>
+                <th style="width: 20%">Table</th>
+                <th style="width: 40%">Description</th>
+                <th style="width: 40%">Descrizione</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ns_admins</code></td>
+                <td>Administrator account (single)</td>
+                <td>Account amministratore (singolo)</td>
+              </tr>
+              <tr>
+                <td><code>ns_articles</code></td>
+                <td>Universal collection system</td>
+                <td>Sistema collezioni universale</td>
+              </tr>
+              <tr>
+                <td><code>ns_categories</code></td>
+                <td>Main categories</td>
+                <td>Categorie principali</td>
+              </tr>
+              <tr>
+                <td><code>ns_subcategories</code></td>
+                <td>Subcategories</td>
+                <td>Sottocategorie</td>
+              </tr>
+              <tr>
+                <td><code>ns_requests</code></td>
+                <td>Contact form</td>
+                <td>Form contatto</td>
+              </tr>
+              <tr>
+                <td><code>ns_login_security</code></td>
+                <td>Rate limiting / Brute force protection</td>
+                <td>Protezione brute force</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="text-center py-4 text-muted">
+        <hr />
+        <p class="mb-1"><strong>Star51 Setup Wizard</strong> - Version 2.5.0</p>
+        <p class="mb-0">License: GPL v3</p>
+      </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

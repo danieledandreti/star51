@@ -1,0 +1,808 @@
+{
+    "nav": {
+        "administrators": "Administrator",
+        "management": "Management",
+        "categories": "Categories",
+        "subcategories": "Subcategories",
+        "articles": "Articles",
+        "requests": "Requests",
+        "search": "Search",
+        "logout": "Logout",
+        "language": "Language",
+        "profile": "Profile",
+        "profile_menu": "Profile menu",
+        "main_nav": "Main navigation",
+        "go_to_dashboard": "Go to dashboard",
+        "home": "Home"
+    },
+    "buttons": {
+        "delete": "Delete",
+        "edit": "Edit",
+        "back_to_list": "Back to List",
+        "search": "Search",
+        "close": "Close",
+        "new_article": "New Article",
+        "login": "Login",
+        "back_to_login": "Back to Login"
+    },
+    "messages": {
+        "required_fields": "Fields marked with <span class=\"text-danger fw-bold\">*</span> are required",
+        "validation_errors": "Validation Errors",
+        "credentials_invalid": "Invalid credentials. Try again.",
+        "attempts_remaining": "Remaining attempts"
+    },
+    "labels": {
+        "message": "Message",
+        "username": "Username",
+        "password": "Password",
+        "created_at": "on",
+        "modified_at": "mod. on",
+        "not_set": "Not set",
+        "continue": "continue",
+        "deleted": "Deleted",
+        "miscellaneous": "Miscellaneous",
+        "to_reorganize": "to reorganize",
+        "all_articles": "All articles",
+        "no_date": "[No date]"
+    },
+    "pages": {
+        "dashboard_title": "Dashboard",
+        "dashboard_overview": "Administration Overview",
+        "dashboard_subtitle": "Welcome to the administration of",
+        "dashboard_intro": "In this page you find a summary of all data in the database. In the navigation menu you can find all available sections; in each section you can add, edit or delete a record with a simple click.",
+        "articles_management": "Articles Management"
+    },
+    "rate_limit": {
+        "lockout_singular": "Too many failed login attempts. Try again in 1 minute.",
+        "lockout_plural": "Too many failed login attempts. Try again in {minutes} minutes."
+    },
+    "toggle": {
+        "activated": "activated",
+        "deactivated": "deactivated",
+        "success": "Record <strong>{id}</strong> {status} successfully"
+    },
+    "head": {
+        "default_title_suffix": "Star51 Administration",
+        "default_description": "NovaStar51 Administration - Star51 administrative control panel"
+    },
+    "pagination": {
+        "page_singular": "page",
+        "page_plural": "pages",
+        "nav_label": "Page navigation",
+        "first": "First page",
+        "previous": "Previous page",
+        "next": "Next page",
+        "last": "Last page"
+    },
+    "login": {
+        "title": "NovaStar51 Admin",
+        "subtitle": "Login",
+        "forgot_password": "Forgot your password?"
+    },
+    "search": {
+        "articles_placeholder": "Search articles...",
+        "articles_hint": "Search articles by title, summary or content.",
+        "requests_placeholder": "Search requests...",
+        "requests_hint": "Search requests by name, surname, email or message."
+    },
+    "dashboard": {
+        "search_articles": "Search among articles",
+        "search_requests": "Search among requests",
+        "categories": "Category(ies)",
+        "subcategories": "Subcategory(ies)",
+        "articles": "Article(s)",
+        "requests": "Request(s)",
+        "articles_misc": "Article(s) in Miscellaneous",
+        "updated_at": "Updated at",
+        "universal_collection": "Universal Collection System"
+    },
+    "errors": {
+        "loading_articles": "Error loading articles.",
+        "loading_categories": "Error loading categories.",
+        "loading_subcategories": "Error loading subcategories.",
+        "validation_errors": "Validation Errors"
+    },
+    "empty": {
+        "no_articles": "No articles found",
+        "no_articles_desc": "There are no articles in the database. Create the first article to start organizing the collection.",
+        "create_first_article": "Create the first article",
+        "no_categories": "No categories found",
+        "no_categories_desc": "There are no categories in the database. Create the first category to start organizing content.",
+        "create_first_category": "Create the first category",
+        "no_subcategories": "No subcategories found",
+        "no_subcategories_desc": "There are no subcategories in the database. Create the first subcategory to start organizing content.",
+        "create_first_subcategory": "Create the first subcategory"
+    },
+    "settings": {
+        "language_title": "System Language",
+        "language_label": "Interface Language",
+        "language_help": "One language for the entire system (Admin + Frontend). JSON files are in nova/lang/ - edit offline.",
+
+        "page": {
+            "title": "System Configuration",
+            "subtitle": "Star51 global system configuration management",
+            "access": "Access: Super Admin Only",
+            "config_file": "Config file:",
+            "back_to_list": "Back to List"
+        },
+
+        "cleanup": {
+            "title": "Install Cleanup",
+            "files_detected": "Installation files detected",
+            "files_to_remove": "Files to remove:",
+            "folder": "folder",
+            "file": "file",
+            "security_note": "For security, remove the install folder after installation.",
+            "safety_lock_note": "The <code>.installed</code> file in the project root is kept as a safety lock to prevent accidental re-installation.",
+            "remove_button": "Remove Install Folder",
+            "remove_confirm": "Confirm removal of /install/ folder?\n\nThis operation is irreversible.",
+            "system_clean": "System clean",
+            "system_clean_desc": "No action required.",
+            "install_removed": "/install/ folder removed successfully",
+            "install_error": "Error removing /install/ - Check permissions",
+            "install_absent": "/install/ folder already absent",
+            "complete": "Install cleanup completed!",
+            "partial": "Partial install cleanup."
+        },
+
+        "log": {
+            "title": "Log Management",
+            "lines": "lines",
+            "archive_button": "Archive Log",
+            "archive_confirm": "Archive current log?\n\nThe error.log file will be renamed with timestamp and a new empty file will be created.",
+            "view_last": "View Last 100 lines",
+            "last_records": "Last 100 Records",
+            "total": "total",
+            "no_records": "No records available",
+            "log_not_found": "Log file not found.",
+            "log_auto_create": "The error.log file will be created automatically on the first system error.",
+            "not_found": "Log file not found. No archiving needed.",
+            "empty": "Log file empty. No archiving needed.",
+            "archive_error": "Error archiving log. Check logs/ folder permissions.",
+            "archive_partial": "Log archived but unable to create new empty file. Check permissions.",
+            "archive_success": "Log archived successfully! File saved:"
+        },
+
+        "msg": {
+            "invalid_csrf": "Invalid CSRF token",
+            "error": "Error:"
+        }
+    },
+    "admins": {
+        "page": {
+            "title": "Administrator Profile",
+            "title_edit_self": "Edit Your Profile",
+            "description": "Administrator users management - view, edit and access control",
+            "desc_edit": "Edit system administrator"
+        },
+
+        "list": {
+            "title": "Administrator Profile",
+            "subtitle": "In this page you find your NovaStar51 administrator account and all information.",
+            "col_name": "Full Name",
+            "col_username": "Username",
+            "col_email": "Email",
+            "col_created_by": "Created by",
+            "col_actions": "Actions",
+            "created": "Created",
+            "modified": "Mod",
+            "error_load_account": "Error: Unable to load your account data. Check the logs."
+        },
+
+        "form": {
+            "title_edit": "Edit Administrator Data",
+            "subtitle_edit_self": "Edit your personal information and credentials",
+            "required_notice": "Fields marked with <span class=\"text-danger fw-bold\">*</span> are required",
+            "section_personal": "Personal Information",
+            "section_credentials": "Login Credentials",
+            "section_confirm": "Security Confirmation",
+            "current_password": "Current Password",
+            "help_current_password": "Enter your current password to confirm changes",
+            "email_lock_title": "Click to unlock/lock email field",
+            "username_lock_title": "Click to unlock/lock username field",
+            "first_name": "First Name",
+            "last_name": "Last Name",
+            "email": "Email",
+            "username": "Username",
+            "password_new": "New Password",
+            "password_new_confirm": "Confirm New Password",
+            "help_email": "Email must be unique in the system",
+            "help_password_edit": "Leave empty to keep current password. Minimum 8 characters.",
+            "help_username_readonly": "Username cannot be modified",
+            "invalid_first_name": "Enter administrator first name",
+            "invalid_last_name": "Enter administrator last name",
+            "invalid_email": "Enter a valid email address"
+        },
+
+        "buttons": {
+            "back_to_list": "Back to List",
+            "save": "Save Changes",
+            "edit": "Edit",
+            "settings": "System Configuration"
+        },
+
+        "msg": {
+            "updated": "Administrator <strong>{name}</strong> updated successfully!"
+        },
+
+        "err": {
+            "load_account": "Error loading your account.",
+            "not_found": "Administrator not found",
+            "csrf_invalid": "Invalid request. Security token missing or incorrect.",
+            "query_prepare": "Error preparing query",
+            "update_failed": "Error updating",
+            "password_hash": "Error generating password hash",
+            "unexpected_update": "An unexpected error occurred while updating the administrator."
+        },
+
+        "val": {
+            "required": "{field} is required",
+            "first_name_max": "First name cannot exceed 100 characters",
+            "last_name_max": "Last name cannot exceed 100 characters",
+            "username_length": "Username must be between 3 and 50 characters",
+            "username_format": "Username can only contain letters, numbers and underscore",
+            "email_format": "Invalid email format",
+            "email_max": "Email cannot exceed 100 characters",
+            "email_exists_other": "Another administrator with this email already exists",
+            "password_min": "Password must be at least 8 characters",
+            "password_mismatch": "Passwords do not match",
+            "current_password_required": "Current password is required to save changes",
+            "current_password_wrong": "Current password is incorrect"
+        },
+
+        "fields": {
+            "first_name": "First Name",
+            "last_name": "Last Name",
+            "email": "Email"
+        },
+
+        "error_page": {
+            "title": "Error"
+        }
+    },
+
+    "password_reset": {
+        "title": "Password Recovery",
+        "new_password_title": "New Password",
+        "security_check": "Security Check",
+        "security_check_desc": "Before continuing, answer the question below.",
+        "captcha_hint": "Write the answer in letters (e.g., \"five\")",
+        "email_label": "Email Address",
+        "send_link": "Send Recovery Link",
+        "footer_info": "You will receive an email with a link to reset your password. The link will be valid for 30 minutes.",
+        "hello": "Hello",
+        "enter_new_password": "Enter your new password.",
+        "new_password": "New Password",
+        "confirm_password": "Confirm Password",
+        "password_hint": "Minimum 8 characters. Use letters, numbers and symbols.",
+        "update_password": "Update Password",
+        "single_use_link": "This link can only be used once. After updating, login with your new password.",
+        "strength_very_weak": "Very Weak",
+        "strength_weak": "Weak",
+        "strength_medium": "Medium",
+        "strength_strong": "Strong",
+        "password_strength": "Password strength",
+        "email_invalid": "Invalid email",
+        "captcha_error": "CAPTCHA system error. Try again.",
+        "captcha_expired": "CAPTCHA expired. Try again.",
+        "captcha_wrong": "Wrong CAPTCHA answer. Try again.",
+        "reset_email_exists": "If the email is in the system, you will receive a recovery link within a few minutes.",
+        "reset_email_already_sent": "Recovery email already sent. Check your inbox (and spam folder).",
+        "reset_email_sent": "Recovery email sent! Check your inbox (and spam folder).",
+        "reset_email_error": "Error sending email. Try again later.",
+        "link_invalid": "Invalid link. Request a new password recovery.",
+        "token_invalid_used": "Token invalid or already used. Request a new password recovery.",
+        "link_expired": "The link has expired. Request a new password recovery.",
+        "token_missing": "Missing token. Request a new password recovery.",
+        "all_fields_required": "All fields are required.",
+        "passwords_not_match": "Passwords do not match.",
+        "password_min_length": "Password must be at least 8 characters.",
+        "password_update_error": "Error updating password",
+        "password_updated": "Password updated successfully! You can now login with your new password.",
+        "system_error": "System error"
+    },
+
+    "categories": {
+        "page": {
+            "title": "Categories Management",
+            "description": "Main categories management - view, edit and control content organization",
+            "title_create": "New Category",
+            "title_edit": "Edit Category",
+            "desc_create": "Add new category to the system",
+            "desc_edit": "Edit system category"
+        },
+
+        "list": {
+            "title": "Categories List",
+            "subtitle": "On this page you can view all categories in the database, both published and unpublished, sorted by insertion ID.",
+            "reminder": "Remember: after creating a new category, make sure to publish it to make it visible on your site!",
+            "col_category": "Category",
+            "col_description": "Description",
+            "col_status": "Status",
+            "col_created_by": "Created by",
+            "col_actions": "Actions",
+            "unknown_admin": "Unknown admin",
+            "created_at": "on",
+            "updated_at": "mod. on",
+            "empty_title": "No categories found",
+            "empty_desc": "There are no categories in the database. Create the first category to start organizing content.",
+            "empty_button": "Create the first category"
+        },
+
+        "form": {
+            "title_create": "New Category Entry",
+            "title_edit": "Edit Category",
+            "subtitle_create": "Fill in the fields to create a new main category in the system.",
+            "subtitle_edit": "Edit the category fields and save changes",
+            "required_notice": "Fields marked with <span class=\"text-danger fw-bold\">*</span> are required",
+            "category_name": "Category Name",
+            "category_description": "Description",
+            "help_name": "Category identifier name (e.g.: Photography, Collections, Info)",
+            "help_description": "Optional description (maximum 120 characters - about 3 lines)",
+            "invalid_name": "Category name is required and cannot exceed 255 characters."
+        },
+
+        "status": {
+            "active": "Active",
+            "inactive": "Inactive",
+            "click_activate": "Click to activate",
+            "click_deactivate": "Click to deactivate"
+        },
+
+        "buttons": {
+            "new_category": "New Category",
+            "back_to_list": "Back to List",
+            "create": "Create Category",
+            "save": "Save Changes",
+            "edit": "Edit",
+            "delete": "Delete"
+        },
+
+        "confirm": {
+            "delete": "You are about to delete this category. Confirm?",
+            "deactivate": "Deactivating this category will also hide associated subcategories and articles on the site. Confirm?"
+        },
+
+        "msg": {
+            "created": "Record <strong>{id}</strong> created successfully!",
+            "updated": "Record <strong>{id}</strong> updated successfully!",
+            "deleted": "Record <strong>#{id}</strong> deleted successfully!",
+            "deleted_articles": "<strong>{count}</strong> articles saved in \"Miscellaneous\".",
+            "deleted_subcats": "<strong>{count}</strong> subcategories moved to \"Extra\"."
+        },
+
+        "err": {
+            "load": "Error loading categories.",
+            "invalid_id": "Invalid category ID",
+            "not_found": "Category not found",
+            "csrf_invalid": "Invalid request. Security token missing or incorrect.",
+            "system_protected": "System categories cannot be deleted",
+            "query_prepare": "Error preparing query",
+            "insert_failed": "Insert error",
+            "update_failed": "Update error",
+            "delete_failed": "Error deleting category",
+            "move_articles": "Error moving articles",
+            "move_subcats": "Error moving subcategories",
+            "unexpected_create": "An unexpected error occurred while creating the category.",
+            "unexpected_update": "An unexpected error occurred while updating the category."
+        },
+
+        "val": {
+            "name_required": "Category name is required",
+            "name_max": "Category name cannot exceed 255 characters",
+            "name_exists": "A category with this name already exists",
+            "name_exists_other": "Another category with this name already exists"
+        },
+
+        "error_page": {
+            "title": "Error",
+            "back_to_form": "Back to Form",
+            "back_to_edit": "Back to Edit",
+            "back_to_list": "Categories List"
+        }
+    },
+
+    "articles": {
+        "page": {
+            "title": "Articles Management",
+            "description": "Full management of Star51 collection articles - create, edit and organize your collection items",
+            "title_create": "New Article",
+            "title_edit": "Edit Article",
+            "title_show": "Article Details",
+            "title_search": "Search Articles",
+            "title_import": "Import Articles CSV",
+            "desc_create": "Create new article in the collection",
+            "desc_edit": "Edit collection article",
+            "desc_show": "View complete article details in the Star51 collection",
+            "desc_search": "Search results for Star51 collection articles",
+            "desc_import": "Bulk import articles from CSV file",
+            "create_title": "New Article",
+            "create_desc": "Add new article to Star51 collection - Universal Collection System",
+            "edit_title": "Edit Article",
+            "edit_desc": "Edit Star51 collection article - Universal Collection System"
+        },
+
+        "list": {
+            "title": "Articles List",
+            "subtitle": "On this page you can view all articles in the database, both published and unpublished, sorted alphabetically by title.",
+            "reminder": "Remember: after creating a new article, make sure to publish it to make it visible on your site!",
+            "col_image": "Image",
+            "col_article": "Article",
+            "col_media": "Media",
+            "col_publish_date": "Publish Date",
+            "col_status": "Status",
+            "col_created_by": "Created by",
+            "col_actions": "Actions"
+        },
+
+        "show": {
+            "title": "Article Details",
+            "back_to_list": "Back to List",
+            "status": "Status",
+            "created_at": "Created at",
+            "updated_at": "Updated at",
+            "category_subcategory": "Category and Subcategory",
+            "collection_type": "Collection Type/Format",
+            "year": "Year",
+            "publish_date": "Publish Date",
+            "article_id": "Article ID",
+            "created_by": "Created by",
+            "summary": "Summary",
+            "no_summary": "No summary available",
+            "extended_text": "Extended text",
+            "no_extended_text": "No extended text available",
+            "youtube_video": "YouTube Video",
+            "open_video": "Open Video",
+            "no_video": "No video available",
+            "image_gallery": "Image Gallery",
+            "image_1": "Image 1",
+            "image_2": "Image 2",
+            "no_image": "No image available"
+        },
+
+        "search": {
+            "title": "Search Results",
+            "results_title": "Search Results",
+            "results_subtitle": "Articles found sorted alphabetically by title.",
+            "results_found": "<strong>{count}</strong> results found for &quot;<strong>{query}</strong>&quot; in alphabetical order.",
+            "no_results": "The search for &quot;<strong>{query}</strong>&quot; did not return any results.",
+            "no_results_title": "No results found",
+            "no_results_desc": "The search for &quot;<strong>{query}</strong>&quot; produced no results.<br>Try different or more generic keywords.",
+            "min_chars": "Enter at least 3 characters to search."
+        },
+
+        "form": {
+            "title_create": "New Article Entry",
+            "title_edit": "Edit Article",
+            "subtitle_create": "Fill in the fields to create a new article in the collection.",
+            "subtitle_edit": "Edit the article fields and save changes.",
+            "required_notice": "Fields marked with <span class=\"text-danger fw-bold\">*</span> are required",
+
+            "section_main": "Main Information",
+            "section_details": "Collection Details",
+            "section_content": "Content",
+            "section_media": "Media",
+            "section_images": "Images",
+            "section_file": "Attached File",
+
+            "article_title": "Article Title",
+            "article_title_placeholder": "Enter the article title",
+            "article_title_help": "Main article title (max 255 characters)",
+
+            "category_subcategory": "Category and Subcategory",
+            "select_subcategory": "Select subcategory...",
+            "category_subcategory_help": "Select the category and subcategory",
+
+            "item_collection": "Collection Type/Format",
+            "item_collection_placeholder": "e.g. Blu-ray, DVD, LEGO, Vinyl...",
+            "item_collection_help": "Format or type of the item (max 100 characters)",
+
+            "item_year": "Year",
+            "item_year_placeholder": "e.g. 2024",
+            "item_year_help": "Production/release year (range: {min}-{max})",
+
+            "publish_date": "Publish Date",
+            "publish_date_help": "Publication date on the frontend",
+
+            "article_summary": "Summary",
+            "article_summary_placeholder": "Brief article description...",
+            "article_summary_help": "Short text displayed in lists and previews",
+
+            "article_content": "Extended Text",
+            "article_content_help": "Full article content with formatting",
+
+            "youtube_video": "YouTube Video",
+            "youtube_video_placeholder": "https://www.youtube.com/watch?v=...",
+            "youtube_video_help": "Full YouTube video URL",
+
+            "image_1": "Image 1 (Main)",
+            "image_2": "Image 2",
+            "image_help": "<strong>JPG only</strong> - Exact dimensions <strong>{width}×{height}px</strong>.",
+
+            "current_file": "Current file",
+            "remove_image": "Remove existing image",
+            "no_image": "No image uploaded",
+
+            "card_title_create": "New Article Entry",
+            "card_subtitle_create": "Fill in the fields to add a new article to the Star51 collection.",
+            "card_title_edit": "Edit Article",
+            "card_subtitle_edit": "Edit the article fields and save changes - ID: {id}",
+            "show_date_checkbox": "Show date on site",
+            "subcategory": "Category and Subcategory",
+            "subcategory_placeholder": "[category] - subcategory",
+            "subcategory_feedback": "Select a category and subcategory.",
+            "select": "Select",
+            "title": "Article Title",
+            "title_feedback": "Title is required",
+            "collection": "Collection Type/Format",
+            "collection_help": "Format or edition (e.g., 4K UHD, Blu-ray Criterion, LEGO UCS)",
+            "year": "Year",
+            "year_feedback": "Year must be between 1901 and 2155",
+            "year_help": "Production or release year",
+            "summary": "Summary",
+            "summary_help": "Brief description (shown in lists)",
+            "content": "Extended Text",
+            "content_help": "Full description, personal story, technical notes",
+            "jpg_only": "JPG only",
+            "youtube": "YouTube Video",
+            "youtube_help": "Full YouTube video URL (optional)",
+            "cat_subcat_inactive": "Cat/Subcat Inactive",
+            "cat_inactive": "Cat Inactive",
+            "subcat_inactive": "Subcat Inactive",
+            "remove": "Remove",
+            "quill_placeholder": "Full description, personal story, technical details, anecdotes..."
+        },
+
+        "status": {
+            "active": "Active",
+            "inactive": "Inactive",
+            "date_on": "Date ON",
+            "date_off": "Date OFF",
+            "click_activate": "Click to activate",
+            "click_deactivate": "Click to deactivate",
+            "date_visible": "Date visible on frontend - Click to hide",
+            "date_hidden": "Date hidden on frontend - Click to show"
+        },
+
+        "buttons": {
+            "new_article": "New Article",
+            "back_to_list": "Back to List",
+            "back_to_form": "Back to Form",
+            "create": "Create Article",
+            "save": "Save Changes"
+        },
+
+        "confirm": {
+            "delete": "You are about to delete this article. Confirm?"
+        },
+
+        "msg": {
+            "created": "Article ID <strong>{id}</strong> created successfully!",
+            "updated": "Article ID <strong>{id}</strong> updated successfully!",
+            "deleted": "Record <strong>#{id}</strong> deleted successfully!",
+            "toggled_active": "Record <strong>{id}</strong> activated successfully",
+            "toggled_inactive": "Record <strong>{id}</strong> deactivated successfully",
+            "toggled_date_on": "Record <strong>{id}</strong> will show publish date on frontend",
+            "toggled_date_off": "Record <strong>{id}</strong> will hide publish date on frontend"
+        },
+
+        "err": {
+            "load": "Error loading articles.",
+            "invalid_id": "Invalid article ID",
+            "not_found": "Article not found",
+            "csrf_invalid": "Invalid request. Security token missing or incorrect.",
+            "no_permission": "You don't have permission to access this section.",
+            "query_prepare": "Error preparing query",
+            "insert_failed": "Insert error",
+            "update_failed": "Update error",
+            "delete_failed": "Error deleting article",
+            "toggle_failed": "Error updating status",
+            "toggle_date_failed": "Error updating date visibility status",
+            "unexpected_create": "An unexpected error occurred while creating the article.",
+            "unexpected_update": "An unexpected error occurred while updating the article.",
+            "subcategories_load": "Error loading subcategories."
+        },
+
+        "val": {
+            "title_required": "Article title is required",
+            "title_max": "Title cannot exceed {max} characters",
+            "subcategory_required": "Category and Subcategory is required",
+            "collection_max": "Collection type cannot exceed {max} characters",
+            "year_range": "Year must be between {min} and {max}",
+            "youtube_invalid": "YouTube video URL is invalid"
+        },
+
+        "error_page": {
+            "title": "Error",
+            "unexpected_create": "An unexpected error occurred while creating the article.",
+            "unexpected_update": "An unexpected error occurred while updating the article.",
+            "back_to_form": "Back to Form",
+            "back_to_list": "Articles List"
+        },
+
+        "js": {
+            "files_too_large": "WARNING: Files too large!",
+            "total_uploaded": "Total files uploaded",
+            "max_allowed": "Maximum allowed",
+            "files_selected": "Selected files",
+            "suggestions": "Suggestions",
+            "reduce_images": "Reduce image sizes",
+            "upload_fewer": "Upload fewer files at once",
+            "php_reject": "PHP may reject the upload before validation.",
+            "reduce_size_or_count": "Reduce size or number of files.",
+            "compress_file": "Compress the file before uploading"
+        }
+    },
+
+    "images": {
+        "val": {
+            "gallery_invalid": "Image {num}: File is not a valid image",
+            "gallery_format": "Image {num}: Unsupported format. Use only JPG/JPEG",
+            "gallery_size": "Image {num}: Wrong dimensions ({width}×{height}px). Required: {h_width}×{h_height}px (H) or {v_width}×{v_height}px (V)",
+            "gallery_save_error": "Image {num}: Error saving file",
+            "resize_error_gallery": "Error creating thumbnails for image {num}"
+        }
+    },
+
+    "subcategories": {
+        "page": {
+            "title": "Subcategories Management",
+            "description": "Subcategories management - view, edit and organize content",
+            "title_create": "New Subcategory",
+            "title_edit": "Edit Subcategory",
+            "desc_create": "Create new subcategory for content organization",
+            "desc_edit": "Edit system subcategory"
+        },
+
+        "list": {
+            "title": "Subcategories List",
+            "subtitle": "On this page you can view all subcategories in the database, both published and unpublished, sorted by insertion ID.",
+            "reminder": "Remember: after creating a new subcategory, make sure to publish it to make it visible on your site!",
+            "col_catsubcat": "[Cat.] - Subcat.",
+            "col_description": "Description",
+            "col_status": "Status",
+            "col_created_by": "Created by",
+            "col_actions": "Actions",
+            "category_deleted": "Deleted"
+        },
+
+        "form": {
+            "title_create": "New Subcategory Entry",
+            "title_edit": "Edit Subcategory",
+            "subtitle_create": "Fill in the fields to create a new subcategory.",
+            "subtitle_edit": "Edit the subcategory fields and save changes",
+            "id_category": "Category",
+            "select_category": "Select a category...",
+            "category_inactive": "(Inactive)",
+            "help_category": "The subcategory will be associated with the selected category",
+            "invalid_category": "Select a category for the subcategory.",
+            "subcategory_name": "Subcategory Name",
+            "subcategory_description": "Description",
+            "help_name": "Identifying name for the subcategory (e.g.: 4K UHD, Blu-ray, LEGO UCS)",
+            "invalid_name": "Subcategory name is required and cannot exceed 255 characters."
+        },
+
+        "buttons": {
+            "new_subcategory": "New Subcategory",
+            "back_to_list": "Back to List",
+            "create": "Create Subcategory",
+            "save": "Save Changes"
+        },
+
+        "confirm": {
+            "delete": "Associated articles will be moved to Mix. Confirm?",
+            "deactivate": "Deactivating this subcategory will also hide associated articles on the site. Confirm?"
+        },
+
+        "msg": {
+            "created": "Record <strong>{id}</strong> created successfully!",
+            "updated": "Record <strong>{id}</strong> updated successfully!",
+            "deleted": "Record <strong>#{id}</strong> deleted successfully!",
+            "deleted_articles": "<strong>{count}</strong> articles saved in \"Miscellaneous\"."
+        },
+
+        "err": {
+            "load": "Error loading subcategories.",
+            "invalid_id": "Invalid subcategory ID",
+            "not_found": "Subcategory not found",
+            "csrf_invalid": "Invalid request. Security token missing or incorrect.",
+            "system_protected": "System subcategories cannot be deleted",
+            "query_prepare": "Error preparing query: ",
+            "insert_failed": "Insert error: ",
+            "update_failed": "Update error: ",
+            "delete_failed": "Error deleting subcategory",
+            "move_articles": "Error moving articles",
+            "unexpected_create": "An unexpected error occurred while creating the subcategory.",
+            "unexpected_update": "An unexpected error occurred while updating the subcategory.",
+            "error_create": "Creation error",
+            "error_update": "Edit error"
+        },
+
+        "val": {
+            "category_required": "Parent category is required",
+            "category_invalid": "Invalid parent category",
+            "category_not_exists": "Selected category does not exist",
+            "category_inactive": "Selected category is inactive. Activate it before creating subcategories.",
+            "name_required": "Subcategory name is required",
+            "name_max": "Subcategory name cannot exceed 255 characters",
+            "name_exists": "A subcategory with this name already exists in the selected category",
+            "name_exists_other": "Another subcategory with this name already exists in the selected category"
+        },
+
+        "error_page": {
+            "title": "Error",
+            "back_to_form": "Back to Creation",
+            "back_to_edit": "Back to Edit",
+            "back_to_list": "Subcategories List",
+            "view_subcategory": "View Subcategory"
+        }
+    },
+
+    "requests": {
+        "page": {
+            "title": "Request Management",
+            "description": "User requests management - contact messages and newsletter subscriptions",
+            "title_search": "Search Requests",
+            "desc_search": "User requests search results"
+        },
+
+        "list": {
+            "title": "Requests List",
+            "subtitle": "This page displays all user requests, sorted by status and date.",
+            "hint": "Click on a request to view full details and manage the response.",
+            "col_name": "Full Name",
+            "col_message": "Message",
+            "col_contact": "Contact",
+            "col_type": "Type",
+            "col_status": "Status",
+            "col_date": "Date",
+            "col_actions": "Actions"
+        },
+
+        "status": {
+            "processed": "Processed",
+            "pending": "Pending",
+            "click_pending": "Click to mark as Pending",
+            "click_processed": "Click to mark as Processed"
+        },
+
+        "content": {
+            "no_message": "No message",
+            "full_message": "Full Message",
+            "no_message_available": "No message available",
+            "expand_collapse": "Expand/Collapse message"
+        },
+
+        "empty": {
+            "title": "No requests found",
+            "desc": "No user requests have been received yet."
+        },
+
+        "search": {
+            "title": "Search Results",
+            "results_title": "Search Results",
+            "results_subtitle": "Requests found sorted by ID (most recent first).",
+            "results_found": "<strong>{count}</strong> results found for &quot;<strong>{query}</strong>&quot;.",
+            "no_results": "The search for &quot;<strong>{query}</strong>&quot; returned no results.",
+            "no_results_title": "No results found",
+            "no_results_desc": "The search for &quot;<strong>{query}</strong>&quot; returned no results.<br>Try different or more generic keywords.",
+            "min_chars": "Please enter at least 3 characters to search."
+        },
+
+        "confirm": {
+            "delete": "You are about to delete this request. Confirm?"
+        },
+
+        "msg": {
+            "deleted": "Record <strong>#{id}</strong> deleted successfully!"
+        },
+
+        "err": {
+            "load": "Error loading requests.",
+            "csrf_invalid": "Invalid request. Security token missing or incorrect.",
+            "invalid_id": "Invalid request ID",
+            "not_found": "Request not found",
+            "delete_failed": "Error deleting request"
+        }
+    }
+}

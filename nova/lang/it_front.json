@@ -1,0 +1,236 @@
+{
+    "site": {
+        "title": "Star51",
+        "subtitle": "La mia collezione"
+    },
+    "nav": {
+        "home": "Home",
+        "articles": "Articoli",
+        "about": "Chi Siamo",
+        "news": "News",
+        "categories": "Categorie",
+        "contact": "Contatti",
+        "search": "Cerca",
+        "search_placeholder": "Cerca..."
+    },
+    "carousel": {
+        "previous": "Slide precedente",
+        "next": "Slide successiva"
+    },
+    "homepage": {
+        "latest_title": "Ultimi Inserimenti",
+        "view_all": "Vedi tutti",
+        "welcome_title": "Benvenuto in Star51",
+        "welcome_subtitle": "La tua destinazione per articoli di qualità",
+        "categories_title": "Esplora le Nostre Categorie",
+        "categories_subtitle": "Scopri tutte le categorie disponibili e le ultime notizie",
+        "category_fallback": "Scopri questa categoria...",
+        "news_title": "Ultime News",
+        "read_article": "Leggi articolo",
+        "slide1_title": "NovaStar51",
+        "slide1_subtitle": "La tua collezione, il tuo mondo",
+        "slide2_title": "Organizza con Stile",
+        "slide2_subtitle": "Gestisci le tue passioni in modo semplice e intuitivo",
+        "slide3_title": "Sempre con Te",
+        "slide3_subtitle": "Accedi alla tua collezione ovunque tu sia",
+        "page_description": "Star51 - La tua destinazione per articoli di qualità e servizi professionali. Scopri i nostri prodotti, consulenza esperta e soluzioni innovative."
+    },
+    "buttons": {
+        "go": "Vai",
+        "view_all": "Vedi Tutto",
+        "back": "Torna Indietro",
+        "submit": "Invia",
+        "save": "Salva",
+        "cancel": "Annulla",
+        "close": "Chiudi",
+        "read_more": "Leggi tutto"
+    },
+    "articles": {
+        "page_title": "I Nostri Articoli",
+        "page_subtitle": "Scopri la nostra selezione di prodotti e servizi di qualità",
+        "page_description": "Star51 - Scopri la nostra collezione completa di articoli, prodotti e servizi.",
+        "all_articles": "Tutti gli Articoli",
+        "no_articles": "Nessun articolo trovato in questa categoria.",
+        "view_all": "Vedi tutti gli articoli",
+        "fallback_summary": "Scopri di più su questo articolo...",
+        "navigation": "Navigazione articoli"
+    },
+    "article": {
+        "details": "Dettagli",
+        "related": "Articoli correlati",
+        "back_to_list": "Torna alla lista",
+        "year": "Anno",
+        "category": "Categoria",
+        "subcategory": "Sottocategoria",
+        "description": "Descrizione",
+        "published_on": "Pubblicato il",
+        "no_content": "Nessun contenuto disponibile."
+    },
+    "category": {
+        "all_articles": "Tutti gli articoli",
+        "subcategories": "Sottocategorie",
+        "no_subcategories": "Nessuna sottocategoria"
+    },
+    "contact": {
+        "title": "Contattaci",
+        "subtitle": "Siamo qui per aiutarti. Scegli il modo più comodo per metterti in contatto con noi",
+        "subtitle_2": "Compila il form sottostante e ti risponderemo il prima possibile",
+        "first_name": "Nome",
+        "last_name": "Cognome",
+        "email": "Email",
+        "phone": "Telefono",
+        "phone_hint": "Campo opzionale per essere ricontattati",
+        "captcha_label": "Verifica:",
+        "captcha_hint": "Scrivi il risultato in lettere (es: tre, cinque, dieci)",
+        "message": "Messaggio",
+        "message_placeholder": "Descrivi la tua richiesta...",
+        "privacy_label": "Accetto il trattamento dei dati personali secondo la",
+        "privacy_link": "Privacy Policy",
+        "submit": "Invia Richiesta",
+        "data_protection": "I tuoi dati sono protetti e verranno utilizzati solo per rispondere alla tua richiesta",
+        "error": "Errore",
+        "validation": {
+            "first_name": "Il nome è obbligatorio",
+            "last_name": "Il cognome è obbligatorio",
+            "email": "Email valida è obbligatoria",
+            "captcha": "Inserisci il risultato della verifica di sicurezza",
+            "captcha_expired": "Sessione scaduta. Ricarica la pagina e riprova",
+            "captcha_timeout": "Verifica di sicurezza scaduta. Ricarica la pagina",
+            "captcha_wrong": "Risultato della verifica non corretto. Riprova",
+            "message": "Il messaggio è obbligatorio",
+            "privacy": "Devi accettare la Privacy Policy"
+        },
+        "success": {
+            "message": "Grazie per averci contattato! Abbiamo ricevuto il tuo messaggio e ti risponderemo al più presto.",
+            "email_sent": "Ti abbiamo inviato una conferma via email."
+        },
+        "errors": {
+            "db_connection": "Errore di connessione al database. Riprova più tardi.",
+            "save_failed": "Errore durante il salvataggio dei dati.",
+            "generic": "Si è verificato un errore durante l'elaborazione della richiesta."
+        },
+        "locations_title": "Le Nostre Sedi",
+        "locations_subtitle": "Trova la sede più vicina a te per informazioni e assistenza",
+        "location_1": {
+            "title": "Sede di Genova"
+        },
+        "location_2": {
+            "title": "Sede in Svizzera"
+        },
+        "location_labels": {
+            "working_hours": "Orari di Lavoro",
+            "weekdays": "Lun-Ven",
+            "phone": "Telefono",
+            "email": "Email"
+        },
+        "overlay": {
+            "close": "Chiudi",
+            "sending": "Invio in corso",
+            "wait": "Attendi qualche secondo..."
+        }
+    },
+    "search": {
+        "title": "Ricerca",
+        "subtitle": "Trova prodotti, articoli e contenuti di Star51",
+        "placeholder": "Cerca nella collezione...",
+        "input_placeholder": "Cosa stai cercando?",
+        "min_chars": "Inserisci almeno 3 caratteri per avviare la ricerca",
+        "results": "Risultati per",
+        "results_found": "Risultati trovati per",
+        "no_results": "Nessun risultato trovato",
+        "no_results_hint": "Prova con parole chiave diverse.",
+        "navigation": "Navigazione risultati ricerca"
+    },
+    "pagination": {
+        "first": "Prima",
+        "last": "Ultima",
+        "next": "Successiva",
+        "previous": "Precedente",
+        "showing": "Visualizzando",
+        "of": "di",
+        "results": "risultati"
+    },
+    "footer": {
+        "description": "La tua destinazione per articoli di qualità e servizi professionali. Offriamo soluzioni innovative e un servizio clienti eccellente.",
+        "follow_us": "Seguici",
+        "contact_us": "Contattaci",
+        "copyright": "Tutti i diritti riservati.",
+        "privacy_policy": "Privacy Policy",
+        "cookie_policy": "Cookie Policy",
+        "powered_by": "Powered by NovaStar51"
+    },
+    "messages": {
+        "no_results": "Nessun risultato trovato",
+        "no_categories": "Nessuna categoria disponibile al momento.",
+        "no_news": "Nessuna news disponibile al momento.",
+        "no_date": "n.d.",
+        "loading": "Caricamento...",
+        "error": "Si è verificato un errore"
+    },
+    "news": {
+        "title": "News & Aggiornamenti",
+        "subtitle": "Rimani sempre aggiornato sulle ultime novità di Star51",
+        "badge": "News",
+        "no_news": "Nessuna news disponibile al momento. Torna presto per aggiornamenti!",
+        "navigation": "Navigazione news"
+    },
+    "captcha": {
+        "numbers": ["zero", "uno", "due", "tre", "quattro", "cinque", "sei", "sette", "otto", "nove", "dieci", "undici", "dodici"],
+        "questions": [
+            "Quanto fa %s + %s?",
+            "Quanto fa %s piu %s?",
+            "Somma %s e %s:",
+            "%s + %s uguale?",
+            "Calcola %s piu %s:"
+        ]
+    },
+    "date": {
+        "format": "{d} {month} {Y}",
+        "months": ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"]
+    },
+    "policy": {
+        "page_title": "Privacy & Cookie Policy",
+        "page_description": "Privacy Policy e Cookie Policy di Star51 - Informazioni complete sul trattamento dei dati personali e utilizzo dei cookie in conformita GDPR.",
+        "title": "Privacy Policy & Cookie Policy",
+        "subtitle": "Informazioni complete sul trattamento dei tuoi dati personali e sull'utilizzo dei cookie"
+    },
+    "about": {
+        "page_title": "Chi Siamo",
+        "page_description": "Scopri la storia di Star51, il nostro team e i valori che guidano la nostra missione.",
+        "title": "Chi Siamo",
+        "subtitle": "La nostra storia, i nostri valori e la passione che ci guida ogni giorno"
+    },
+    "error_page": {
+        "page_title": "Errore",
+        "back_home": "Torna alla Home",
+        "search": "Cerca nel sito",
+        "400": {
+            "title": "Richiesta non valida",
+            "description": "Hmm, non abbiamo capito la richiesta... dai riprova :-)"
+        },
+        "401": {
+            "title": "Non autorizzato",
+            "description": "Ehi! Prima fatti riconoscere, poi ne parliamo."
+        },
+        "403": {
+            "title": "Accesso negato",
+            "description": "Zona riservata, serve il pass VIP!"
+        },
+        "404": {
+            "title": "Pagina non trovata",
+            "description": "Houston, abbiamo un problema... la pagina è sparita!"
+        },
+        "500": {
+            "title": "Errore del server",
+            "description": "Il server ha bisogno di un caffè... torniamo subito!"
+        },
+        "503": {
+            "title": "Servizio non disponibile",
+            "description": "Stiamo facendo manutenzione, passa dopo... ti offriamo caffè e biscotti!"
+        },
+        "default": {
+            "title": "Errore sconosciuto",
+            "description": "Beh... questo è imbarazzante. Qualcosa non ha funzionato!"
+        }
+    }
+}

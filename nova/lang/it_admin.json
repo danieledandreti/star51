@@ -1,0 +1,808 @@
+{
+    "nav": {
+        "administrators": "Amministratore",
+        "management": "Gestione",
+        "categories": "Categorie",
+        "subcategories": "Sottocategorie",
+        "articles": "Articoli",
+        "requests": "Richieste",
+        "search": "Ricerca",
+        "logout": "Logout",
+        "language": "Lingua",
+        "profile": "Profilo",
+        "profile_menu": "Menu profilo",
+        "main_nav": "Navigazione principale",
+        "go_to_dashboard": "Vai alla dashboard",
+        "home": "Home"
+    },
+    "buttons": {
+        "delete": "Elimina",
+        "edit": "Modifica",
+        "back_to_list": "Torna alla Lista",
+        "search": "Cerca",
+        "close": "Chiudi",
+        "new_article": "Nuovo Articolo",
+        "login": "Accedi",
+        "back_to_login": "Torna al Login"
+    },
+    "messages": {
+        "required_fields": "I campi contrassegnati con <span class=\"text-danger fw-bold\">*</span> sono obbligatori",
+        "validation_errors": "Errori di Validazione",
+        "credentials_invalid": "Credenziali non valide. Riprova.",
+        "attempts_remaining": "Tentativi rimanenti"
+    },
+    "labels": {
+        "message": "Messaggio",
+        "username": "Username",
+        "password": "Password",
+        "created_at": "il",
+        "modified_at": "mod. il",
+        "not_set": "Non impostata",
+        "continue": "continua",
+        "deleted": "Eliminata",
+        "miscellaneous": "Varie",
+        "to_reorganize": "da riorganizzare",
+        "all_articles": "Tutti gli articoli",
+        "no_date": "[Data non presente]"
+    },
+    "pages": {
+        "dashboard_title": "Dashboard",
+        "dashboard_overview": "Panoramica dell'amministrazione",
+        "dashboard_subtitle": "Benvenuto nell'amministrazione di",
+        "dashboard_intro": "In questa pagina trovi un riepilogo di tutti i dati presenti nel database. Nel menu di navigazione sono presenti tutte le sezioni disponibili; in ogni sezione puoi inserire, modificare o cancellare un record tramite un semplice clic.",
+        "articles_management": "Gestione Articoli"
+    },
+    "rate_limit": {
+        "lockout_singular": "Troppi tentativi di accesso falliti. Riprova tra 1 minuto.",
+        "lockout_plural": "Troppi tentativi di accesso falliti. Riprova tra {minutes} minuti."
+    },
+    "toggle": {
+        "activated": "attivato",
+        "deactivated": "disattivato",
+        "success": "Record <strong>{id}</strong> {status} con successo"
+    },
+    "head": {
+        "default_title_suffix": "Amministrazione Star51",
+        "default_description": "NovaStar51 Administration - Pannello di controllo amministrativo Star51"
+    },
+    "pagination": {
+        "page_singular": "pagina",
+        "page_plural": "pagine",
+        "nav_label": "Navigazione pagine",
+        "first": "Prima pagina",
+        "previous": "Pagina precedente",
+        "next": "Pagina successiva",
+        "last": "Ultima pagina"
+    },
+    "login": {
+        "title": "NovaStar51 Admin",
+        "subtitle": "Accedi",
+        "forgot_password": "Hai dimenticato la password?"
+    },
+    "search": {
+        "articles_placeholder": "Cerca articoli...",
+        "articles_hint": "Cerca tra gli articoli per titolo, testo breve o testo esteso.",
+        "requests_placeholder": "Cerca richieste...",
+        "requests_hint": "Cerca tra le richieste per nome, cognome, email o messaggio."
+    },
+    "dashboard": {
+        "search_articles": "Ricerca tra gli articoli",
+        "search_requests": "Ricerca tra le richieste",
+        "categories": "Categoria/e",
+        "subcategories": "Sottocategoria/e",
+        "articles": "Articolo/i",
+        "requests": "Richiesta/e",
+        "articles_misc": "Articolo/i in Varie",
+        "updated_at": "Aggiornato al",
+        "universal_collection": "Universal Collection System"
+    },
+    "errors": {
+        "loading_articles": "Errore nel caricamento degli articoli.",
+        "loading_categories": "Errore nel caricamento delle categorie.",
+        "loading_subcategories": "Errore nel caricamento delle sottocategorie.",
+        "validation_errors": "Errori di Validazione"
+    },
+    "empty": {
+        "no_articles": "Nessun articolo trovato",
+        "no_articles_desc": "Non ci sono articoli nel database. Crea il primo articolo per iniziare ad organizzare la collezione.",
+        "create_first_article": "Crea il primo articolo",
+        "no_categories": "Nessuna categoria trovata",
+        "no_categories_desc": "Non ci sono categorie nel database. Crea la prima categoria per iniziare ad organizzare i contenuti.",
+        "create_first_category": "Crea la prima categoria",
+        "no_subcategories": "Nessuna sottocategoria trovata",
+        "no_subcategories_desc": "Non ci sono sottocategorie nel database. Crea la prima sottocategoria per iniziare ad organizzare i contenuti.",
+        "create_first_subcategory": "Crea la prima sottocategoria"
+    },
+    "settings": {
+        "language_title": "Lingua Sistema",
+        "language_label": "Lingua Interfaccia",
+        "language_help": "Una lingua per tutto il sistema (Admin + Frontend). I file JSON sono in nova/lang/ - editare offline.",
+
+        "page": {
+            "title": "Configurazione Sistema",
+            "subtitle": "Gestione configurazioni globali del sistema Star51",
+            "access": "Accesso: Solo Super Admin",
+            "config_file": "File config:",
+            "back_to_list": "Torna alla Lista"
+        },
+
+        "cleanup": {
+            "title": "Pulizia Installazione",
+            "files_detected": "File di installazione rilevati",
+            "files_to_remove": "File da rimuovere:",
+            "folder": "cartella",
+            "file": "file",
+            "security_note": "Per sicurezza, rimuovi la cartella install dopo l'installazione.",
+            "safety_lock_note": "Il file <code>.installed</code> nella root del progetto viene mantenuto come blocco di sicurezza per prevenire reinstallazioni accidentali.",
+            "remove_button": "Rimuovi Cartella Install",
+            "remove_confirm": "Confermi la rimozione della cartella /install/?\n\nQuesta operazione è irreversibile.",
+            "system_clean": "Sistema pulito",
+            "system_clean_desc": "Nessun intervento necessario.",
+            "install_removed": "Cartella /install/ rimossa con successo",
+            "install_error": "Errore nella rimozione di /install/ - Verifica permessi",
+            "install_absent": "Cartella /install/ già assente",
+            "complete": "Pulizia installazione completata!",
+            "partial": "Pulizia installazione parziale."
+        },
+
+        "log": {
+            "title": "Gestione Log",
+            "lines": "righe",
+            "archive_button": "Archivia Log",
+            "archive_confirm": "Archiviare il log corrente?\n\nIl file error.log verrà rinominato con timestamp e verrà creato un nuovo file vuoto.",
+            "view_last": "Visualizza le Ultime 100 righe",
+            "last_records": "Ultimi 100 Record",
+            "total": "totali",
+            "no_records": "Nessun record disponibile",
+            "log_not_found": "File log non trovato.",
+            "log_auto_create": "Il file error.log verrà creato automaticamente al primo errore del sistema.",
+            "not_found": "File log non trovato. Nessuna archiviazione necessaria.",
+            "empty": "File log vuoto. Nessuna archiviazione necessaria.",
+            "archive_error": "Errore durante l'archiviazione del log. Verifica i permessi della cartella logs/.",
+            "archive_partial": "Log archiviato ma impossibile creare nuovo file vuoto. Verifica i permessi.",
+            "archive_success": "Log archiviato con successo! File salvato:"
+        },
+
+        "msg": {
+            "invalid_csrf": "Token CSRF non valido",
+            "error": "Errore:"
+        }
+    },
+    "admins": {
+        "page": {
+            "title": "Profilo Amministratore",
+            "description": "Gestione utenti amministratori - visualizzazione, modifica e controllo accessi",
+            "title_edit_self": "Modifica Il Tuo Profilo",
+            "desc_edit": "Modifica amministratore del sistema"
+        },
+
+        "list": {
+            "title": "Profilo Amministratore",
+            "subtitle": "In questa pagina trovi il tuo account amministratore NovaStar51 e tutte le informazioni.",
+            "col_name": "Nome Completo",
+            "col_username": "Username",
+            "col_email": "Email",
+            "col_created_by": "Inserito da",
+            "col_actions": "Azioni",
+            "created": "Creato",
+            "modified": "Mod",
+            "error_load_account": "Errore: Impossibile caricare i dati del tuo account. Controlla i log."
+        },
+
+        "form": {
+            "title_edit": "Modifica Dati Amministratore",
+            "subtitle_edit_self": "Modifica le tue informazioni personali e credenziali",
+            "required_notice": "I campi contrassegnati con <span class=\"text-danger fw-bold\">*</span> sono obbligatori",
+            "section_personal": "Informazioni Personali",
+            "section_credentials": "Credenziali di Accesso",
+            "section_confirm": "Conferma Sicurezza",
+            "current_password": "Password Attuale",
+            "help_current_password": "Inserisci la tua password attuale per confermare le modifiche",
+            "email_lock_title": "Clicca per sbloccare/bloccare il campo email",
+            "username_lock_title": "Clicca per sbloccare/bloccare il campo username",
+            "first_name": "Nome",
+            "last_name": "Cognome",
+            "email": "Email",
+            "username": "Username",
+            "password_new": "Nuova Password",
+            "password_new_confirm": "Conferma Nuova Password",
+            "help_email": "L'email deve essere unica nel sistema",
+            "help_password_edit": "Lascia vuoto per non modificare. Minimo 8 caratteri.",
+            "help_username_readonly": "L'username non può essere modificato",
+            "invalid_first_name": "Inserisci il nome dell'amministratore",
+            "invalid_last_name": "Inserisci il cognome dell'amministratore",
+            "invalid_email": "Inserisci un indirizzo email valido"
+        },
+
+        "buttons": {
+            "back_to_list": "Torna alla Lista",
+            "save": "Salva Modifiche",
+            "edit": "Modifica",
+            "settings": "Configurazione Sistema"
+        },
+
+        "msg": {
+            "updated": "Amministratore <strong>{name}</strong> modificato con successo!"
+        },
+
+        "err": {
+            "load_account": "Errore nel caricamento del tuo account.",
+            "not_found": "Amministratore non trovato",
+            "csrf_invalid": "Richiesta non valida. Token di sicurezza mancante o non corretto.",
+            "query_prepare": "Errore nella preparazione della query",
+            "update_failed": "Errore nell'aggiornamento",
+            "password_hash": "Errore nella generazione dell'hash della password",
+            "unexpected_update": "Si è verificato un errore imprevisto durante l'aggiornamento dell'amministratore."
+        },
+
+        "val": {
+            "required": "{field} è obbligatorio",
+            "first_name_max": "Il nome non può superare i 100 caratteri",
+            "last_name_max": "Il cognome non può superare i 100 caratteri",
+            "username_length": "L'username deve essere tra 3 e 50 caratteri",
+            "username_format": "L'username può contenere solo lettere, numeri e underscore",
+            "email_format": "Formato email non valido",
+            "email_max": "L'email non può superare i 100 caratteri",
+            "email_exists_other": "Esiste già un altro amministratore con questa email",
+            "password_min": "La password deve essere di almeno 8 caratteri",
+            "password_mismatch": "Le password non coincidono",
+            "current_password_required": "La password attuale è obbligatoria per salvare le modifiche",
+            "current_password_wrong": "La password attuale non è corretta"
+        },
+
+        "fields": {
+            "first_name": "Nome",
+            "last_name": "Cognome",
+            "email": "Email"
+        },
+
+        "error_page": {
+            "title": "Errore"
+        }
+    },
+
+    "password_reset": {
+        "title": "Recupero Password",
+        "new_password_title": "Nuova Password",
+        "security_check": "Verifica di Sicurezza",
+        "security_check_desc": "Prima di continuare, rispondi alla domanda qui sotto.",
+        "captcha_hint": "Scrivi la risposta in lettere (es: \"cinque\")",
+        "email_label": "Indirizzo Email",
+        "send_link": "Invia Link di Recupero",
+        "footer_info": "Riceverai un'email con il link per reimpostare la password. Il link sarà valido per 30 minuti.",
+        "hello": "Ciao",
+        "enter_new_password": "Inserisci la tua nuova password.",
+        "new_password": "Nuova Password",
+        "confirm_password": "Conferma Password",
+        "password_hint": "Minimo 8 caratteri. Usa lettere, numeri e simboli.",
+        "update_password": "Aggiorna Password",
+        "single_use_link": "Questo link può essere utilizzato una sola volta. Dopo l'aggiornamento, effettua il login con la nuova password.",
+        "strength_very_weak": "Molto Debole",
+        "strength_weak": "Debole",
+        "strength_medium": "Media",
+        "strength_strong": "Forte",
+        "password_strength": "Forza password",
+        "email_invalid": "Email non valida",
+        "captcha_error": "Errore sistema CAPTCHA. Riprova.",
+        "captcha_expired": "Il CAPTCHA è scaduto. Riprova.",
+        "captcha_wrong": "Risposta CAPTCHA errata. Riprova.",
+        "reset_email_exists": "Se l'email è presente nel sistema, riceverai un link di recupero entro pochi minuti.",
+        "reset_email_already_sent": "Email di recupero già inviata. Controlla la tua casella di posta (e la cartella spam).",
+        "reset_email_sent": "Email di recupero inviata! Controlla la tua casella di posta (e la cartella spam).",
+        "reset_email_error": "Errore durante l'invio dell'email. Riprova più tardi.",
+        "link_invalid": "Link non valido. Richiedi un nuovo recupero password.",
+        "token_invalid_used": "Token non valido o già utilizzato. Richiedi un nuovo recupero password.",
+        "link_expired": "Il link è scaduto. Richiedi un nuovo recupero password.",
+        "token_missing": "Token mancante. Richiedi un nuovo recupero password.",
+        "all_fields_required": "Tutti i campi sono obbligatori.",
+        "passwords_not_match": "Le password non coincidono.",
+        "password_min_length": "La password deve contenere almeno 8 caratteri.",
+        "password_update_error": "Errore durante l'aggiornamento della password",
+        "password_updated": "Password aggiornata con successo! Ora puoi effettuare il login con la nuova password.",
+        "system_error": "Errore del sistema"
+    },
+
+    "categories": {
+        "page": {
+            "title": "Gestione Categorie",
+            "description": "Gestione categorie principali - visualizzazione, modifica e controllo organizzazione contenuti",
+            "title_create": "Nuova Categoria",
+            "title_edit": "Modifica Categoria",
+            "desc_create": "Aggiungi nuova categoria al sistema",
+            "desc_edit": "Modifica categoria del sistema"
+        },
+
+        "list": {
+            "title": "Elenco Categorie",
+            "subtitle": "In questa pagina puoi visualizzare tutte le categorie presenti nel database, sia pubblicate che non pubblicate, ordinate in base all'ID di inserimento.",
+            "reminder": "Ricorda: dopo aver creato una nuova categoria, assicurati di pubblicarla per renderla visibile sul tuo sito!",
+            "col_category": "Categoria",
+            "col_description": "Descrizione",
+            "col_status": "Stato",
+            "col_created_by": "Inserito da",
+            "col_actions": "Azioni",
+            "unknown_admin": "Admin sconosciuto",
+            "created_at": "il",
+            "updated_at": "mod. il",
+            "empty_title": "Nessuna categoria trovata",
+            "empty_desc": "Non ci sono categorie nel database. Crea la prima categoria per iniziare ad organizzare i contenuti.",
+            "empty_button": "Crea la prima categoria"
+        },
+
+        "form": {
+            "title_create": "Inserimento Nuova Categoria",
+            "title_edit": "Modifica Categoria",
+            "subtitle_create": "Compila i campi per creare una nuova categoria principale del sistema.",
+            "subtitle_edit": "Modifica i campi della categoria e salva le modifiche",
+            "required_notice": "I campi contrassegnati con <span class=\"text-danger fw-bold\">*</span> sono obbligatori",
+            "category_name": "Nome Categoria",
+            "category_description": "Descrizione",
+            "help_name": "Nome identificativo della categoria (es: Fotografia, Collezioni, Info)",
+            "help_description": "Descrizione opzionale (massimo 120 caratteri - circa 3 righe)",
+            "invalid_name": "Il nome categoria è obbligatorio e non può superare i 255 caratteri."
+        },
+
+        "status": {
+            "active": "Attivo",
+            "inactive": "Disattivo",
+            "click_activate": "Clicca per attivare",
+            "click_deactivate": "Clicca per disattivare"
+        },
+
+        "buttons": {
+            "new_category": "Nuova Categoria",
+            "back_to_list": "Torna alla Lista",
+            "create": "Crea Categoria",
+            "save": "Salva Modifiche",
+            "edit": "Modifica",
+            "delete": "Elimina"
+        },
+
+        "confirm": {
+            "delete": "Stai per eliminare questa categoria. Confermi?",
+            "deactivate": "Disattivando questa categoria nascondi anche sottocategorie e articoli associati sul sito. Confermi?"
+        },
+
+        "msg": {
+            "created": "Creazione del record <strong>{id}</strong> avvenuta con successo!",
+            "updated": "Aggiornamento del record <strong>{id}</strong> avvenuto con successo!",
+            "deleted": "Record <strong>#{id}</strong> eliminato con successo!",
+            "deleted_articles": "<strong>{count}</strong> articoli salvati in \"Varie\".",
+            "deleted_subcats": "<strong>{count}</strong> sottocategorie spostate in \"Extra\"."
+        },
+
+        "err": {
+            "load": "Errore nel caricamento delle categorie.",
+            "invalid_id": "ID categoria non valido",
+            "not_found": "Categoria non trovata",
+            "csrf_invalid": "Richiesta non valida. Token di sicurezza mancante o non corretto.",
+            "system_protected": "Le categorie di sistema non possono essere eliminate",
+            "query_prepare": "Errore nella preparazione della query",
+            "insert_failed": "Errore nell'inserimento",
+            "update_failed": "Errore nell'aggiornamento",
+            "delete_failed": "Errore nell'eliminazione della categoria",
+            "move_articles": "Errore nello spostamento degli articoli",
+            "move_subcats": "Errore nello spostamento delle sottocategorie",
+            "unexpected_create": "Si è verificato un errore imprevisto durante la creazione della categoria.",
+            "unexpected_update": "Si è verificato un errore imprevisto durante l'aggiornamento della categoria."
+        },
+
+        "val": {
+            "name_required": "Nome categoria è obbligatorio",
+            "name_max": "Il nome categoria non può superare i 255 caratteri",
+            "name_exists": "Esiste già una categoria con questo nome",
+            "name_exists_other": "Esiste già un'altra categoria con questo nome"
+        },
+
+        "error_page": {
+            "title": "Errore",
+            "back_to_form": "Torna al Form",
+            "back_to_edit": "Torna alla Modifica",
+            "back_to_list": "Lista Categorie"
+        }
+    },
+
+    "articles": {
+        "page": {
+            "title": "Gestione Articoli",
+            "description": "Gestione completa articoli collezione Star51 - crea, modifica e organizza gli elementi della tua collezione",
+            "title_create": "Nuovo Articolo",
+            "title_edit": "Modifica Articolo",
+            "title_show": "Dettagli Articolo",
+            "title_search": "Ricerca Articoli",
+            "title_import": "Importa Articoli CSV",
+            "desc_create": "Creazione nuovo articolo nella collezione",
+            "desc_edit": "Modifica articolo della collezione",
+            "desc_show": "Visualizza dettagli completi dell'articolo nella collezione Star51",
+            "desc_search": "Risultati ricerca articoli collezione Star51",
+            "desc_import": "Importazione massiva articoli da file CSV",
+            "create_title": "Nuovo Articolo",
+            "create_desc": "Aggiungi nuovo articolo alla collezione Star51 - Universal Collection System",
+            "edit_title": "Modifica Articolo",
+            "edit_desc": "Modifica articolo della collezione Star51 - Universal Collection System"
+        },
+
+        "list": {
+            "title": "Elenco Articoli",
+            "subtitle": "In questa pagina puoi visualizzare tutti gli articoli presenti nel database, sia pubblicati che non pubblicati, ordinati per titolo in ordine alfabetico.",
+            "reminder": "Ricorda: dopo aver creato un nuovo articolo, assicurati di pubblicarlo per renderlo visibile sul tuo sito!",
+            "col_image": "Immagine",
+            "col_article": "Articolo",
+            "col_media": "Media",
+            "col_publish_date": "Data Pubbl.",
+            "col_status": "Stato",
+            "col_created_by": "Inserito da",
+            "col_actions": "Azioni"
+        },
+
+        "show": {
+            "title": "Dettagli Articolo",
+            "back_to_list": "Torna alla Lista",
+            "status": "Stato",
+            "created_at": "Creato il",
+            "updated_at": "Aggiornato il",
+            "category_subcategory": "Categoria e Sottocategoria",
+            "collection_type": "Tipo/Formato Collezione",
+            "year": "Anno",
+            "publish_date": "Data Pubblicazione",
+            "article_id": "ID Articolo",
+            "created_by": "Creato da",
+            "summary": "Riassunto",
+            "no_summary": "Nessun riassunto disponibile",
+            "extended_text": "Testo esteso",
+            "no_extended_text": "Nessun testo esteso disponibile",
+            "youtube_video": "Video YouTube",
+            "open_video": "Apri Video",
+            "no_video": "Nessun video disponibile",
+            "image_gallery": "Galleria Immagini",
+            "image_1": "Immagine 1",
+            "image_2": "Immagine 2",
+            "no_image": "Nessuna immagine disponibile"
+        },
+
+        "search": {
+            "title": "Risultati della ricerca",
+            "results_title": "Risultati della Ricerca",
+            "results_subtitle": "Articoli trovati ordinati alfabeticamente per titolo.",
+            "results_found": "<strong>{count}</strong> risultati trovati per &quot;<strong>{query}</strong>&quot; in ordine alfabetico.",
+            "no_results": "La ricerca del termine &quot;<strong>{query}</strong>&quot; non ha generato nessun risultato.",
+            "no_results_title": "Nessun risultato trovato",
+            "no_results_desc": "La ricerca di &quot;<strong>{query}</strong>&quot; non ha prodotto risultati.<br>Prova con parole chiave diverse o più generiche.",
+            "min_chars": "Per effettuare una ricerca immettere almeno 3 caratteri."
+        },
+
+        "form": {
+            "title_create": "Inserimento Nuovo Articolo",
+            "title_edit": "Modifica Articolo",
+            "subtitle_create": "Compila i campi per creare un nuovo articolo nella collezione.",
+            "subtitle_edit": "Modifica i campi dell'articolo e salva le modifiche.",
+            "required_notice": "I campi contrassegnati con <span class=\"text-danger fw-bold\">*</span> sono obbligatori",
+
+            "section_main": "Informazioni Principali",
+            "section_details": "Dettagli Collezione",
+            "section_content": "Contenuto",
+            "section_media": "Media",
+            "section_images": "Immagini",
+            "section_file": "File Allegato",
+
+            "article_title": "Titolo Articolo",
+            "article_title_placeholder": "Inserisci il titolo dell'articolo",
+            "article_title_help": "Titolo principale dell'articolo (max 255 caratteri)",
+
+            "category_subcategory": "Categoria e Sottocategoria",
+            "select_subcategory": "Seleziona sottocategoria...",
+            "category_subcategory_help": "Seleziona la categoria e sottocategoria di appartenenza",
+
+            "item_collection": "Tipo/Formato Collezione",
+            "item_collection_placeholder": "es. Blu-ray, DVD, LEGO, Vinile...",
+            "item_collection_help": "Formato o tipo dell'elemento (max 100 caratteri)",
+
+            "item_year": "Anno",
+            "item_year_placeholder": "es. 2024",
+            "item_year_help": "Anno di produzione/uscita (range: {min}-{max})",
+
+            "publish_date": "Data Pubblicazione",
+            "publish_date_help": "Data di pubblicazione sul frontend",
+
+            "article_summary": "Riassunto",
+            "article_summary_placeholder": "Breve descrizione dell'articolo...",
+            "article_summary_help": "Testo breve visualizzato nelle liste e anteprime",
+
+            "article_content": "Testo Esteso",
+            "article_content_help": "Contenuto completo dell'articolo con formattazione",
+
+            "youtube_video": "Video YouTube",
+            "youtube_video_placeholder": "https://www.youtube.com/watch?v=...",
+            "youtube_video_help": "URL completo del video YouTube",
+
+            "image_1": "Immagine 1 (Principale)",
+            "image_2": "Immagine 2",
+            "image_help": "<strong>Solo JPG</strong> - Dimensioni <strong>{width}×{height}px</strong> esatte.",
+
+            "current_file": "File attuale",
+            "remove_image": "Rimuovi immagine esistente",
+            "no_image": "Nessuna immagine caricata",
+
+            "card_title_create": "Inserimento Nuovo Articolo",
+            "card_subtitle_create": "Compila i campi per aggiungere un nuovo articolo alla collezione Star51.",
+            "card_title_edit": "Modifica Articolo",
+            "card_subtitle_edit": "Modifica i campi dell'articolo e salva le modifiche - ID: {id}",
+            "show_date_checkbox": "Mostra data sul sito",
+            "subcategory": "Categoria e Sottocategoria",
+            "subcategory_placeholder": "[categoria] - sottocategoria",
+            "subcategory_feedback": "Seleziona una categoria e sottocategoria.",
+            "select": "Seleziona",
+            "title": "Titolo Articolo",
+            "title_feedback": "Il titolo è obbligatorio",
+            "collection": "Tipo/Formato Collezione",
+            "collection_help": "Formato o edizione (es: 4K UHD, Blu-ray Criterion, LEGO UCS)",
+            "year": "Anno",
+            "year_feedback": "L'anno deve essere compreso tra 1901 e 2155",
+            "year_help": "Anno produzione o uscita",
+            "summary": "Riassunto",
+            "summary_help": "Breve descrizione (mostrata nelle liste)",
+            "content": "Testo esteso",
+            "content_help": "Descrizione completa, storia personale, note tecniche",
+            "jpg_only": "Solo JPG",
+            "youtube": "Video YouTube",
+            "youtube_help": "URL completo video YouTube (opzionale)",
+            "cat_subcat_inactive": "Cat/Subcat Disattive",
+            "cat_inactive": "Cat Disattiva",
+            "subcat_inactive": "Subcat Disattiva",
+            "remove": "Rimuovi",
+            "quill_placeholder": "Descrizione completa, storia personale, dettagli tecnici, aneddoti..."
+        },
+
+        "status": {
+            "active": "Attivo",
+            "inactive": "Disattivo",
+            "date_on": "Data ON",
+            "date_off": "Data OFF",
+            "click_activate": "Clicca per attivare",
+            "click_deactivate": "Clicca per disattivare",
+            "date_visible": "Data visibile sul frontend - Clicca per nascondere",
+            "date_hidden": "Data nascosta sul frontend - Clicca per mostrare"
+        },
+
+        "buttons": {
+            "new_article": "Nuovo Articolo",
+            "back_to_list": "Torna alla Lista",
+            "back_to_form": "Torna al Form",
+            "create": "Crea Articolo",
+            "save": "Salva Modifiche"
+        },
+
+        "confirm": {
+            "delete": "Stai per eliminare questo articolo. Confermi?"
+        },
+
+        "msg": {
+            "created": "Articolo ID <strong>{id}</strong> creato con successo!",
+            "updated": "Articolo ID <strong>{id}</strong> aggiornato con successo!",
+            "deleted": "Record <strong>#{id}</strong> eliminato con successo!",
+            "toggled_active": "Record <strong>{id}</strong> attivato con successo",
+            "toggled_inactive": "Record <strong>{id}</strong> disattivato con successo",
+            "toggled_date_on": "Record <strong>{id}</strong> mostrerà la data di pubblicazione sul frontend",
+            "toggled_date_off": "Record <strong>{id}</strong> nasconderà la data di pubblicazione sul frontend"
+        },
+
+        "err": {
+            "load": "Errore nel caricamento degli articoli.",
+            "invalid_id": "ID articolo non valido",
+            "not_found": "Articolo non trovato",
+            "csrf_invalid": "Richiesta non valida. Token di sicurezza mancante o non corretto.",
+            "no_permission": "Non hai i permessi per accedere a questa sezione.",
+            "query_prepare": "Errore nella preparazione della query",
+            "insert_failed": "Errore nell'inserimento",
+            "update_failed": "Errore nell'aggiornamento",
+            "delete_failed": "Errore nell'eliminazione dell'articolo",
+            "toggle_failed": "Errore nell'aggiornamento dello stato",
+            "toggle_date_failed": "Errore nell'aggiornamento dello stato visibilità data",
+            "unexpected_create": "Si è verificato un errore imprevisto durante la creazione dell'articolo.",
+            "unexpected_update": "Si è verificato un errore imprevisto durante l'aggiornamento dell'articolo.",
+            "subcategories_load": "Errore nel caricamento delle sottocategorie."
+        },
+
+        "val": {
+            "title_required": "Titolo articolo è obbligatorio",
+            "title_max": "Il titolo non può superare i {max} caratteri",
+            "subcategory_required": "Categoria e Sottocategoria è obbligatoria",
+            "collection_max": "Il tipo collezione non può superare i {max} caratteri",
+            "year_range": "L'anno deve essere compreso tra {min} e {max}",
+            "youtube_invalid": "L'URL del video YouTube non è valido"
+        },
+
+        "error_page": {
+            "title": "Errore",
+            "unexpected_create": "Si è verificato un errore imprevisto durante la creazione dell'articolo.",
+            "unexpected_update": "Si è verificato un errore imprevisto durante l'aggiornamento dell'articolo.",
+            "back_to_form": "Torna al Form",
+            "back_to_list": "Lista Articoli"
+        },
+
+        "js": {
+            "files_too_large": "ATTENZIONE: File troppo grandi!",
+            "total_uploaded": "Totale file caricati",
+            "max_allowed": "Massimo consentito",
+            "files_selected": "File selezionati",
+            "suggestions": "Suggerimenti",
+            "reduce_images": "Riduci le dimensioni delle immagini",
+            "upload_fewer": "Carica meno file contemporaneamente",
+            "php_reject": "PHP potrebbe rifiutare l'upload prima della validazione.",
+            "reduce_size_or_count": "Riduci la dimensione o il numero di file.",
+            "compress_file": "Comprimi il file prima di caricare"
+        }
+    },
+
+    "images": {
+        "val": {
+            "gallery_invalid": "Immagine {num}: File non è un'immagine valida",
+            "gallery_format": "Immagine {num}: Formato non supportato. Usa solo JPG/JPEG",
+            "gallery_size": "Immagine {num}: Dimensioni errate ({width}×{height}px). Richieste: {h_width}×{h_height}px (H) oppure {v_width}×{v_height}px (V)",
+            "gallery_save_error": "Immagine {num}: Errore nel salvataggio del file",
+            "resize_error_gallery": "Errore nella creazione delle miniature per immagine {num}"
+        }
+    },
+
+    "subcategories": {
+        "page": {
+            "title": "Gestione Sottocategorie",
+            "description": "Gestione sottocategorie - visualizzazione, modifica e controllo organizzazione contenuti",
+            "title_create": "Nuova Sottocategoria",
+            "title_edit": "Modifica Sottocategoria",
+            "desc_create": "Creazione nuova sottocategoria per organizzazione contenuti",
+            "desc_edit": "Modifica sottocategoria del sistema"
+        },
+
+        "list": {
+            "title": "Elenco Sottocategorie",
+            "subtitle": "In questa pagina puoi visualizzare tutte le sottocategorie presenti nel database, sia pubblicate che non pubblicate, ordinate in base all'ID di inserimento.",
+            "reminder": "Ricorda: dopo aver creato una nuova sottocategoria, assicurati di pubblicarla per renderla visibile sul tuo sito!",
+            "col_catsubcat": "[Cat.] - SottoCat.",
+            "col_description": "Descrizione",
+            "col_status": "Stato",
+            "col_created_by": "Inserito da",
+            "col_actions": "Azioni",
+            "category_deleted": "Eliminata"
+        },
+
+        "form": {
+            "title_create": "Inserimento Nuova Sottocategoria",
+            "title_edit": "Modifica Sottocategoria",
+            "subtitle_create": "Compila i campi per creare una nuova sottocategoria.",
+            "subtitle_edit": "Modifica i campi della sottocategoria e salva le modifiche",
+            "id_category": "Categoria",
+            "select_category": "Seleziona una categoria...",
+            "category_inactive": "(Disattiva)",
+            "help_category": "La sottocategoria sarà associata alla categoria selezionata",
+            "invalid_category": "Seleziona una categoria per la sottocategoria.",
+            "subcategory_name": "Nome Sottocategoria",
+            "subcategory_description": "Descrizione",
+            "help_name": "Nome identificativo della sottocategoria (es: 4K UHD, Blu-ray, LEGO UCS)",
+            "invalid_name": "Il nome della sottocategoria è obbligatorio e non può superare i 255 caratteri."
+        },
+
+        "buttons": {
+            "new_subcategory": "Nuova Sottocategoria",
+            "back_to_list": "Torna alla Lista",
+            "create": "Crea Sottocategoria",
+            "save": "Salva Modifiche"
+        },
+
+        "confirm": {
+            "delete": "Gli articoli associati verranno spostati in Mix. Confermi?",
+            "deactivate": "Disattivando questa sottocategoria nascondi anche gli articoli associati sul sito. Confermi?"
+        },
+
+        "msg": {
+            "created": "Creazione del record <strong>{id}</strong> avvenuta con successo!",
+            "updated": "Aggiornamento del record <strong>{id}</strong> avvenuto con successo!",
+            "deleted": "Record <strong>#{id}</strong> eliminato con successo!",
+            "deleted_articles": "<strong>{count}</strong> articoli salvati in \"Varie\"."
+        },
+
+        "err": {
+            "load": "Errore nel caricamento delle sottocategorie.",
+            "invalid_id": "ID sottocategoria non valido",
+            "not_found": "Sottocategoria non trovata",
+            "csrf_invalid": "Richiesta non valida. Token di sicurezza mancante o non corretto.",
+            "system_protected": "Le sottocategorie di sistema non possono essere eliminate",
+            "query_prepare": "Errore nella preparazione della query: ",
+            "insert_failed": "Errore nell'inserimento: ",
+            "update_failed": "Errore nell'aggiornamento: ",
+            "delete_failed": "Errore nell'eliminazione della sottocategoria",
+            "move_articles": "Errore nello spostamento degli articoli",
+            "unexpected_create": "Si è verificato un errore imprevisto durante la creazione della sottocategoria.",
+            "unexpected_update": "Si è verificato un errore imprevisto durante l'aggiornamento della sottocategoria.",
+            "error_create": "Errore nella creazione",
+            "error_update": "Errore nella modifica"
+        },
+
+        "val": {
+            "category_required": "Categoria padre è obbligatorio",
+            "category_invalid": "Categoria padre non valida",
+            "category_not_exists": "La categoria selezionata non esiste",
+            "category_inactive": "La categoria selezionata è disattiva. Attivala prima di creare sottocategorie.",
+            "name_required": "Nome sottocategoria è obbligatorio",
+            "name_max": "Il nome sottocategoria non può superare i 255 caratteri",
+            "name_exists": "Esiste già una sottocategoria con questo nome nella categoria selezionata",
+            "name_exists_other": "Esiste già un'altra sottocategoria con questo nome nella categoria selezionata"
+        },
+
+        "error_page": {
+            "title": "Errore",
+            "back_to_form": "Torna alla Creazione",
+            "back_to_edit": "Torna alla Modifica",
+            "back_to_list": "Lista Sottocategorie",
+            "view_subcategory": "Visualizza Sottocategoria"
+        }
+    },
+
+    "requests": {
+        "page": {
+            "title": "Gestione Richieste",
+            "description": "Gestione richieste utenti - messaggi di contatto e iscrizioni newsletter",
+            "title_search": "Ricerca Richieste",
+            "desc_search": "Risultati ricerca richieste utenti"
+        },
+
+        "list": {
+            "title": "Elenco Richieste",
+            "subtitle": "In questa pagina puoi visualizzare tutte le richieste degli utenti, ordinate per stato e data.",
+            "hint": "Clicca su una richiesta per visualizzare i dettagli completi e gestire la risposta.",
+            "col_name": "Nome Cognome",
+            "col_message": "Messaggio",
+            "col_contact": "Contatto",
+            "col_type": "Tipologia",
+            "col_status": "Stato",
+            "col_date": "Data",
+            "col_actions": "Azioni"
+        },
+
+        "status": {
+            "processed": "Evasa",
+            "pending": "Non Evasa",
+            "click_pending": "Clicca per segnare come Non Evasa",
+            "click_processed": "Clicca per segnare come Evasa"
+        },
+
+        "content": {
+            "no_message": "Nessun messaggio",
+            "full_message": "Messaggio Completo",
+            "no_message_available": "Nessun messaggio disponibile",
+            "expand_collapse": "Espandi/Chiudi messaggio"
+        },
+
+        "empty": {
+            "title": "Nessuna richiesta trovata",
+            "desc": "Non sono ancora arrivate richieste dagli utenti."
+        },
+
+        "search": {
+            "title": "Risultati della ricerca",
+            "results_title": "Risultati della Ricerca",
+            "results_subtitle": "Richieste trovate ordinate per ID (più recenti prima).",
+            "results_found": "<strong>{count}</strong> risultati trovati per &quot;<strong>{query}</strong>&quot;.",
+            "no_results": "La ricerca del termine &quot;<strong>{query}</strong>&quot; non ha generato nessun risultato.",
+            "no_results_title": "Nessun risultato trovato",
+            "no_results_desc": "La ricerca di &quot;<strong>{query}</strong>&quot; non ha prodotto risultati.<br>Prova con parole chiave diverse o più generiche.",
+            "min_chars": "Per effettuare una ricerca immettere almeno 3 caratteri."
+        },
+
+        "confirm": {
+            "delete": "Stai per eliminare questa richiesta. Confermi?"
+        },
+
+        "msg": {
+            "deleted": "Record <strong>#{id}</strong> eliminato con successo!"
+        },
+
+        "err": {
+            "load": "Errore nel caricamento delle richieste.",
+            "csrf_invalid": "Richiesta non valida. Token di sicurezza mancante o non corretto.",
+            "invalid_id": "ID richiesta non valido",
+            "not_found": "Richiesta non trovata",
+            "delete_failed": "Errore nell'eliminazione della richiesta"
+        }
+    }
+}

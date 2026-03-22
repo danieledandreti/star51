@@ -1,0 +1,65 @@
+# Star51 Solo - Apache Configuration
+# Error pages, compression, caching, security
+
+# ===== ERROR PAGES =====
+# Redirect HTTP errors to unified error page
+ErrorDocument 400 /error.php?code=400
+ErrorDocument 401 /error.php?code=401
+ErrorDocument 403 /error.php?code=403
+ErrorDocument 404 /error.php?code=404
+ErrorDocument 500 /error.php?code=500
+ErrorDocument 503 /error.php?code=503
+
+# ===== GZIP COMPRESSION (mod_deflate) =====
+# Compress text-based resources for faster delivery
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/javascript
+    AddOutputFilterByType DEFLATE application/javascript application/json
+    AddOutputFilterByType DEFLATE image/svg+xml application/xml
+</IfModule>
+
+# ===== BROWSER CACHE (mod_expires) =====
+# Images: 1 year | CSS/JS: 1 month | HTML: no cache
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType application/x-font-woff2 "access plus 1 year"
+</IfModule>
+
+# ===== SECURITY HEADERS (mod_headers) =====
+# Complement PHP headers already set in inc_head.php
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# ===== DIRECTORY PROTECTION =====
+# Disable directory listing
+Options -Indexes
+
+# Block access to sensitive files
+<FilesMatch "\.(log|sql|md|json|gitignore)$">
+    Require all denied
+</FilesMatch>
+
+# Protect config and internal directories via RewriteRule
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^nova/(conf|logs|legas|inc)/ - [F,L]
+    RewriteRule ^install/ - [F,L]
+</IfModule>
+
+# ===== HTTPS REDIRECT (production only) =====
+# Uncomment when deploying with SSL
+# <IfModule mod_rewrite.c>
+#     RewriteEngine On
+#     RewriteCond %{HTTPS} off
+#     RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# </IfModule>

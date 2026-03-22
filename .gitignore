@@ -1,0 +1,30 @@
+# Dev files
+_dev/
+
+# File upload directories (contain user-uploaded files)
+file_db_max/*
+file_db_med/*
+file_db_min/*
+
+# Keep directory structure and fallback images
+!file_db_max/.gitkeep
+!file_db_med/.gitkeep
+!file_db_min/.gitkeep
+!file_db_max/nova-01-max.jpg
+!file_db_med/nova-01-med.jpg
+!file_db_min/nova-01-min.jpg
+
+# macOS system files
+.DS_Store
+
+# Log files
+nova/logs/error.log
+
+# Config with credentials (contains DB passwords, SMTP credentials)
+nova/conf/nova_config_values.php
+
+# Config backups (timestamped)
+nova/conf/nova_config_values.php.backup_*
+
+# Installation lock
+.installed
