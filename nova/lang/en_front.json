@@ -1,0 +1,236 @@
+{
+    "site": {
+        "title": "Star51",
+        "subtitle": "My collection"
+    },
+    "nav": {
+        "home": "Home",
+        "articles": "Articles",
+        "about": "About Us",
+        "news": "News",
+        "categories": "Categories",
+        "contact": "Contact",
+        "search": "Search",
+        "search_placeholder": "Search..."
+    },
+    "carousel": {
+        "previous": "Previous slide",
+        "next": "Next slide"
+    },
+    "homepage": {
+        "latest_title": "Latest Additions",
+        "view_all": "View all",
+        "welcome_title": "Welcome to Star51",
+        "welcome_subtitle": "Your destination for quality articles",
+        "categories_title": "Explore Our Categories",
+        "categories_subtitle": "Discover all available categories and the latest news",
+        "category_fallback": "Discover this category...",
+        "news_title": "Latest News",
+        "read_article": "Read article",
+        "slide1_title": "NovaStar51",
+        "slide1_subtitle": "Your collection, your world",
+        "slide2_title": "Organize in Style",
+        "slide2_subtitle": "Manage your passions simply and intuitively",
+        "slide3_title": "Always with You",
+        "slide3_subtitle": "Access your collection wherever you are",
+        "page_description": "Star51 - Your destination for quality articles and professional services. Discover our premium products, expert consulting, and innovative solutions."
+    },
+    "buttons": {
+        "go": "Go",
+        "view_all": "View All",
+        "back": "Go Back",
+        "submit": "Submit",
+        "save": "Save",
+        "cancel": "Cancel",
+        "close": "Close",
+        "read_more": "Read more"
+    },
+    "articles": {
+        "page_title": "Our Articles",
+        "page_subtitle": "Discover our selection of quality products and services",
+        "page_description": "Star51 - Discover our complete collection of articles, products and services.",
+        "all_articles": "All Articles",
+        "no_articles": "No articles found in this category.",
+        "view_all": "View all articles",
+        "fallback_summary": "Discover more about this article...",
+        "navigation": "Articles navigation"
+    },
+    "article": {
+        "details": "Details",
+        "related": "Related articles",
+        "back_to_list": "Back to list",
+        "year": "Year",
+        "category": "Category",
+        "subcategory": "Subcategory",
+        "description": "Description",
+        "published_on": "Published on",
+        "no_content": "No content available."
+    },
+    "category": {
+        "all_articles": "All articles",
+        "subcategories": "Subcategories",
+        "no_subcategories": "No subcategories"
+    },
+    "contact": {
+        "title": "Contact Us",
+        "subtitle": "We are here to help. Choose the most convenient way to get in touch with us",
+        "subtitle_2": "Fill out the form below and we will get back to you as soon as possible",
+        "first_name": "First Name",
+        "last_name": "Last Name",
+        "email": "Email",
+        "phone": "Phone",
+        "phone_hint": "Optional field for callbacks",
+        "captcha_label": "Verify:",
+        "captcha_hint": "Write the result in words (e.g.: three, five, ten)",
+        "message": "Message",
+        "message_placeholder": "Describe your request...",
+        "privacy_label": "I accept the processing of personal data according to the",
+        "privacy_link": "Privacy Policy",
+        "submit": "Send Request",
+        "data_protection": "Your data is protected and will only be used to respond to your request",
+        "error": "Error",
+        "validation": {
+            "first_name": "First name is required",
+            "last_name": "Last name is required",
+            "email": "Valid email is required",
+            "captcha": "Please enter the security verification result",
+            "captcha_expired": "Session expired. Please reload the page and try again",
+            "captcha_timeout": "Security verification expired. Please reload the page",
+            "captcha_wrong": "Verification result is incorrect. Please try again",
+            "message": "Message is required",
+            "privacy": "You must accept the Privacy Policy"
+        },
+        "success": {
+            "message": "Thank you for contacting us! We have received your message and will respond as soon as possible.",
+            "email_sent": "We have sent you a confirmation email."
+        },
+        "errors": {
+            "db_connection": "Database connection error. Please try again later.",
+            "save_failed": "Error saving data.",
+            "generic": "An error occurred while processing your request."
+        },
+        "locations_title": "Our Locations",
+        "locations_subtitle": "Find the nearest office for information and assistance",
+        "location_1": {
+            "title": "Genoa Office"
+        },
+        "location_2": {
+            "title": "Switzerland Office"
+        },
+        "location_labels": {
+            "working_hours": "Working Hours",
+            "weekdays": "Mon-Fri",
+            "phone": "Phone",
+            "email": "Email"
+        },
+        "overlay": {
+            "close": "Close",
+            "sending": "Sending",
+            "wait": "Please wait a moment..."
+        }
+    },
+    "search": {
+        "title": "Search",
+        "subtitle": "Find products, articles and content from Star51",
+        "placeholder": "Search the collection...",
+        "input_placeholder": "What are you looking for?",
+        "min_chars": "Enter at least 3 characters to start searching",
+        "results": "Results for",
+        "results_found": "Results found for",
+        "no_results": "No results found",
+        "no_results_hint": "Try different keywords.",
+        "navigation": "Search results navigation"
+    },
+    "pagination": {
+        "first": "First",
+        "last": "Last",
+        "next": "Next",
+        "previous": "Previous",
+        "showing": "Showing",
+        "of": "of",
+        "results": "results"
+    },
+    "footer": {
+        "description": "Your destination for quality articles and professional services. We offer innovative solutions and excellent customer service.",
+        "follow_us": "Follow Us",
+        "contact_us": "Contact Us",
+        "copyright": "All rights reserved.",
+        "privacy_policy": "Privacy Policy",
+        "cookie_policy": "Cookie Policy",
+        "powered_by": "Powered by NovaStar51"
+    },
+    "messages": {
+        "no_results": "No results found",
+        "no_categories": "No categories available at the moment.",
+        "no_news": "No news available at the moment.",
+        "no_date": "n/a",
+        "loading": "Loading...",
+        "error": "An error occurred"
+    },
+    "news": {
+        "title": "News & Updates",
+        "subtitle": "Stay up to date with the latest news from Star51",
+        "badge": "News",
+        "no_news": "No news available at the moment. Check back soon for updates!",
+        "navigation": "News navigation"
+    },
+    "captcha": {
+        "numbers": ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"],
+        "questions": [
+            "What is %s + %s?",
+            "What is %s plus %s?",
+            "Add %s and %s:",
+            "%s + %s equals?",
+            "Calculate %s plus %s:"
+        ]
+    },
+    "date": {
+        "format": "{month} {d}, {Y}",
+        "months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    },
+    "policy": {
+        "page_title": "Privacy & Cookie Policy",
+        "page_description": "Star51 Privacy Policy and Cookie Policy - Complete information about personal data processing and cookie usage in GDPR compliance.",
+        "title": "Privacy Policy & Cookie Policy",
+        "subtitle": "Complete information about your personal data processing and cookie usage"
+    },
+    "about": {
+        "page_title": "About Us",
+        "page_description": "Discover the story of Star51, our team and the values that guide our mission.",
+        "title": "About Us",
+        "subtitle": "Our story, our values and the passion that drives us every day"
+    },
+    "error_page": {
+        "page_title": "Error",
+        "back_home": "Back to Home",
+        "search": "Search the site",
+        "400": {
+            "title": "Bad Request",
+            "description": "Hmm, we didn't get that request... come on, try again :-)"
+        },
+        "401": {
+            "title": "Unauthorized",
+            "description": "Hey! Introduce yourself first, then we'll talk."
+        },
+        "403": {
+            "title": "Forbidden",
+            "description": "VIP area, you need a special pass!"
+        },
+        "404": {
+            "title": "Page Not Found",
+            "description": "Houston, we have a problem... the page is gone!"
+        },
+        "500": {
+            "title": "Internal Server Error",
+            "description": "The server needs a coffee... we'll be right back!"
+        },
+        "503": {
+            "title": "Service Unavailable",
+            "description": "We're doing maintenance, come back later... coffee and cookies on us!"
+        },
+        "default": {
+            "title": "Unknown Error",
+            "description": "Well... this is awkward. Something didn't work!"
+        }
+    }
+}

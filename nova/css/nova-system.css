@@ -1,0 +1,1476 @@
+/* ==========================================
+   NOVA ADMINISTRATION SYSTEM CSS
+   ========================================== */
+/* Production-Ready Admin Interface
+   Based on Star51 System
+   v2.0 December 2025 */
+/* ==========================================
+   CSS CUSTOM PROPERTIES
+   ========================================== */
+/* Nova color palette, spacing, typography
+   All variables prefixed with --nova-* */
+:root {
+  /* === NOVASTAR ADMIN PALETTE === */
+  --nova-brand-orange: #ff5b19;
+  --nova-charcoal: #161616;
+  --nova-cream: #e5e3d2;
+  --nova-mint: #aecacd;
+  --nova-golden: #f4b942;
+  --nova-golden-light: #f7c965;
+  --nova-terracotta: #c85a30;
+  --nova-orange-light: #ff7b47;
+  --nova-orange-soft: #ff8c66;
+
+  /* System Colors */
+  --nova-primary: var(--nova-brand-orange);
+  --nova-dark: var(--nova-charcoal);
+  --nova-light: #ffffff;
+  --nova-white: #ffffff;
+
+  /* Navbar Colors */
+  --nova-navbar-bg: var(--nova-mint-alpha-60);
+  --nova-navbar-border: var(--nova-mint-alpha-40);
+  --nova-nav-link-hover: var(--nova-brand-orange);
+
+  /* Universal Link States */
+  --nova-link-normal: #ff7b47;
+  --nova-link-active: #ff7b47;
+
+  /* Additional Color Variables - Consolidation */
+  --nova-mint-dark: #578a8f;
+  --nova-gray-border: #dee2e6;
+  --nova-gray-muted: #6c757d;
+
+  /* Cream Scale */
+  --nova-cream-base: #e5e3d2;
+  --nova-cream-10: #e2dfce;
+  --nova-cream-40: #d9d3c2;
+
+  /* Alpha Variations */
+  --nova-mint-alpha-60: rgba(174, 202, 205, 0.6);
+  --nova-mint-alpha-40: rgba(174, 202, 205, 0.4);
+  --nova-mint-alpha-30: rgba(174, 202, 205, 0.3);
+  --nova-mint-alpha-20: rgba(174, 202, 205, 0.2);
+  --nova-mint-alpha-15: rgba(174, 202, 205, 0.15);
+  --nova-mint-alpha-10: rgba(174, 202, 205, 0.1);
+  --nova-mint-alpha-70: rgba(174, 202, 205, 0.7);
+
+  --nova-mint-dark-alpha-30: rgba(87, 138, 143, 0.3);
+
+  --nova-terracotta-alpha-30: rgba(200, 90, 48, 0.3);
+
+  --nova-orange-alpha-40: rgba(255, 91, 25, 0.4);
+  --nova-orange-alpha-20: rgba(255, 91, 25, 0.2);
+  --nova-orange-alpha-12: rgba(255, 91, 25, 0.12);
+
+  --nova-orange-light-alpha-12: rgba(255, 123, 71, 0.12);
+
+  --nova-golden-alpha-30: rgba(244, 185, 66, 0.3);
+
+  --nova-white-alpha-80: rgba(255, 255, 255, 0.8);
+
+  --nova-charcoal-alpha-75: rgba(22, 22, 22, 0.75);
+  --nova-charcoal-ghosting: rgba(40, 40, 40, 0.4);
+
+  --nova-shadow-light: rgba(0, 0, 0, 0.05);
+  --nova-shadow-medium: rgba(0, 0, 0, 0.1);
+
+  /* Layout */
+  --nova-navbar-height: 70px;
+  --nova-footer-height: 60px;
+  --nova-container-max: 1400px;
+
+  /* Spacing */
+  --nova-spacing-xs: 0.5rem;
+  --nova-spacing-sm: 1rem;
+  --nova-spacing-md: 1.5rem;
+  --nova-spacing-lg: 2rem;
+  --nova-spacing-xl: 3rem;
+
+  /* Typography */
+  --nova-font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  --nova-font-size-sm: 0.875rem;
+  --nova-font-size-base: 1rem;
+  --nova-font-size-lg: 1.125rem;
+
+  /* Border Radius */
+  --nova-radius-sm: 6px;
+  --nova-radius-md: 8px;
+  --nova-radius-lg: 12px;
+
+  /* Transitions */
+  --nova-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --nova-transition-fast: all 0.2s ease;
+  --nova-transition-color: color 0.2s ease;
+
+  /* Common Pattern Variables */
+  --nova-icon-size: 1.5rem;
+  --nova-icon-spacing: 8px;
+}
+
+/* ==========================================
+   GLOBAL RESET & BASE STYLES
+   ========================================== */
+/* Box-sizing, smooth scroll, font defaults */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--nova-font-family);
+  font-size: var(--nova-font-size-base);
+  line-height: 1.6;
+  color: var(--nova-dark);
+  background-color: var(--nova-light);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* ==========================================
+   LAYOUT SYSTEM
+   ========================================== */
+/* Container, main content, wrapper utilities */
+
+/* Container */
+.container-nova {
+  max-width: var(--nova-container-max);
+  margin: 0 auto;
+  width: 100%;
+  padding-left: var(--nova-spacing-lg);
+  padding-right: var(--nova-spacing-lg);
+}
+
+/* Main Layout */
+.nova-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.nova-main-content {
+  flex: 1;
+  padding-top: var(--nova-navbar-height);
+  padding-bottom: var(--nova-spacing-lg);
+}
+
+.content-wrapper {
+  padding-top: var(--nova-spacing-lg);
+  padding-bottom: var(--nova-spacing-lg);
+}
+
+/* ==========================================
+   NOVA NAVBAR SYSTEM
+   ========================================== */
+/* Fixed top navbar with glassmorphism effect
+   Dropdown menus, mobile toggle, icon navigation */
+
+.navbar.nova-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--nova-navbar-height);
+  background: var(--nova-navbar-bg);
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid var(--nova-navbar-border);
+  padding: 0.8rem 0;
+  z-index: 1050;
+}
+
+.nova-navbar .navbar-nav .nav-link {
+  color: var(--nova-link-normal);
+  font-weight: 500;
+  font-size: var(--nova-font-size-lg);
+  margin: 0 12px;
+  padding: 8px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  transition: var(--nova-transition-fast);
+}
+
+.nova-navbar .navbar-nav .nav-link i {
+  font-size: var(--nova-icon-size);
+  margin-right: var(--nova-icon-spacing);
+  flex-shrink: 0;
+  transition: var(--nova-transition-color);
+}
+
+/* Home icon exception - no margin for better active box */
+.nova-navbar .navbar-nav .nav-link i.bi-house-heart-fill {
+  margin-right: 0;
+}
+
+/* Icon states - Clean cascade */
+.nova-navbar .nav-link i {
+  color: var(--nova-mint-alpha-70);
+  transition: var(--nova-transition-color);
+}
+
+.nova-navbar .nav-link:hover i {
+  color: var(--nova-golden);
+}
+
+.nova-navbar .nav-link.active i {
+  color: var(--nova-link-active);
+}
+
+.nova-navbar .navbar-nav .nav-link span {
+  position: relative;
+}
+
+/* Navbar underlines removed for cleaner look */
+
+.nova-navbar .navbar-nav .nav-link:hover {
+  color: var(--nova-white);
+  background-color: var(--nova-orange-soft);
+  border-radius: var(--nova-radius-sm);
+}
+
+.nova-navbar .navbar-nav .nav-link.active {
+  color: var(--nova-link-active);
+  font-weight: 600;
+  background-color: var(--nova-orange-light-alpha-12);
+  border-radius: var(--nova-radius-sm);
+}
+
+/* Dropdown Menus */
+.nova-navbar .dropdown-menu {
+  border: 1px solid var(--nova-navbar-border);
+  border-radius: var(--nova-radius-sm);
+  box-shadow: 0 2px 10px var(--nova-shadow-medium);
+  margin-top: 2px;
+}
+
+/* Dropdown unified styling */
+.nova-navbar .dropdown-menu .dropdown-item {
+  color: var(--nova-charcoal);
+  padding: 12px 16px;
+  border-radius: 0;
+  transition: var(--nova-transition-fast);
+  display: flex;
+  align-items: center;
+}
+
+.nova-navbar .dropdown-menu .dropdown-item:hover {
+  background-color: var(--nova-orange-soft);
+  color: white;
+}
+
+/* Ensure dropdown text spans are white on hover */
+.nova-navbar .dropdown-menu .dropdown-item:hover .dropdown-item-text {
+  color: white;
+}
+
+.nova-navbar .dropdown-menu .dropdown-item i {
+  font-size: var(--nova-icon-size);
+  margin-right: var(--nova-icon-spacing);
+  color: var(--nova-mint-alpha-70);
+  transition: var(--nova-transition-color);
+}
+
+.nova-navbar .dropdown-menu .dropdown-item:hover i {
+  color: var(--nova-golden);
+}
+
+/* Mobile Toggle */
+.navbar-toggler {
+  border-color: var(--nova-nav-link-hover);
+  padding: 0.25rem 0.5rem;
+}
+
+/* ==========================================
+   MOBILE NAVIGATION ICONS
+   ========================================== */
+/* Circular icon buttons for mobile navbar
+   Nova mint soft background with hover effects */
+
+/* Mobile nav icons container */
+.mobile-nav-icons {
+  align-items: center;
+}
+
+/* Mobile nav icon styling - Nova style */
+.navbar .mobile-nav-icon,
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--nova-mint-alpha-15); /* Nova mint soft */
+  color: var(--nova-charcoal);
+  text-decoration: none;
+  transition: var(--nova-transition);
+  font-size: 1.4rem;
+  border: 1px solid var(--nova-mint-alpha-30);
+}
+
+.mobile-nav-icon:hover,
+.mobile-nav-icon:focus,
+.navbar-brand:hover,
+.navbar-brand:focus {
+  background: var(--nova-brand-orange);
+  color: white;
+  transform: scale(1.05);
+  text-decoration: none;
+  box-shadow: 0 0 0 3px var(--nova-orange-alpha-20);
+}
+
+.mobile-nav-icon:active,
+.navbar-brand:active {
+  transform: scale(0.95);
+}
+
+/* ==========================================
+   NOVA TABLES
+   ========================================== */
+/* Cream-colored tables with hover effects
+   Compact variant, action buttons, responsive design */
+
+/* Nova table styling with Cream scheme */
+.nova-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--nova-gray-border);
+  border-radius: var(--nova-radius-sm);
+  overflow: hidden;
+}
+
+/* Table header - Cream background */
+.nova-table thead th {
+  background-color: var(--nova-cream-base);
+  color: var(--nova-charcoal);
+  border-bottom: 2px solid var(--nova-cream-40);
+  font-weight: 600;
+  padding: 12px 16px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Table body */
+.nova-table tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--nova-cream-10);
+  vertical-align: middle;
+}
+
+/* Alternating rows - Nova Mint scheme (Soft + Bright) */
+/* Bootstrap 5.3.8 uses CSS variables + box-shadow */
+.table.nova-table {
+  --bs-table-striped-bg: #e8f4f5; /* Soft mint (zebra) */
+  --bs-table-hover-bg: #c8e3e7; /* Bright mint (hover) */
+}
+
+/* Standard zebra pattern (normal tables without accordion) */
+.table.nova-table:not(.nova-table-accordion) tbody tr:nth-child(even) {
+  --bs-table-accent-bg: var(--bs-table-striped-bg);
+}
+
+.table.nova-table:not(.nova-table-accordion) tbody tr:nth-child(odd) {
+  --bs-table-accent-bg: transparent;
+}
+
+/* Zebra pattern for accordion tables (requests_list.php) */
+/* Each request = 2 rows (main + collapse), zebra on 4n+3 rows */
+.table.nova-table-accordion tbody tr {
+  --bs-table-accent-bg: transparent;
+}
+
+.table.nova-table-accordion tbody tr:nth-child(4n + 3) {
+  --bs-table-accent-bg: var(--bs-table-striped-bg);
+}
+
+/* Accordion rows (.collapse) always transparent */
+.table.nova-table-accordion tbody tr.collapse {
+  --bs-table-accent-bg: transparent !important;
+}
+
+/* Row hover effect (all tables) */
+.table.nova-table tbody tr:hover {
+  --bs-table-accent-bg: var(--bs-table-hover-bg);
+  transition: background-color 0.2s ease;
+}
+
+/* Compact table variant - reduced padding */
+.nova-table-compact thead th {
+  padding: 8px 12px;
+}
+
+.nova-table-compact tbody td {
+  padding: 8px 12px;
+}
+
+/* Table action buttons - Perfect alignment */
+.nova-table .btn-lg {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0.5rem 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+/* ==========================================
+   NOVA BADGE SYSTEM
+   ========================================== */
+/* Unified badge helpers for all tables
+   Philosophy: Extend Bootstrap, never override */
+
+/* === HELPER CLASSES === */
+
+/* Badge Standard (non-clickable) - Universal helper for all tables */
+.nova-badge-status {
+  min-width: 140px;
+  font-size: 0.9rem;
+  padding: 0.4em 0.75em;
+  font-weight: 500;
+  display: inline-block;
+  text-align: center;
+}
+
+/* Badge Clickable (with hover effect) - For toggle/interactive badges */
+.nova-badge-clickable {
+  min-width: 140px;
+  font-size: 0.9rem;
+  padding: 0.4em 0.75em;
+  font-weight: 500;
+  display: inline-block;
+  text-align: center;
+  text-decoration: none; /* No underline on links */
+  transition: opacity 0.2s ease;
+}
+
+.nova-badge-clickable:hover {
+  opacity: 0.85;
+  cursor: pointer;
+  text-decoration: none; /* Prevent underline on hover */
+}
+
+.nova-badge-clickable:focus {
+  text-decoration: none; /* Prevent underline on focus */
+}
+
+/* Icon spacing inside badges */
+.nova-badge-status i,
+.nova-badge-clickable i {
+  margin-right: 0.5rem; /* Increased from 0.25rem to 0.5rem for better spacing */
+}
+
+/* Badge Outline Muted - For "Normale" and "Data OFF" states */
+/* Breaking the schema: outline instead of solid fill */
+.badge-outline-muted {
+  background: white;
+  color: #6c757d;
+  border: 2px solid #dee2e6;
+}
+
+.badge-outline-muted:hover {
+  background: #f8f9fa;
+  color: #495057;
+}
+
+/* Badge Placeholder - Matches Active badge width (Solo: no featured) */
+.nova-badge-placeholder {
+  min-width: 70px;
+}
+
+
+/* ==========================================
+   NOVA BUTTON SYSTEM
+   ========================================== */
+/* Action button helper for page headers and forms
+   Philosophy: Extend Bootstrap, never override
+   Session 20 - 4 Novembre 2025 */
+
+/* Action Button - Universal helper for header actions and form submits */
+.nova-btn-action {
+  font-size: 1.25rem; /* Replace fs-5 utility */
+  padding: 0.5rem 1rem; /* Comfortable click target */
+}
+
+/* Icon spacing inside action buttons - Aligned with badge system (0.5rem) */
+.nova-btn-action i {
+  margin-right: 0.5rem;
+}
+
+/* Fix Edit button icon color - Bootstrap default (green outline) */
+.btn-outline-success i {
+  color: inherit; /* Inherit button color (green on normal, white on hover) */
+}
+
+/* END ADMINS LIST STYLING */
+
+/* ==========================================
+   BOOTSTRAP OVERRIDES
+   ========================================== */
+/* Nova branding colors via CSS variables
+   Primary buttons, mint secondary, outline variants */
+
+/* Override Bootstrap Primary to Nova Orange */
+.btn-primary {
+  --bs-btn-bg: var(--nova-brand-orange);
+  --bs-btn-border-color: var(--nova-brand-orange);
+  --bs-btn-hover-bg: var(--nova-orange-soft);
+  --bs-btn-hover-border-color: var(--nova-orange-soft);
+  --bs-btn-active-bg: var(--nova-orange-soft);
+  --bs-btn-active-border-color: var(--nova-orange-soft);
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--nova-brand-orange);
+  --bs-btn-border-color: var(--nova-brand-orange);
+  --bs-btn-hover-bg: var(--nova-brand-orange);
+  --bs-btn-hover-border-color: var(--nova-brand-orange);
+  --bs-btn-active-bg: var(--nova-brand-orange);
+  --bs-btn-active-border-color: var(--nova-brand-orange);
+}
+
+/* Mint Secondary Button - Login/Password Reset pages */
+.btn-mint-secondary {
+  border-color: var(--nova-mint);
+  color: var(--nova-mint-dark);
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+.btn-mint-secondary:hover {
+  border-color: var(--nova-mint-dark);
+  color: var(--nova-white);
+  background: var(--nova-mint-dark);
+}
+
+.btn-mint-secondary:active,
+.btn-mint-secondary:focus {
+  border-color: var(--nova-mint-dark);
+  background: var(--nova-mint-dark);
+  color: var(--nova-white);
+  box-shadow: none;
+}
+
+/* Orange Solid Button - Full orange background with white text */
+.btn-orange {
+  color: var(--nova-white);
+  background-color: var(--nova-brand-orange);
+  border-color: var(--nova-brand-orange);
+  transition: all 0.3s ease;
+}
+
+.btn-orange:hover {
+  color: var(--nova-white);
+  background-color: var(--nova-orange-light);
+  border-color: var(--nova-orange-light);
+}
+
+.btn-orange:active,
+.btn-orange:focus {
+  color: var(--nova-white);
+  background-color: var(--nova-brand-orange);
+  border-color: var(--nova-brand-orange);
+  filter: brightness(0.9); /* Slightly darker, but stays orange */
+}
+
+/* Orange Outline Button - For button groups and toggles */
+.btn-outline-orange {
+  color: var(--nova-brand-orange);
+  border-color: var(--nova-brand-orange);
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+/* Hover state - Light highlight (higher specificity to override Bootstrap)
+   Keep orange border + orange text, add subtle background */
+.btn.btn-outline-orange:hover {
+  color: var(--nova-brand-orange);
+  background-color: var(--nova-orange-alpha-12);
+  border-color: var(--nova-brand-orange);
+}
+
+/* Checked/Active/Focus state - Full fill (white text, orange background) */
+.btn.btn-outline-orange:active,
+.btn.btn-outline-orange:focus,
+.btn-check:checked + .btn-outline-orange {
+  color: var(--nova-white);
+  background-color: var(--nova-brand-orange);
+  border-color: var(--nova-brand-orange);
+}
+
+/* ==========================================
+   ACCESSIBILITY
+   ========================================== */
+/* Focus indicators, screen reader utilities
+   WCAG 2.1 compliant styles */
+
+/* Focus Indicators */
+*:focus {
+  outline: none;
+}
+
+/* Custom focus for interactive elements */
+.nova-navbar .nav-link:focus,
+.footer-right a:focus {
+  background-color: var(--nova-orange-alpha-12);
+  border-radius: var(--nova-radius-sm);
+  box-shadow: 0 0 0 2px var(--nova-orange-alpha-20);
+}
+
+/* Screen Reader Only */
+.sr-only,
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* ==========================================
+   CARD SYSTEM
+   ========================================== */
+/* Nova cards with mint accent borders
+   Login cards, card headers, footers */
+
+.nova-card {
+  background-color: var(--nova-white);
+  border: 1px solid var(--nova-gray-border);
+  border-top: 3px solid var(--nova-mint);
+  border-radius: var(--nova-radius-md);
+  box-shadow: 0 1px 3px var(--nova-shadow-light);
+}
+
+/* Sistema Info card - mint border-bottom accent */
+.nova-card .nova-card-body .card-title.border-bottom {
+  border-bottom-color: var(--nova-mint);
+  border-bottom-width: 2px;
+}
+
+.nova-card-body {
+  padding: var(--nova-spacing-md);
+}
+
+/* Login Card Specific Styles */
+.login-card {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.nova-card-header {
+  background: var(--nova-mint-alpha-15);
+  padding: var(--nova-spacing-lg);
+  border-bottom: 1px solid var(--nova-mint-alpha-30);
+  border-radius: var(--nova-radius-md) var(--nova-radius-md) 0 0;
+}
+
+.nova-card-footer {
+  background: var(--nova-mint-alpha-10);
+  padding: var(--nova-spacing-md);
+  border-top: 1px solid var(--nova-mint-alpha-20);
+  border-radius: 0 0 var(--nova-radius-md) var(--nova-radius-md);
+}
+
+.login-logo {
+  width: 80px;
+  height: 80px;
+  background: var(--nova-brand-orange);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  color: white;
+  font-size: 2.5rem;
+  position: relative;
+}
+
+.login-logo i {
+  color: white;
+  z-index: 2;
+}
+
+/* Dark footer for ghosting effect */
+.nova-card-footer.login-footer {
+  background-color: var(--nova-mint-alpha-70);
+  border-top: 1px solid var(--nova-mint-dark);
+}
+
+/* A/B Test Footer Colors */
+.nova-card-footer.login-footer-neutral {
+  background-color: #f8f9fa;
+  border-top: 1px solid var(--nova-gray-border);
+}
+
+.nova-card-footer.login-footer-light {
+  background-color: var(--nova-mint-alpha-20);
+  border-top: 1px solid var(--nova-mint-alpha-30);
+}
+
+/* Enlarged password link */
+.forgot-password-link {
+  color: var(--nova-mint-dark);
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.forgot-password-link:hover {
+  background-color: var(--nova-orange-light-alpha-12);
+  color: var(--nova-brand-orange);
+  text-decoration: none;
+}
+
+/* Footer icon links without underline */
+.footer-icons-link {
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+  color: var(--nova-mint-dark);
+  text-decoration: none;
+}
+
+.footer-icons-link:hover {
+  opacity: 1;
+  text-decoration: none;
+}
+
+/* Login page layout adjustments */
+body.login-page .nova-main-content {
+  padding-top: 0;
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Responsive adjustments for login */
+@media (max-width: 576px) {
+  .login-card {
+    margin: 1rem;
+  }
+
+  .login-logo {
+    width: 70px;
+    height: 70px;
+    font-size: 1.8rem;
+  }
+}
+
+/* ==========================================
+   PAGE HEADER
+   ========================================== */
+/* Page title, subtitle with card styling */
+.page-header {
+  background-color: var(--nova-white);
+  border: 1px solid var(--nova-gray-border);
+  border-radius: var(--nova-radius-md);
+  box-shadow: 0 1px 3px var(--nova-shadow-light);
+  padding: var(--nova-spacing-lg);
+  margin-bottom: var(--nova-spacing-lg);
+}
+
+.page-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--nova-dark);
+  margin-bottom: var(--nova-spacing-xs);
+  line-height: 1.3;
+}
+
+.page-subtitle {
+  color: var(--nova-gray-muted);
+  font-size: var(--nova-font-size-base);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ==========================================
+   FOOTER SYSTEM
+   ========================================== */
+/* Fixed height footer with charcoal background
+   Left/right content, ghosting effects for links */
+
+footer.nova-footer {
+  height: var(--nova-navbar-height);
+  background-color: var(--nova-charcoal-alpha-75);
+  color: var(--nova-white);
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+  flex-shrink: 0;
+  border-top: 1px solid var(--nova-mint-alpha-30);
+  padding: 0.8rem 0;
+}
+
+.footer-content {
+  width: 100%;
+}
+
+/* Footer layout - Common properties */
+.footer-left,
+.footer-right {
+  font-size: var(--nova-font-size-base);
+}
+
+/* Footer left - Year + version */
+.footer-left {
+  float: left;
+}
+
+.footer-left i {
+  font-size: 1.1rem;
+}
+
+/* Footer right - Author link with ghosting effect */
+.footer-right {
+  float: right;
+  color: var(--nova-white-alpha-80);
+}
+
+.footer-right i {
+  font-size: 1.25rem;
+  margin: 0 4px;
+}
+
+.footer-right a {
+  color: var(--nova-charcoal-ghosting); /* Ghosting effect - barely visible */
+  text-decoration: none;
+  font-weight: 500;
+  transition: var(--nova-transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-right a:hover,
+.footer-right a:focus {
+  color: var(--nova-golden); /* Golden hover like dropdown menus */
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.footer-right a i {
+  transition: var(--nova-transition);
+  color: var(--nova-charcoal-ghosting); /* Ghosting for icons */
+}
+
+.footer-right a:hover i {
+  color: var(--nova-golden); /* Golden hover */
+  transform: scale(1.1);
+}
+
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* ==========================================
+   NOVA CUSTOM CARD HEADERS
+   ========================================== */
+/* Colored card headers (mint, golden, terracotta)
+   Stats cards, button styles, pagination */
+
+/* Base card header styles - common properties */
+.nova-card .card-header[class*="bg-nova-"] {
+  color: white;
+  padding: 0.5rem 1rem;
+  border-top-left-radius: var(--nova-radius-md);
+  border-top-right-radius: var(--nova-radius-md);
+}
+
+/* Specific color variants */
+.nova-card .card-header.bg-nova-mint {
+  background-color: var(--nova-mint);
+  border-bottom: 1px solid var(--nova-mint-alpha-30);
+}
+
+.nova-card .card-header.bg-nova-mint-dark {
+  background-color: var(--nova-mint-dark);
+  border-bottom: 1px solid var(--nova-mint-dark-alpha-30);
+}
+
+.nova-card .card-header.bg-nova-golden {
+  background-color: var(--nova-golden);
+  border-bottom: 1px solid var(--nova-golden-alpha-30);
+}
+
+.nova-card .card-header.bg-nova-terracotta {
+  background-color: var(--nova-terracotta);
+  border-bottom: 1px solid var(--nova-terracotta-alpha-30);
+}
+
+/* Stats cards clean layout */
+.nova-stats-card .nova-card-body {
+  padding: 1rem; /* Match header horizontal padding */
+}
+
+/* Card header links - Progressive Gold (NO UNDERLINES!) */
+.card-header h6 a {
+  color: white;
+  text-decoration: none;
+  transition: var(--nova-transition);
+}
+
+.card-header h6 a:hover {
+  color: var(--nova-golden-light);
+  text-decoration: none;
+}
+
+.card-header h6 a:active,
+.card-header h6 a:focus {
+  color: var(--nova-golden);
+  text-decoration: none;
+}
+
+/* Nova Pagination - Orange theme */
+.pagination.nova-pagination .page-link {
+  color: var(--nova-brand-orange);
+  background-color: white;
+  border: 1px solid var(--nova-brand-orange);
+  text-decoration: none;
+  transition: var(--nova-transition);
+}
+
+.pagination.nova-pagination .page-link:hover {
+  color: white;
+  background-color: var(--nova-brand-orange);
+  border-color: var(--nova-brand-orange);
+}
+
+.pagination.nova-pagination .page-item.active .page-link {
+  color: white;
+  background-color: var(--nova-brand-orange);
+  border-color: var(--nova-brand-orange);
+}
+
+.pagination.nova-pagination .page-item.disabled .page-link {
+  color: var(--nova-orange-alpha-40);
+  background-color: var(--nova-orange-alpha-12);
+  border-color: var(--nova-orange-alpha-20);
+}
+
+.nova-stats-content {
+  display: flex;
+  align-items: flex-start; /* Icons and text aligned to top */
+}
+
+.nova-stats-content .nova-stats-icon {
+  font-size: var(--nova-icon-size); /* fs-4 equivalent */
+  margin-right: 1rem; /* me-3 equivalent */
+  color: var(--nova-mint-dark); /* Same color as headers */
+  flex-shrink: 0; /* Prevent icon shrinking */
+}
+
+/* ==========================================
+   TABLE IMAGE & CONTENT HELPERS
+   ========================================== */
+/* Shared styles for articles/categories tables
+   Thumbnails, placeholders, content formatting */
+
+/* Table cell for thumbnails - centered content */
+.thumb-cell {
+  text-align: center;
+  vertical-align: middle;
+}
+.thumb-cell .article-thumb-main,
+.thumb-cell .image-placeholder-thumbnail {
+  margin: 0 auto;
+}
+
+/* Main thumbnail (image_1, image_2) */
+.article-thumb-main {
+  max-width: 80px;
+  max-height: 80px;
+  object-fit: cover;
+  border-radius: var(--nova-radius-sm);
+  border: 1px solid var(--nova-gray-border);
+  display: block;
+}
+
+/* === IMAGE PLACEHOLDER BASE === */
+/* Shared styles for all image placeholders */
+[class*="image-placeholder-"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(174, 202, 205, 0.15);
+  border: 1px solid var(--nova-gray-border);
+  color: var(--nova-mint-dark);
+}
+
+/* Placeholder for missing thumbnail (image_1) */
+.image-placeholder-thumbnail {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--nova-radius-sm);
+  font-size: 2rem;
+}
+
+/* Placeholder for missing micro thumbnails (image_2) */
+.image-placeholder-micro {
+  width: 40px;
+  height: 40px;
+  border-radius: 2px;
+  font-size: 1rem;
+}
+
+/* Placeholder for missing image in edit/create forms (preview area) */
+.image-placeholder-preview {
+  width: 100%;
+  aspect-ratio: 4 / 3; /* 800×600 ratio */
+  border-radius: var(--nova-radius-sm);
+  font-size: 3rem; /* Large icon for preview */
+}
+
+/* Article mini-card column */
+.article-title {
+  font-size: 1.05rem;
+  color: var(--nova-charcoal);
+  line-height: 1.3;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.article-summary {
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.4;
+  display: block;
+}
+
+.article-summary a {
+  color: var(--nova-brand-orange);
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--nova-transition-fast);
+}
+
+.article-summary a:hover {
+  color: var(--nova-orange-soft);
+  text-decoration: underline;
+}
+
+/* Contact links in requests table - action orange color */
+.nova-table td a[href^="mailto:"],
+.nova-table td a[href^="tel:"] {
+  color: var(--nova-brand-orange);
+  text-decoration: none;
+  transition: var(--nova-transition-fast);
+}
+
+.nova-table td a[href^="mailto:"]:hover,
+.nova-table td a[href^="tel:"]:hover {
+  color: var(--nova-orange-soft);
+  text-decoration: underline;
+}
+
+/* Responsive - remove hover effects on touch devices */
+@media (hover: none) {
+  .micro-thumb:hover {
+    transform: none;
+  }
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN
+   ========================================== */
+/* Mobile breakpoints (768px, 576px)
+   Adaptive spacing, font sizes */
+
+@media (max-width: 768px) {
+  .container-nova {
+    padding-left: var(--nova-spacing-md);
+    padding-right: var(--nova-spacing-md);
+  }
+
+  .content-wrapper {
+    padding-top: var(--nova-spacing-sm);
+    padding-bottom: var(--nova-spacing-sm);
+  }
+
+  .page-header {
+    padding: var(--nova-spacing-md);
+  }
+
+  .page-title {
+    font-size: var(--nova-icon-size);
+  }
+}
+
+@media (max-width: 576px) {
+  .container-nova {
+    padding-left: var(--nova-spacing-sm);
+    padding-right: var(--nova-spacing-sm);
+  }
+
+  .nova-navbar {
+    padding: var(--nova-spacing-xs) 0;
+  }
+
+  .page-title {
+    font-size: 1.3rem;
+  }
+
+  .footer-left,
+  .footer-right {
+    font-size: calc(var(--nova-font-size-sm) * 0.8);
+  }
+}
+
+/* ==========================================
+   NOVA UTILITY HELPERS
+   ========================================== */
+/* Helper classes to eliminate inline styles
+   Philosophy: Semantic, reusable, Bootstrap-compatible */
+
+/* === TABLE COLUMN WIDTHS === */
+.nova-col-w100 {
+  width: 100px;
+}
+.nova-col-w120 {
+  width: 120px;
+}
+.nova-col-w130 {
+  width: 130px;
+}
+.nova-col-w180 {
+  width: 180px;
+}
+
+/* === IMAGE SIZING UTILITIES === */
+
+/* Micro thumbnails - Small square (40×40px) */
+.nova-img-micro-thumb {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 2px;
+  border: 1px solid var(--nova-gray-border);
+}
+
+/* === PROGRESS BAR UTILITIES === */
+.nova-progress-slim {
+  height: 8px;
+}
+
+/* === BACKGROUND UTILITIES === */
+.nova-bg-mint-soft {
+  background-color: var(--nova-mint-alpha-30);
+}
+
+.nova-bg-offcanvas-header {
+  background-color: var(--nova-mint-alpha-20);
+  border-bottom: 1px solid var(--nova-mint-alpha-40);
+}
+
+/* === TEXT UTILITIES === */
+.nova-pre-wrap {
+  white-space: pre-line; /* Preserves newlines, collapses multiple spaces */
+}
+
+.nova-fs-xl {
+  font-size: 1.5rem;
+}
+
+/* Letter spacing for logo/brand */
+.nova-ls-wide {
+  letter-spacing: 0.3rem;
+}
+
+/* === FORM PLACEHOLDER SYSTEM === */
+/* Visible placeholder for disabled/unavailable form fields */
+.nova-form-placeholder-label {
+  visibility: hidden;
+}
+
+.nova-form-placeholder-box {
+  background-color: #f8f9fa;
+  border: 1px solid var(--nova-gray-border);
+  border-radius: 4px;
+  height: 38px;
+}
+
+.nova-form-placeholder-text {
+  visibility: hidden;
+}
+
+/* === LAYOUT UTILITIES === */
+
+/* Card with mint accent border top */
+.nova-card-mint-accent {
+  border-top: 3px solid var(--nova-mint);
+}
+
+/* Min-height utilities for content placeholders */
+.nova-min-h-120 {
+  min-height: 120px;
+}
+.nova-min-h-180 {
+  min-height: 180px;
+}
+.nova-min-h-240 {
+  min-height: 240px;
+}
+
+/* === QUILL EDITOR UTILITIES === */
+.nova-quill-editor {
+  background: white;
+  min-height: 180px;
+  font-size: 16px;
+}
+
+.nova-quill-editor-tall {
+  height: 300px;
+}
+
+/* Hide element (for hidden textareas backing WYSIWYG) */
+.nova-hidden {
+  display: none;
+}
+
+/* Padding top utility */
+.nova-pt-1rem {
+  padding-top: 1rem;
+}
+
+/* === FORM OPACITY/DISABLE STATE === */
+.nova-form-locked {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* ==========================================
+   CONTENT PLACEHOLDER SYSTEM
+   ========================================== */
+/* Empty state placeholders for articles
+   Mint background with icon indicators */
+
+/* Content States - Filled vs Empty */
+.content-box-title {
+  color: var(--nova-mint-dark);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.content-filled {
+  background: transparent;
+  padding: 1rem;
+}
+
+.content-placeholder {
+  background: rgba(174, 202, 205, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+  border-left: 4px solid var(--nova-mint-dark);
+  border-radius: 0.5rem;
+}
+
+.content-placeholder i {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.5;
+}
+
+.content-placeholder p {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+/* Universal Collection System Subtitle */
+.universal-subtitle {
+  color: var(--nova-mint-dark);
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+/* Username in <code> - Black for normal rows (remove purple browser default) */
+.nova-table tbody tr td code {
+  color: var(--nova-charcoal);
+  background-color: transparent;
+}
+
+/* === CHEVRON TOGGLE - Bootstrap Collapse === */
+/* Higher specificity selector - no !important needed */
+button.btn[data-bs-toggle="collapse"] i.bi-chevron-up {
+  display: none;
+}
+
+/* When collapsed (closed) - show DOWN arrow */
+button.btn[data-bs-toggle="collapse"].collapsed i.bi-chevron-down {
+  display: inline-block;
+}
+button.btn[data-bs-toggle="collapse"].collapsed i.bi-chevron-up {
+  display: none;
+}
+
+/* When expanded (open) - show UP arrow */
+button.btn[data-bs-toggle="collapse"]:not(.collapsed) i.bi-chevron-down {
+  display: none;
+}
+button.btn[data-bs-toggle="collapse"]:not(.collapsed) i.bi-chevron-up {
+  display: inline-block;
+}
+
+/* ==========================================
+   QUILL EDITOR DISPLAY MODE
+   ========================================== */
+/* Read-only Quill content display (articles_show.php)
+   Removes border from Quill container when used for display only */
+
+.nova-quill-display.ql-container {
+  border-width: 0;
+}
+
+/* ==========================================
+   FORM UTILITIES - Nova Orange Extensions
+   ========================================== */
+/* Extend Bootstrap utilities with Nova brand colors */
+
+/* Text utility - Orange for dynamic values */
+.text-orange {
+  color: var(--nova-brand-orange);
+}
+
+/* ============================================================
+   Nova Home Cards - Link Style (Star51 Brand Orange)
+   ============================================================ */
+.nova-stats-card .card-header {
+  padding: 1rem var(--nova-spacing-md); /* Use standard spacing for consistency with body */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125); /* Separator line between title and content */
+}
+
+.nova-stats-card .card-header .card-title a {
+  color: #ff5b19; /* Star51 brand orange - more specific than Bootstrap */
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.nova-stats-card .card-header .card-title a:hover {
+  color: #e64a0e; /* Darker orange on hover */
+  text-decoration: none;
+}
+
+/* ============================================================
+   Log Viewer - Monospace container for error.log display
+   ============================================================ */
+.nova-log-viewer {
+  max-height: 400px;
+  overflow-y: auto;
+  font-family: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85rem; /* Reduced from 0.95rem - more compact */
+  line-height: 1.5; /* Reduced from 1.6 - tighter spacing */
+  white-space: normal; /* Collapse multiple spaces, wrap normally */
+  word-wrap: break-word;
+}
+
+/* ============================================================
+   Log Management - Compact Links (18-24px height)
+   ============================================================ */
+.nova-log-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: #495057;
+  text-decoration: none;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.nova-log-link:hover {
+  color: #ff5b19;
+  border-color: #ff5b19;
+  background-color: rgba(255, 91, 25, 0.05);
+  text-decoration: none;
+}
+
+.nova-log-link i {
+  font-size: 0.875rem;
+}
+
+/* Primary variant: Orange background with white text - same states as .btn-orange */
+.nova-log-link-primary {
+  background-color: var(--nova-brand-orange);
+  color: white;
+  border-color: var(--nova-brand-orange);
+  transition: all 0.2s ease;
+}
+
+.nova-log-link-primary:hover {
+  background-color: var(--nova-orange-light);
+  color: white;
+  border-color: var(--nova-orange-light);
+}
+
+.nova-log-link-primary:active,
+.nova-log-link-primary:focus {
+  background-color: var(--nova-brand-orange);
+  color: white;
+  border-color: var(--nova-brand-orange);
+  filter: brightness(0.9);
+}
+
+/* Log Info Text - Match btn-sm typography (Session 51) */
+.nova-log-info-text {
+  font-size: 0.875rem;
+  line-height: 1.75; /* More generous spacing to match buttons */
+}
+
+/* Log Toggle Button - Chevron Rotation (Session 51) */
+.nova-log-toggle i {
+  transition: transform 0.2s ease;
+  display: inline-block;
+}
+
+/* Rotate chevron up when accordion is open (not collapsed) */
+.nova-log-toggle:not(.collapsed) i {
+  transform: rotate(180deg);
+}
+
+/* ==========================================
+   FILE INPUT BUTTON STYLING
+   ========================================== */
+/* Nova orange styling for file input button */
+
+input.nova-file-input::file-selector-button {
+  color: var(--nova-brand-orange);
+  font-weight: 500;
+}
+
+/* ==========================================
+   LANGUAGE DROPDOWN - ACTIVE STATE ORANGE
+   ========================================== */
+/* Override Bootstrap blue with Nova orange for language dropdown */
+.nova-dropdown .dropdown-item.active,
+.nova-dropdown .dropdown-item:active {
+  background-color: var(--nova-orange-soft);
+  color: #fff;
+}
+
+/* Mobile language menu */
+.list-group-item.active {
+  background-color: var(--nova-brand-orange);
+  border-color: var(--nova-brand-orange);
+}
