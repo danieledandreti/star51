@@ -133,16 +133,68 @@
     <div class="container">
       <h2 class="section-title">Guardalo in Azione</h2>
       <p class="section-subtitle">
-        Un&rsquo;interfaccia pulita e moderna, progettata per la semplicit&agrave;.
+        Dall'installazione alla tua prima collezione &mdash; in pochi clic.
       </p>
-      <div class="screenshot-wrapper">
-        <img src="img/screenshot-placeholder.svg"
-             alt="Anteprima screenshot Star51 Solo"
-             width="1200"
-             height="700">
+
+      <!-- Carousel thumbnails -->
+      <div class="carousel">
+        <button class="carousel-arrow carousel-prev" aria-label="Precedente">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+        <div class="carousel-track">
+          <div class="carousel-slide" data-index="0">
+            <img src="img/carousel/01-setup-required.png"
+                 alt="Schermata di benvenuto">
+            <span class="carousel-caption">Benvenuto</span>
+          </div>
+          <div class="carousel-slide" data-index="1">
+            <img src="img/carousel/02a-installer-gmail.png"
+                 alt="Installazione con Gmail SMTP">
+            <span class="carousel-caption">Installa con Gmail</span>
+          </div>
+          <div class="carousel-slide" data-index="2">
+            <img src="img/carousel/02b-installer-no-gmail.png"
+                 alt="Installazione senza Gmail">
+            <span class="carousel-caption">Installa senza Gmail</span>
+          </div>
+          <div class="carousel-slide" data-index="3">
+            <img src="img/carousel/03a-installation-complete-gmail.png"
+                 alt="Installazione completata con Gmail">
+            <span class="carousel-caption">Completata (Gmail)</span>
+          </div>
+          <div class="carousel-slide" data-index="4">
+            <img src="img/carousel/03b-installation-complete-no-gmail.png"
+                 alt="Installazione completata senza Gmail">
+            <span class="carousel-caption">Completata (Standard)</span>
+          </div>
+          <div class="carousel-slide" data-index="5">
+            <img src="img/carousel/04-create-category.png"
+                 alt="Crea una categoria">
+            <span class="carousel-caption">Crea Categoria</span>
+          </div>
+          <div class="carousel-slide" data-index="6">
+            <img src="img/carousel/05-create-article.png"
+                 alt="Crea un articolo">
+            <span class="carousel-caption">Crea Articolo</span>
+          </div>
+          <div class="carousel-slide" data-index="7">
+            <img src="img/carousel/06-articles-list.png"
+                 alt="Lista gestione articoli">
+            <span class="carousel-caption">Lista Articoli</span>
+          </div>
+          <div class="carousel-slide" data-index="8">
+            <img src="img/carousel/07-frontend-detail.png"
+                 alt="Pagina dettaglio articolo pubblica">
+            <span class="carousel-caption">Dettaglio Articolo</span>
+          </div>
+        </div>
+        <button class="carousel-arrow carousel-next" aria-label="Successivo">
+          <i class="bi bi-chevron-right"></i>
+        </button>
       </div>
     </div>
   </section>
+
 
   <!-- Download -->
   <section id="download" class="section download-section">
@@ -227,27 +279,7 @@
     </div>
   </footer>
 
-  <script>
-    document.querySelectorAll('a[href^="#"]').forEach(function(link) {
-      link.addEventListener('click', function(e) {
-        var target = document.querySelector(this.getAttribute('href'));
-        if (!target) return;
-        e.preventDefault();
-        var start = window.scrollY;
-        var end = target.getBoundingClientRect().top + window.scrollY - 80;
-        var distance = end - start;
-        var duration = 1200;
-        var startTime = null;
-        function step(time) {
-          if (!startTime) startTime = time;
-          var progress = Math.min((time - startTime) / duration, 1);
-          window.scrollTo(0, start + distance * progress);
-          if (progress < 1) requestAnimationFrame(step);
-        }
-        requestAnimationFrame(step);
-      });
-    });
-  </script>
+  <script src="js/landing.js"></script>
 
 </body>
 </html>
