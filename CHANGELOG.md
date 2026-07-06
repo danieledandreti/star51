@@ -2,6 +2,22 @@
 
 All notable changes to Star51 will be documented in this file.
 
+## [1.0.1] - 2026-07-06
+
+### Changed
+
+- Separated Nova system configuration from administrator management by moving it to the dedicated `nova/system/` section.
+- Updated Nova navigation with the `Admin` menu, grouping administrator management and system configuration in a clearer area.
+- Renamed the `Management` menu to `Collection` to better describe the area for categories, subcategories, and articles.
+- Updated the `Collection` icon to `bi-archive` for clearer visual recognition.
+
+### Fixed
+
+- Fixed password recovery when Nova security constants are not loaded before rate-limit handling.
+- Added missing password recovery translations.
+- Improved password recovery logging with clearer context.
+- Removed final PHP closing tags from pure PHP files.
+
 ## [1.0.0] - 2026-03-10
 
 ### Initial Release
