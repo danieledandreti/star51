@@ -46,7 +46,8 @@ star51/
 │   ├── lang/          i18n JSON files
 │   ├── articles/      Article CRUD
 │   ├── cat/           Category management
-│   ├── admins/        Admin profile
+│   ├── admins/        Administrator account management
+│   ├── system/        System configuration and maintenance
 │   └── requests/      Contact request management
 ├── file_db_max/med/min/  Image uploads (3 sizes)
 └── install/           Installation wizard
