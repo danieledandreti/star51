@@ -157,5 +157,3 @@ if (!empty($uploaded_image_2)) {
     $errors[] = str_replace('{num}', '2', __admin('images.val.resize_error_gallery'));
   }
 }
-
-?>

@@ -60,6 +60,7 @@ try {
 
       // Increment rate limiting attempts for wrong CAPTCHA
       $rate_limit_username = '';
+      $rate_limit_context = 'password_reset';
       require_once 'inc/inc_nova_rate_limit_increment.php';
 
       header('Location: password-reset.php');
@@ -72,6 +73,7 @@ try {
 
   // Increment rate limiting attempts for password reset request
   $rate_limit_username = '';
+  $rate_limit_context = 'password_reset';
   require_once 'inc/inc_nova_rate_limit_increment.php';
 
   // Check if admin exists with this email

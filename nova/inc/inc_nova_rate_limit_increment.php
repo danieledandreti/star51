@@ -5,8 +5,9 @@
 //
 // Usage: Include this file AFTER a failed login attempt
 //
-// Optional input variable:
+// Optional input variables:
 // - $rate_limit_username (string) → Username for logging (optional)
+// - $rate_limit_context (string) → Action context for logging (optional, default: login)
 //
 // Returns these variables:
 // - $rate_limit_locked (bool) → Was lockout triggered?
@@ -17,11 +18,18 @@
 // ============================================================================
 // Configuration
 // ============================================================================
+if (!defined('NOVA_MAX_LOGIN_ATTEMPTS') || !defined('NOVA_LOCKOUT_TIME')) {
+  require_once __DIR__ . '/inc_nova_constants.php';
+}
+
 // ============================================================================
-// Get client IP address and username (if provided)
+// Get client IP address, username and context (if provided)
 // ============================================================================
 $rate_limit_ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
 $rate_limit_username = $rate_limit_username ?? '';
+$rate_limit_context = $rate_limit_context ?? 'login';
+$rate_limit_action = $rate_limit_context === 'password_reset' ? 'Password reset request' : 'Failed login attempt';
+$rate_limit_lock_action = $rate_limit_context === 'password_reset' ? 'Password reset locked' : 'IP locked';
 
 // Validate IP address
 $rate_limit_ip = filter_var($rate_limit_ip, FILTER_VALIDATE_IP);
@@ -80,7 +88,7 @@ if ($rl_inc_result && mysqli_num_rows($rl_inc_result) > 0) {
 
         // Log lockout event
         $username_log = $rate_limit_username ? " for user '$rate_limit_username'" : '';
-        error_log("Nova Rate Limit: IP $rate_limit_ip locked{$username_log} (attempts: $new_attempts)");
+        error_log("Nova Rate Limit: $rate_limit_lock_action IP $rate_limit_ip{$username_log} (attempts: $new_attempts)");
 
         unset($rl_update, $rl_update_stmt);
     } else {
@@ -95,9 +103,9 @@ if ($rl_inc_result && mysqli_num_rows($rl_inc_result) > 0) {
         $rate_limit_attempts = $new_attempts;
         $remaining = NOVA_MAX_LOGIN_ATTEMPTS - $new_attempts;
 
-        // Log failed attempt
+        // Log attempt
         $username_log = $rate_limit_username ? " for user '$rate_limit_username'" : '';
-        error_log("Nova Rate Limit: Failed attempt IP $rate_limit_ip{$username_log} ($new_attempts/" . NOVA_MAX_LOGIN_ATTEMPTS . ", $remaining remaining)");
+        error_log("Nova Rate Limit: $rate_limit_action IP $rate_limit_ip{$username_log} ($new_attempts/" . NOVA_MAX_LOGIN_ATTEMPTS . ", $remaining remaining)");
 
         unset($rl_update, $rl_update_stmt, $remaining);
     }
@@ -116,7 +124,7 @@ if ($rl_inc_result && mysqli_num_rows($rl_inc_result) > 0) {
 
     // Log first attempt
     $username_log = $rate_limit_username ? " for user '$rate_limit_username'" : '';
-    error_log("Nova Rate Limit: First failed attempt IP $rate_limit_ip{$username_log}");
+    error_log("Nova Rate Limit: First $rate_limit_action IP $rate_limit_ip{$username_log}");
 
     unset($rl_insert, $rl_insert_stmt);
 }
@@ -124,5 +132,4 @@ if ($rl_inc_result && mysqli_num_rows($rl_inc_result) > 0) {
 // ============================================================================
 // Cleanup temporary variables
 // ============================================================================
-unset($rl_inc_check, $rl_inc_stmt, $rl_inc_result, $rl_inc_record, $username_log, $current_time);
-?>
+unset($rl_inc_check, $rl_inc_stmt, $rl_inc_result, $rl_inc_record, $username_log, $current_time, $rate_limit_action, $rate_limit_lock_action);

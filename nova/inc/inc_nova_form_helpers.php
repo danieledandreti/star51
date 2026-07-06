@@ -100,5 +100,3 @@ function nova_is_checked($field, $db_data = null, $form_data = null, $default = 
     // Priority 3: Default state
     return $default ? 'checked' : '';
 }
-
-?>

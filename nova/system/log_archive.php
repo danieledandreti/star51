@@ -8,7 +8,7 @@ require_once '../inc/inc_nova_session.php';
 // Security: CSRF Protection
 if (!isset($_GET['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_GET['csrf_token'])) {
   $_SESSION['error'] = __admin('settings.msg.invalid_csrf');
-  header('Location: admins_settings.php');
+  header('Location: settings.php');
   exit();
 }
 
@@ -19,14 +19,14 @@ $log_dir = dirname($log_file);
 // Check if log file exists
 if (!file_exists($log_file)) {
   $_SESSION['error'] = __admin('settings.log.not_found');
-  header('Location: admins_settings.php');
+  header('Location: settings.php');
   exit();
 }
 
 // Check if file is empty (no need to archive)
 if (filesize($log_file) === 0) {
   $_SESSION['error'] = __admin('settings.log.empty');
-  header('Location: admins_settings.php');
+  header('Location: settings.php');
   exit();
 }
 
@@ -39,7 +39,7 @@ $archive_path = $log_dir . '/' . $archive_filename;
 if (!rename($log_file, $archive_path)) {
   $_SESSION['error'] = __admin('settings.log.archive_error');
   error_log("Nova: Log archive failed - Unable to rename error.log to $archive_filename");
-  header('Location: admins_settings.php');
+  header('Location: settings.php');
   exit();
 }
 
@@ -47,7 +47,7 @@ if (!rename($log_file, $archive_path)) {
 if (!touch($log_file)) {
   $_SESSION['error'] = __admin('settings.log.archive_partial');
   error_log('Nova: Log archive partial success - Archive created but new error.log creation failed');
-  header('Location: admins_settings.php');
+  header('Location: settings.php');
   exit();
 }
 
@@ -60,5 +60,5 @@ error_log("Nova: Log archived successfully - File: $archive_filename by Admin ID
 // Success message
 $_SESSION['success'] = __admin('settings.log.archive_success') . " <strong>$archive_filename</strong>";
 
-header('Location: admins_settings.php');
+header('Location: settings.php');
 exit();

@@ -8,7 +8,7 @@ require_once '../inc/inc_nova_session.php';
 // Security: CSRF Protection
 if (!isset($_GET['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_GET['csrf_token'])) {
   $_SESSION['error'] = __admin('settings.msg.invalid_csrf');
-  header('Location: admins_settings.php');
+  header('Location: settings.php');
   exit();
 }
 
@@ -89,5 +89,5 @@ if (empty($cleanup_errors)) {
 }
 
 // Redirect back to settings
-header('Location: admins_settings.php');
+header('Location: settings.php');
 exit();

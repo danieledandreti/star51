@@ -71,4 +71,3 @@ if ($rl_check_result && mysqli_num_rows($rl_check_result) > 0) {
 // Cleanup temporary variables
 // ============================================================================
 unset($rl_check_query, $rl_check_stmt, $rl_check_result, $rl_record, $current_time, $seconds_remaining);
-?>

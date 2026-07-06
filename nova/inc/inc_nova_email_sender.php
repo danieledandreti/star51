@@ -201,5 +201,3 @@ function nova_send_password_reset_email($to, $first_name, $last_name, $token)
 // Simple procedural PHP - no OOP, no external dependencies
 // Works on: localhost, Altervista, professional hosting, VPS
 // Auto-detects and uses best available email method
-
-?>

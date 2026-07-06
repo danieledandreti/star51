@@ -80,7 +80,6 @@ function nova_save_config_values($settings, $admin_email = 'unknown', $create_ba
   // ============================================
   // END OF CONFIGURATION VALUES
   // ============================================
-  ?>
   PHP;
 
   // ============================================
@@ -116,5 +115,3 @@ function nova_save_config_values($settings, $admin_email = 'unknown', $create_ba
 // ============================================
 // END OF SETTINGS WRITER
 // ============================================
-
-?>

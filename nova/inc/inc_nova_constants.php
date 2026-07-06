@@ -120,4 +120,3 @@ if (!defined('SUBCATEGORY_NEWS')) {
 // ========================================
 // Pure procedural PHP - constants only, no functions
 // Keep it simple: define() values used directly in code
-?>

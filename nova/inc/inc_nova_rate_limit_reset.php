@@ -47,4 +47,3 @@ if ($rate_limit_reset_success) {
 // Cleanup temporary variables
 // ============================================================================
 unset($rl_delete, $rl_delete_stmt, $username_log);
-?>

@@ -114,5 +114,3 @@ if (isset($_FILES['image_2']) && $_FILES['image_2']['error'] === UPLOAD_ERR_OK) 
         }
     }
 }
-
-?>

@@ -99,6 +99,7 @@ try {
   }
 
   // Password updated successfully
+  error_log('Nova: Password reset completed for Admin ID: ' . $admin['id_admin']);
   $_SESSION['login_success'] = __admin('password_reset.password_updated');
   header('Location: index.php');
   exit();

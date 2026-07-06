@@ -70,5 +70,3 @@ if (!empty($current_image_2) &&
   @unlink(NOVA_PATH_FILE_MIN . $current_image_2);
   error_log("Nova: Old image 2 deleted before upload - File: $current_image_2");
 }
-
-?>

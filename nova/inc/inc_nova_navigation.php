@@ -23,19 +23,21 @@ if (!defined('NOVA_BASE_PATH')) {
 
     <!-- Mobile direct access icons -->
     <div class="d-flex d-lg-none gap-2 mobile-nav-icons">
-      <a href="<?= $nova_base ?>/admins/admins_list.php"
+      <a href="#"
          class="mobile-nav-icon"
-         aria-label="<?= __admin('nav.administrators') ?>"
-         title="<?= __admin('nav.administrators') ?>">
+         data-bs-toggle="offcanvas"
+         data-bs-target="#mobileAdminMenu"
+         aria-label="<?= __admin('nav.admin') ?>"
+         title="<?= __admin('nav.admin') ?>">
         <i class="bi bi-people"></i>
       </a>
       <a href="#"
          class="mobile-nav-icon"
          data-bs-toggle="offcanvas"
-         data-bs-target="#mobileGestioneMenu"
-         aria-label="<?= __admin('nav.management') ?>"
-         title="<?= __admin('nav.management') ?>">
-        <i class="bi bi-gear"></i>
+         data-bs-target="#mobileCollectionMenu"
+         aria-label="<?= __admin('nav.collection') ?>"
+         title="<?= __admin('nav.collection') ?>">
+        <i class="bi bi-archive"></i>
       </a>
       <a href="<?= $nova_base ?>/requests/requests_list.php"
          class="mobile-nav-icon"
@@ -72,14 +74,37 @@ if (!defined('NOVA_BASE_PATH')) {
             <i class="bi bi-house-heart-fill" aria-hidden="true"></i>
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link"
-             href="<?= $nova_base ?>/admins/admins_list.php"
-             aria-label="<?= __admin('nav.administrators') ?>"
-             title="<?= __admin('nav.administrators') ?>">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle <?= in_array(basename($_SERVER['PHP_SELF']), ['admins_list.php', 'settings.php'], true) ? 'active' : '' ?>"
+             href="#"
+             role="button"
+             data-bs-toggle="dropdown"
+             aria-expanded="false"
+             aria-haspopup="true"
+             aria-label="<?= __admin('nav.admin') ?>"
+             title="<?= __admin('nav.admin') ?>">
             <i class="bi bi-people" aria-hidden="true"></i>
-            <span class="d-lg-inline d-none ms-1"><?= __admin('nav.administrators') ?></span>
+            <span class="d-lg-inline d-none ms-1"><?= __admin('nav.admin') ?></span>
           </a>
+          <ul class="dropdown-menu nova-dropdown"
+              aria-label="<?= __admin('nav.admin') ?>">
+            <li>
+              <a class="dropdown-item"
+                 href="<?= $nova_base ?>/admins/admins_list.php"
+                 aria-label="<?= __admin('nav.administrators') ?>">
+                <i class="bi bi-people me-2" aria-hidden="true"></i>
+                <span class="dropdown-item-text"><?= __admin('nav.administrators') ?></span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item"
+                 href="<?= $nova_base ?>/system/settings.php"
+                 aria-label="<?= __admin('nav.system') ?>">
+                <i class="bi bi-gear-fill me-2" aria-hidden="true"></i>
+                <span class="dropdown-item-text"><?= __admin('nav.system') ?></span>
+              </a>
+            </li>
+          </ul>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle"
@@ -88,13 +113,13 @@ if (!defined('NOVA_BASE_PATH')) {
              data-bs-toggle="dropdown"
              aria-expanded="false"
              aria-haspopup="true"
-             aria-label="<?= __admin('nav.management') ?>"
-             title="<?= __admin('nav.management') ?>">
-            <i class="bi bi-gear" aria-hidden="true"></i>
-            <span class="d-lg-inline d-none ms-1"><?= __admin('nav.management') ?></span>
+             aria-label="<?= __admin('nav.collection') ?>"
+             title="<?= __admin('nav.collection') ?>">
+            <i class="bi bi-archive" aria-hidden="true"></i>
+            <span class="d-lg-inline d-none ms-1"><?= __admin('nav.collection') ?></span>
           </a>
           <ul class="dropdown-menu nova-dropdown"
-              aria-label="<?= __admin('nav.management') ?>">
+              aria-label="<?= __admin('nav.collection') ?>">
             <li>
               <a class="dropdown-item"
                  href="<?= $nova_base ?>/cat/cat_list.php"
@@ -209,14 +234,42 @@ if (!defined('NOVA_BASE_PATH')) {
   </div>
 </nav>
 
-<!-- Mobile Offcanvas Menu - Gestione -->
+<!-- Mobile Offcanvas Menu - Admin -->
 <div class="offcanvas offcanvas-bottom"
      tabindex="-1"
-     id="mobileGestioneMenu"
-     aria-labelledby="mobileGestioneMenuLabel">
+     id="mobileAdminMenu"
+     aria-labelledby="mobileAdminMenuLabel">
   <div class="offcanvas-header nova-bg-offcanvas-header">
-    <h5 class="offcanvas-title" id="mobileGestioneMenuLabel">
-      <i class="bi bi-gear me-2"></i><?= __admin('nav.management') ?>
+    <h5 class="offcanvas-title" id="mobileAdminMenuLabel">
+      <i class="bi bi-people me-2"></i><?= __admin('nav.admin') ?>
+    </h5>
+    <button type="button"
+            class="btn-close"
+            data-bs-dismiss="offcanvas"
+            aria-label="<?= __admin('buttons.close') ?>"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="list-group list-group-flush">
+      <a href="<?= $nova_base ?>/admins/admins_list.php"
+         class="list-group-item list-group-item-action">
+        <i class="bi bi-people me-2"></i><?= __admin('nav.administrators') ?>
+      </a>
+      <a href="<?= $nova_base ?>/system/settings.php"
+         class="list-group-item list-group-item-action">
+        <i class="bi bi-gear-fill me-2"></i><?= __admin('nav.system') ?>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile Offcanvas Menu - Collection -->
+<div class="offcanvas offcanvas-bottom"
+     tabindex="-1"
+     id="mobileCollectionMenu"
+     aria-labelledby="mobileCollectionMenuLabel">
+  <div class="offcanvas-header nova-bg-offcanvas-header">
+    <h5 class="offcanvas-title" id="mobileCollectionMenuLabel">
+      <i class="bi bi-archive me-2"></i><?= __admin('nav.collection') ?>
     </h5>
     <button type="button"
             class="btn-close"

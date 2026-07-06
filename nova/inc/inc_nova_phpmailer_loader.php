@@ -81,4 +81,3 @@ function nova_create_mailer($from_name = 'Star51') {
 
     return $mail;
 }
-?>

@@ -54,13 +54,6 @@ $admin = mysqli_fetch_assoc($rs_admin);
               <i class="bi bi-people me-2"></i><?= __admin('admins.page.title') ?>
             </h1>
           </div>
-          <div class="d-flex gap-2">
-            <!-- System Configuration Button -->
-            <a href="admins_settings.php"
-               class="btn btn-outline-primary nova-btn-action">
-              <i class="bi bi-gear-fill"></i><?= __admin('admins.buttons.settings') ?>
-            </a>
-          </div>
         </div>
       </header>
 

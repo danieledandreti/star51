@@ -1,7 +1,10 @@
 {
     "nav": {
         "administrators": "Administrator",
+        "admin": "Admin",
+        "system": "System Configuration",
         "management": "Management",
+        "collection": "Collection",
         "categories": "Categories",
         "subcategories": "Subcategories",
         "articles": "Articles",

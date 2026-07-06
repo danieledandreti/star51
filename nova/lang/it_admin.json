@@ -1,7 +1,10 @@
 {
     "nav": {
         "administrators": "Amministratore",
+        "admin": "Admin",
+        "system": "Configurazione di Sistema",
         "management": "Gestione",
+        "collection": "Collezione",
         "categories": "Categorie",
         "subcategories": "Sottocategorie",
         "articles": "Articoli",
@@ -119,7 +122,7 @@
         "language_help": "Una lingua per tutto il sistema (Admin + Frontend). I file JSON sono in nova/lang/ - editare offline.",
 
         "page": {
-            "title": "Configurazione Sistema",
+            "title": "Configurazione di Sistema",
             "subtitle": "Gestione configurazioni globali del sistema Star51",
             "access": "Accesso: Solo Super Admin",
             "config_file": "File config:",
@@ -218,7 +221,7 @@
             "back_to_list": "Torna alla Lista",
             "save": "Salva Modifiche",
             "edit": "Modifica",
-            "settings": "Configurazione Sistema"
+            "settings": "Configurazione di Sistema"
         },
 
         "msg": {

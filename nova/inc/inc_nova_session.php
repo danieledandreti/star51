@@ -101,4 +101,3 @@ function nova_safe_redirect($fallback)
   }
   return $fallback;
 }
-?>

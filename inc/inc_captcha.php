@@ -37,4 +37,3 @@ $random_format = $question_formats[array_rand($question_formats)];
 
 // Generate the question text with variety
 $captcha_question = sprintf($random_format, $numbers[$num1], $numbers[$num2]);
-?>
