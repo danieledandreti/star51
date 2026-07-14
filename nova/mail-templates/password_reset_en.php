@@ -27,6 +27,6 @@ For security, we recommend:
 2. Never sharing your credentials
 3. Logging out when you finish working
 
-{site_name} Team
+{site_name} Solo
 {site_url}
 EOT;

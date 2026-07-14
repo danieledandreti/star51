@@ -289,10 +289,11 @@
         "captcha_error": "CAPTCHA system error. Try again.",
         "captcha_expired": "CAPTCHA expired. Try again.",
         "captcha_wrong": "Wrong CAPTCHA answer. Try again.",
-        "reset_email_exists": "If the email is in the system, you will receive a recovery link within a few minutes.",
-        "reset_email_already_sent": "Recovery email already sent. Check your inbox (and spam folder).",
-        "reset_email_sent": "Recovery email sent! Check your inbox (and spam folder).",
-        "reset_email_error": "Error sending email. Try again later.",
+        "lockout_singular": "Too many password recovery attempts. Try again in 1 minute.",
+        "lockout_plural": "Too many password recovery attempts. Try again in {minutes} minutes.",
+        "request_received_title": "Request received",
+        "request_received_message": "If the address you entered is associated with an active account, you will receive an email with a password reset link. Check your spam folder too. The link will remain valid for 30 minutes.",
+        "request_again": "Send another request",
         "link_invalid": "Invalid link. Request a new password recovery.",
         "token_invalid_used": "Token invalid or already used. Request a new password recovery.",
         "link_expired": "The link has expired. Request a new password recovery.",
@@ -305,6 +306,30 @@
         "system_error": "A system error occurred. Please try again later."
     },
 
+    "captcha": {
+        "numbers": [
+            "zero",
+            "one",
+            "two",
+            "three",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "eight",
+            "nine",
+            "ten",
+            "eleven",
+            "twelve"
+        ],
+        "questions": [
+            "What is %s + %s?",
+            "What is %s plus %s?",
+            "Add %s and %s:",
+            "%s + %s equals?",
+            "Calculate %s plus %s:"
+        ]
+    },
     "categories": {
         "page": {
             "title": "Categories Management",

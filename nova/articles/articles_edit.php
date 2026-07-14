@@ -78,14 +78,35 @@ $page_description = __admin('articles.page.edit_desc');
 $form_data = $_SESSION['articles_form_data'] ?? $article;
 unset($_SESSION['articles_form_data']);
 
+$nova_quill_html_semantic = $form_data['article_content'] ?? '';
+include '../inc/inc_nova_quill_edit_adapter.php';
+$article_content_editor = $nova_quill_html_editor;
+unset($nova_quill_html_semantic, $nova_quill_html_editor);
+
 // Include form helpers for field repopulation
 include '../inc/inc_nova_form_helpers.php';
+
+$article_content_editor_json = json_encode(
+  $article_content_editor,
+  JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE
+);
+
+if ($article_content_editor_json === false) {
+  $article_content_editor_json = '""';
+}
+
+$js_files_too_large = json_encode(__admin('articles.js.files_too_large'), JSON_UNESCAPED_UNICODE);
+$js_total_uploaded = json_encode(__admin('articles.js.total_uploaded'), JSON_UNESCAPED_UNICODE);
+$js_max_allowed = json_encode(__admin('articles.js.max_allowed'), JSON_UNESCAPED_UNICODE);
+$js_files_selected = json_encode(__admin('articles.js.files_selected'), JSON_UNESCAPED_UNICODE);
+$js_php_reject = json_encode(__admin('articles.js.php_reject'), JSON_UNESCAPED_UNICODE);
+$js_reduce_size_or_count = json_encode(__admin('articles.js.reduce_size_or_count'), JSON_UNESCAPED_UNICODE);
 ?>
 <!DOCTYPE html>
 <html lang="<?= $nova_lang_code ?>">
 <head>
     <!-- Quill Editor CSS (load before Nova styles) -->
-    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
 
     <?php include '../inc/inc_nova_head.php'; ?>
 </head>
@@ -273,7 +294,7 @@ include '../inc/inc_nova_form_helpers.php';
                                             <?= __admin('articles.form.content') ?>
                                         </label>
                                         <div id="quill-editor" class="nova-quill-editor-tall"></div>
-                                        <textarea id="article_content" name="article_content" class="nova-hidden"><?= nova_get_form_value('article_content', $article, $form_data) ?></textarea>
+                                        <textarea id="article_content" name="article_content" class="nova-hidden"><?= htmlspecialchars($form_data['article_content'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
                                         <div class="form-text">
                                             <?= __admin('articles.form.content_help') ?>
                                         </div>
@@ -431,7 +452,7 @@ include '../inc/inc_nova_form_helpers.php';
     </script>
 
     <!-- Quill Editor JS -->
-    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 
     <!-- Quill Editor Custom Styles -->
     <style>
@@ -455,20 +476,28 @@ include '../inc/inc_nova_form_helpers.php';
         var quill = new Quill('#quill-editor', {
             theme: 'snow',
             placeholder: '<?= __admin('articles.form.quill_placeholder') ?>',
+            formats: [
+                'bold',
+                'italic',
+                'underline',
+                'strike',
+                'list',
+                'code-block',
+                'link'
+            ],
             modules: {
                 toolbar: [
-                    [{ 'header': [1, 2, 3, false] }],
                     ['bold', 'italic', 'underline', 'strike'],
                     [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                    [{ 'align': [] }],
+                    ['code-block'],
                     ['link'],
                     ['clean']
                 ]
             }
         });
 
-        // Load existing content from hidden textarea
-        var existingContent = document.getElementById('article_content').value;
+        // Load semantic content adapted for Quill editing
+        var existingContent = <?= $article_content_editor_json ?>;
         if (existingContent) {
             quill.root.innerHTML = existingContent;
         }
@@ -476,7 +505,7 @@ include '../inc/inc_nova_form_helpers.php';
         // Sync Quill content to hidden textarea AND check file size on form submit
         document.querySelector('form').addEventListener('submit', function(e) {
             // STEP 1: Sync Quill content to hidden textarea
-            var contentHTML = quill.root.innerHTML;
+            var contentHTML = quill.getSemanticHTML();
             document.getElementById('article_content').value = contentHTML;
 
             // STEP 2: Check total file size BEFORE submit
@@ -500,12 +529,12 @@ include '../inc/inc_nova_form_helpers.php';
                 const totalMB = (totalSize / (1024 * 1024)).toFixed(2);
                 const maxMB = (maxTotalSize / (1024 * 1024)).toFixed(2);
 
-                alert('<?= __admin('articles.js.files_too_large') ?>\n\n' +
-                    '<?= __admin('articles.js.total_uploaded') ?>: ' + totalMB + 'MB\n' +
-                    '<?= __admin('articles.js.max_allowed') ?>: ' + maxMB + 'MB\n\n' +
-                    '<?= __admin('articles.js.files_selected') ?>:\n' + fileNames.join('\n') + '\n\n' +
-                    '<?= __admin('articles.js.php_reject') ?>\n' +
-                    '<?= __admin('articles.js.reduce_size_or_count') ?>');
+                alert(<?= $js_files_too_large ?> + '\n\n' +
+                    <?= $js_total_uploaded ?> + ': ' + totalMB + 'MB\n' +
+                    <?= $js_max_allowed ?> + ': ' + maxMB + 'MB\n\n' +
+                    <?= $js_files_selected ?> + ':\n' + fileNames.join('\n') + '\n\n' +
+                    <?= $js_php_reject ?> + '\n' +
+                    <?= $js_reduce_size_or_count ?>);
 
                 return false;
             }

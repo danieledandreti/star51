@@ -27,6 +27,6 @@ Per sicurezza, ti consigliamo di:
 2. Non condividere mai le tue credenziali
 3. Effettuare il logout quando finisci di lavorare
 
-{site_name} Team
+{site_name} Solo
 {site_url}
 EOT;

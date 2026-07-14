@@ -6,17 +6,24 @@
  * i18n: Uses language file for numbers and questions
  */
 
-// Ensure language loader is available
-if (!defined('STAR51_LANG_LOADED')) {
-  require_once __DIR__ . '/inc_star51_lang.php';
+global $L_admin, $L_front;
+
+// Use the current language context without overwriting admin/frontend globals.
+if (isset($L_admin['captcha'])) {
+  $captcha_lang = $L_admin['captcha'];
+} else {
+  if (!defined('STAR51_LANG_LOADED')) {
+    require_once __DIR__ . '/inc_star51_lang.php';
+  }
+
+  $captcha_lang = $L_front['captcha'] ?? [];
 }
 
 // Get numbers from language file (0-12)
-global $L;
-$numbers = $L['captcha']['numbers'] ?? ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
+$numbers = $captcha_lang['numbers'] ?? ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
 
 // Get question formats from language file
-$question_formats = $L['captcha']['questions'] ?? ['What is %s + %s?'];
+$question_formats = $captcha_lang['questions'] ?? ['What is %s + %s?'];
 
 // Generate two random numbers (0-6 for more variety)
 $num1 = rand(0, 6);

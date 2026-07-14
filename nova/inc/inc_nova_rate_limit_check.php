@@ -37,6 +37,14 @@ $rate_limit_message = '';
 $current_time = time();
 
 // ============================================================================
+// Remove an expired lockout before evaluating the current IP state
+// ============================================================================
+$rl_expired_query = "DELETE FROM ns_login_security WHERE ip_address = ? AND lockout_until > 0 AND lockout_until <= ?";
+$rl_expired_stmt = mysqli_prepare($conn, $rl_expired_query);
+mysqli_stmt_bind_param($rl_expired_stmt, 'si', $rate_limit_ip, $current_time);
+mysqli_stmt_execute($rl_expired_stmt);
+
+// ============================================================================
 // Query database for lockout status
 // ============================================================================
 $rl_check_query = "SELECT login_attempts, lockout_until FROM ns_login_security WHERE ip_address = ? LIMIT 1";
@@ -70,4 +78,4 @@ if ($rl_check_result && mysqli_num_rows($rl_check_result) > 0) {
 // ============================================================================
 // Cleanup temporary variables
 // ============================================================================
-unset($rl_check_query, $rl_check_stmt, $rl_check_result, $rl_record, $current_time, $seconds_remaining);
+unset($rl_expired_query, $rl_expired_stmt, $rl_check_query, $rl_check_stmt, $rl_check_result, $rl_record, $current_time, $seconds_remaining);

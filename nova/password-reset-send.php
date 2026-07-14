@@ -17,6 +17,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Check rate limiting attempts to determine if CAPTCHA is required
 require_once 'inc/inc_nova_rate_limit_check.php';
 
+// Stop immediately when the IP is already locked.
+if ($rate_limit_locked) {
+  header('Location: password-reset.php');
+  exit();
+}
+
 try {
   // Clean and validate email
   $email = trim($_POST['email'] ?? '');
@@ -76,6 +82,13 @@ try {
   $rate_limit_context = 'password_reset';
   require_once 'inc/inc_nova_rate_limit_increment.php';
 
+  // The request that reaches the limit must not continue to email processing.
+  if ($rate_limit_locked) {
+    unset($_SESSION['captcha_answer'], $_SESSION['captcha_timestamp'], $_SESSION['captcha_num1'], $_SESSION['captcha_num2'], $_SESSION['captcha_result']);
+    header('Location: password-reset.php');
+    exit();
+  }
+
   // Check if admin exists with this email
   $query_admin = "
     SELECT id_admin, first_name, last_name, email
@@ -90,7 +103,8 @@ try {
 
   if (mysqli_num_rows($result) === 0) {
     // Security: Don't reveal if email exists or not
-    $_SESSION['reset_success'] = __admin('password_reset.reset_email_exists');
+    $_SESSION['reset_request_complete'] = true;
+    unset($_SESSION['form_data']);
     header('Location: password-reset.php');
     exit();
   }
@@ -103,7 +117,7 @@ try {
     FROM ns_admins
     WHERE id_admin = ?
       AND reset_token IS NOT NULL
-      AND reset_expires > NOW()
+      AND reset_expires > UTC_TIMESTAMP()
   ";
   $stmt_token = mysqli_prepare($conn, $query_existing_token);
   mysqli_stmt_bind_param($stmt_token, 'i', $admin['id_admin']);
@@ -111,26 +125,22 @@ try {
   $result_token = mysqli_stmt_get_result($stmt_token);
 
   if (mysqli_num_rows($result_token) > 0) {
-    // Valid token already exists - use existing one, don't generate new
-    $existing_token_data = mysqli_fetch_assoc($result_token);
-    $reset_token = $existing_token_data['reset_token'];
-    $reset_sent = true;
-
-    // Set success message (token already sent previously)
-    $_SESSION['reset_success'] = __admin('password_reset.reset_email_already_sent');
+    // A valid token already exists: do not generate or send another one.
+    $_SESSION['reset_request_complete'] = true;
+    unset($_SESSION['form_data']);
   } else {
     // No valid token exists - generate new one
     $reset_token = bin2hex(random_bytes(32));
-    $reset_expires = date('Y-m-d H:i:s', time() + 1800); // 30 minutes
 
     // Save token in database
     $query_save_token = "
       UPDATE ns_admins
-      SET reset_token = ?, reset_expires = ?
+      SET reset_token = ?,
+          reset_expires = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 30 MINUTE)
       WHERE id_admin = ?
     ";
     $stmt = mysqli_prepare($conn, $query_save_token);
-    mysqli_stmt_bind_param($stmt, 'ssi', $reset_token, $reset_expires, $admin['id_admin']);
+    mysqli_stmt_bind_param($stmt, 'si', $reset_token, $admin['id_admin']);
 
     if (!mysqli_stmt_execute($stmt)) {
       throw new Exception(__admin('password_reset.password_update_error'));
@@ -139,11 +149,24 @@ try {
     // Send reset email via universal sender
     $reset_sent = nova_send_password_reset_email($admin['email'], $admin['first_name'], $admin['last_name'], $reset_token);
 
-    if ($reset_sent) {
-      $_SESSION['reset_success'] = __admin('password_reset.reset_email_sent');
-    } else {
-      $_SESSION['reset_errors'] = [__admin('password_reset.reset_email_error')];
+    if (!$reset_sent) {
+      // Allow a future request to generate and send a fresh token.
+      $query_clear_token = "
+        UPDATE ns_admins
+        SET reset_token = NULL,
+            reset_expires = NULL
+        WHERE id_admin = ?
+          AND reset_token = ?
+      ";
+      $stmt_clear_token = mysqli_prepare($conn, $query_clear_token);
+      mysqli_stmt_bind_param($stmt_clear_token, 'is', $admin['id_admin'], $reset_token);
+      mysqli_stmt_execute($stmt_clear_token);
+      error_log('Password reset email failed; token cleared for Admin ID: ' . $admin['id_admin']);
     }
+
+    // Always use the same response to prevent email enumeration.
+    $_SESSION['reset_request_complete'] = true;
+    unset($_SESSION['form_data']);
   }
 
 } catch (Exception $e) {

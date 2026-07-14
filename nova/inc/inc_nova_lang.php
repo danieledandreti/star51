@@ -35,24 +35,24 @@ if (!file_exists($nova_lang_file)) {
 
 // Load and decode language file
 $nova_lang_content = file_get_contents($nova_lang_file);
-$L = json_decode($nova_lang_content, true);
+$L_admin = json_decode($nova_lang_content, true);
 
 // Verify successful loading
-if ($L === null) {
+if ($L_admin === null) {
   error_log("Nova Lang Error: Failed to parse {$nova_lang_file} - " . json_last_error_msg());
-  $L = []; // Empty array to prevent errors
+  $L_admin = []; // Empty array to prevent errors
 }
 
 /**
  * Helper function for dot notation access (Admin)
- * Example: __admin('buttons.save') returns $L['buttons']['save']
+ * Example: __admin('buttons.save') returns $L_admin['buttons']['save']
  *
  * @param string $key Key with dot notation
  * @return string Translation or key if not found (debug-friendly)
  */
 function __admin($key)
 {
-  global $L;
+  global $L_admin;
 
   // Handle empty key
   if (empty($key)) {
@@ -61,7 +61,7 @@ function __admin($key)
 
   // Split key by dots
   $keys = explode('.', $key);
-  $value = $L;
+  $value = $L_admin;
 
   // Traverse the array
   foreach ($keys as $k) {

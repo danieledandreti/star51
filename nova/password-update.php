@@ -47,7 +47,13 @@ try {
 
   // Verify token exists and is not expired
   $query_token = "
-    SELECT id_admin, first_name, last_name, email, reset_expires
+    SELECT
+      id_admin,
+      first_name,
+      last_name,
+      email,
+      reset_expires,
+      reset_expires > UTC_TIMESTAMP() AS token_valid
     FROM ns_admins
     WHERE reset_token = ?
       AND is_active = 1
@@ -66,7 +72,7 @@ try {
   $admin = mysqli_fetch_assoc($result);
 
   // Check if token is expired
-  if (strtotime($admin['reset_expires']) < time()) {
+  if (!$admin['token_valid']) {
     // Clean expired token
     $query_clean = "
       UPDATE ns_admins

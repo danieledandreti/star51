@@ -24,7 +24,10 @@ $uploaded_image_2 = null;
 // Sanitize input data
 $article_title = trim($_POST['article_title'] ?? '');
 $id_subcategory = intval($_POST['id_subcategory'] ?? 0);
-$article_content = trim($_POST['article_content'] ?? '');
+$nova_quill_html_raw = trim($_POST['article_content'] ?? '');
+include '../inc/inc_nova_quill_sanitizer.php';
+$article_content = $nova_quill_html_clean;
+unset($nova_quill_html_clean);
 $article_summary = trim($_POST['article_summary'] ?? '');
 $item_collection = trim($_POST['item_collection'] ?? '');
 $item_year = !empty($_POST['item_year']) ? intval($_POST['item_year']) : null;

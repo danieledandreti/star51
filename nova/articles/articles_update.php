@@ -59,7 +59,10 @@ $errors = [];
 // Sanitize input data
 $article_title = trim($_POST['article_title'] ?? '');
 $id_subcategory = intval($_POST['id_subcategory'] ?? 0);
-$article_content = trim($_POST['article_content'] ?? '');
+$nova_quill_html_raw = trim($_POST['article_content'] ?? '');
+include '../inc/inc_nova_quill_sanitizer.php';
+$article_content = $nova_quill_html_clean;
+unset($nova_quill_html_clean);
 $article_summary = trim($_POST['article_summary'] ?? '');
 $item_collection = trim($_POST['item_collection'] ?? '');
 $item_year = !empty($_POST['item_year']) ? intval($_POST['item_year']) : null;
@@ -120,10 +123,10 @@ if (
 // PHASE 3-6: PROCESS IMAGES (image_1, image_2)
 // ========================================
 
-// Handle checkbox removal + cleanup old images
+// Handle checkbox removal state without deleting old images yet
 // Sets $uploaded_image_1/_2 from $current_image_* (default: keep)
-// If checkbox checked → delete files + set NULL
-// If new upload coming → delete old versions
+// If checkbox checked → set NULL for database update
+// Old versions are deleted only after successful database update
 include '../inc/inc_nova_img_checkbox.php';
 
 // Upload NEW images (validation + upload to file_db_max/)
@@ -245,6 +248,20 @@ try {
   // Execute the query
   if (mysqli_stmt_execute($stmt)) {
     $success_message = str_replace('{id}', $article_id, __admin('articles.msg.updated'));
+
+    // Delete replaced or removed old images only after the database update succeeded
+    if (!empty($current_image_1) && $final_image_1 !== $current_image_1) {
+      @unlink(NOVA_PATH_FILE_MAX . $current_image_1);
+      @unlink(NOVA_PATH_FILE_MED . $current_image_1);
+      @unlink(NOVA_PATH_FILE_MIN . $current_image_1);
+      error_log("Nova: Old image 1 deleted after DB update - File: $current_image_1");
+    }
+    if (!empty($current_image_2) && $final_image_2 !== $current_image_2) {
+      @unlink(NOVA_PATH_FILE_MAX . $current_image_2);
+      @unlink(NOVA_PATH_FILE_MED . $current_image_2);
+      @unlink(NOVA_PATH_FILE_MIN . $current_image_2);
+      error_log("Nova: Old image 2 deleted after DB update - File: $current_image_2");
+    }
 
     // Log the action
     error_log("Nova: Article updated - ID: $article_id by Admin ID: " . $_SESSION['admin_id']);

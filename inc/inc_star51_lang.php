@@ -45,23 +45,23 @@ if (!file_exists($star51_lang_file)) {
 
 // Load and decode language file
 $star51_lang_content = file_get_contents($star51_lang_file);
-$L = json_decode($star51_lang_content, true);
+$L_front = json_decode($star51_lang_content, true);
 
 // Verify successful loading
-if ($L === null) {
+if ($L_front === null) {
     error_log("Star51 Lang Error: Failed to parse {$star51_lang_file} - " . json_last_error_msg());
-    $L = []; // Empty array to prevent errors
+    $L_front = []; // Empty array to prevent errors
 }
 
 /**
  * Helper function for dot notation access (Frontend)
- * Example: __front('nav.home') returns $L['nav']['home']
+ * Example: __front('nav.home') returns $L_front['nav']['home']
  *
  * @param string $key Key with dot notation
  * @return string Translation or key if not found (debug-friendly)
  */
 function __front($key) {
-    global $L;
+    global $L_front;
 
     // Handle empty key
     if (empty($key)) {
@@ -70,7 +70,7 @@ function __front($key) {
 
     // Split key by dots
     $keys = explode('.', $key);
-    $value = $L;
+    $value = $L_front;
 
     // Traverse the array
     foreach ($keys as $k) {
@@ -110,7 +110,7 @@ function star51_get_current_lang() {
  * @return string Formatted date or fallback message
  */
 function format_date_i18n($date) {
-    global $L;
+    global $L_front;
 
     // Handle empty date
     if (empty($date)) {
@@ -127,8 +127,8 @@ function format_date_i18n($date) {
     }
 
     // Get format template and month names from JSON
-    $format = $L['date']['format'] ?? '{d} {month} {Y}';
-    $months = $L['date']['months'] ?? [];
+    $format = $L_front['date']['format'] ?? '{d} {month} {Y}';
+    $months = $L_front['date']['months'] ?? [];
 
     // Get month name (1-based index, array is 0-based)
     $month_index = (int)$date->format('n') - 1;

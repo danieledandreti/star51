@@ -1331,14 +1331,36 @@ button.btn[data-bs-toggle="collapse"]:not(.collapsed) i.bi-chevron-up {
   display: inline-block;
 }
 
-/* ==========================================
-   QUILL EDITOR DISPLAY MODE
-   ========================================== */
-/* Read-only Quill content display (articles_show.php)
-   Removes border from Quill container when used for display only */
+.nova-article-text-box {
+  border-left: 4px solid rgba(174, 202, 205, 0.25);
+  border-right: 4px solid rgba(174, 202, 205, 0.25);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
 
-.nova-quill-display.ql-container {
-  border-width: 0;
+.nova-article-body {
+  line-height: 1.6;
+}
+
+.nova-article-body p {
+  margin-bottom: 0.75rem;
+}
+
+.nova-article-body ol,
+.nova-article-body ul {
+  margin: 0.5rem 0 0.9rem;
+  padding-left: 1.5rem;
+}
+
+.nova-article-body pre {
+  background: #23241f;
+  border-radius: 4px;
+  color: #f8f8f2;
+  line-height: 1.45;
+  margin: 0.75rem 0;
+  overflow-x: auto;
+  padding: 10px 14px;
+  white-space: pre-wrap;
 }
 
 /* ==========================================

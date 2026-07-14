@@ -56,9 +56,6 @@ $page_description = __admin('articles.page.desc_show');
 <!DOCTYPE html>
 <html lang="<?= $nova_lang_code ?>">
 <head>
-    <!-- Quill Editor CSS (read-only display) - CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
-
     <?php include '../inc/inc_nova_head.php'; ?>
 </head>
 
@@ -173,7 +170,7 @@ $page_description = __admin('articles.page.desc_show');
                                         <i class="bi bi-card-text me-1"></i><?= __admin('articles.show.summary') ?>
                                     </h6>
                                     <?php if (!empty($article['article_summary'])): ?>
-                                        <div class="content-filled border-left">
+                                        <div class="nova-article-text-box">
                                             <p class="mb-0"><?= nl2br(htmlspecialchars($article['article_summary'])) ?></p>
                                         </div>
                                     <?php else: ?>
@@ -190,11 +187,8 @@ $page_description = __admin('articles.page.desc_show');
                                         <i class="bi bi-journal-text me-1"></i><?= __admin('articles.show.extended_text') ?>
                                     </h6>
                                     <?php if (!empty($article['article_content'])): ?>
-                                        <!-- Quill read-only content container -->
-                                        <div class="ql-container ql-snow nova-quill-display">
-                                            <div class="ql-editor">
-                                                <?= $article['article_content'] ?>
-                                            </div>
+                                        <div class="nova-article-text-box nova-article-body">
+                                            <?= $article['article_content'] ?>
                                         </div>
                                     <?php else: ?>
                                         <div class="content-placeholder">

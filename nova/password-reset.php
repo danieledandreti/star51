@@ -10,6 +10,29 @@ require_once 'inc/inc_nova_lang.php';
 // Rate Limiting - Check if IP is locked (DB-based)
 require_once 'inc/inc_nova_rate_limit_check.php';
 
+// Consume the one-time request completion state.
+$reset_request_complete = !empty($_SESSION['reset_request_complete']) && !$rate_limit_locked;
+unset($_SESSION['reset_request_complete'], $_SESSION['reset_success']);
+
+// Do not keep stale feedback while the recovery form is locked.
+if ($rate_limit_locked) {
+  unset($_SESSION['reset_errors'], $_SESSION['form_data']);
+}
+
+// Use recovery-specific lockout wording without changing the login message.
+$password_reset_lockout_message = '';
+if ($rate_limit_locked) {
+  if ((int) $rate_limit_minutes_remaining === 1) {
+    $password_reset_lockout_message = __admin('password_reset.lockout_singular');
+  } else {
+    $password_reset_lockout_message = str_replace(
+      '{minutes}',
+      $rate_limit_minutes_remaining,
+      __admin('password_reset.lockout_plural')
+    );
+  }
+}
+
 // Set page variables for includes
 $page_title = __admin('password_reset.title') . ' | ' . $nova_settings['admin_name'];
 $page_description = 'Nova Administration - Password Recovery';
@@ -48,18 +71,32 @@ $page_description = 'Nova Administration - Password Recovery';
               <?php if ($rate_limit_locked): ?>
               <div class="alert alert-warning d-flex align-items-center mb-4" role="alert">
                 <i class="bi bi-shield-lock me-3 fs-1"></i>
-                <div><?= htmlspecialchars($rate_limit_message) ?></div>
+                <div><?= htmlspecialchars($password_reset_lockout_message) ?></div>
               </div>
               <?php endif; ?>
 
-              <!-- Success Message (hide if CAPTCHA required) -->
-              <?php if (isset($_SESSION['reset_success']) && $rate_limit_attempts < 3): ?>
-              <div class="alert alert-success d-flex align-items-center mb-4" role="alert">
-                <i class="bi bi-check-circle me-2"></i>
-                <div><?= htmlspecialchars($_SESSION['reset_success']) ?></div>
+              <?php if ($reset_request_complete): ?>
+              <!-- Request Complete -->
+              <div class="alert alert-info d-flex align-items-start mb-4" role="status">
+                <i class="bi bi-envelope-check me-3 fs-4"></i>
+                <div>
+                  <strong><?= __admin('password_reset.request_received_title') ?></strong><br>
+                  <?= __admin('password_reset.request_received_message') ?>
+                </div>
               </div>
-              <?php unset($_SESSION['reset_success']); ?>
-              <?php endif; ?>
+
+              <a href="index.php" class="btn btn-outline-primary btn-lg w-100 mb-3">
+                <i class="bi bi-arrow-left me-2"></i>
+                <?= __admin('buttons.back_to_login') ?>
+              </a>
+
+              <div class="text-center">
+                <a href="password-reset.php" class="btn btn-outline-secondary btn-lg w-100 btn-mint-secondary">
+                  <i class="bi bi-arrow-left me-2"></i>
+                  <?= __admin('password_reset.request_again') ?>
+                </a>
+              </div>
+              <?php else: ?>
 
               <!-- Error Messages -->
               <?php if (isset($_SESSION['reset_errors'])): ?>
@@ -139,9 +176,30 @@ $page_description = 'Nova Administration - Password Recovery';
                   <?= __admin('buttons.back_to_login') ?>
                 </a>
               </div>
+              <?php endif; ?>
 
             </div>
 
+            <?php if ($reset_request_complete): ?>
+            <!-- Request Complete Footer -->
+            <div class="nova-card-footer login-footer-neutral d-flex justify-content-between align-items-center">
+              <small class="text-muted">
+                NovaStar51 Solo
+              </small>
+              <small class="text-muted">
+                <a href="https://medium.com/@daniele.dandreti"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   title="Passione + Tecnologia + Sogni = Daniele D'Andreti"
+                   class="footer-icons-link">
+                  <i class="bi bi-person-raised-hand" aria-hidden="true"></i> +
+                  <i class="bi bi-laptop" aria-hidden="true"></i> +
+                  <i class="bi bi-balloon-heart" aria-hidden="true"></i> =
+                  <i class="bi bi-star-fill" aria-hidden="true"></i>
+                </a>
+              </small>
+            </div>
+            <?php else: ?>
             <!-- Card Footer -->
             <div class="nova-card-footer login-footer-light d-flex justify-content-center align-items-center">
               <small class="text-muted text-center">
@@ -149,6 +207,7 @@ $page_description = 'Nova Administration - Password Recovery';
                 <?= __admin('password_reset.footer_info') ?>
               </small>
             </div>
+            <?php endif; ?>
 
           </div>
 

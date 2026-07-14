@@ -26,13 +26,27 @@ if (!$subcategories_result) {
 $form_data = $_SESSION['articles_form_data'] ?? [];
 unset($_SESSION['articles_form_data']);
 
+$nova_quill_html_semantic = $form_data['article_content'] ?? '';
+include '../inc/inc_nova_quill_edit_adapter.php';
+$article_content_editor = $nova_quill_html_editor;
+unset($nova_quill_html_semantic, $nova_quill_html_editor);
+
+$article_content_editor_json = json_encode(
+  $article_content_editor,
+  JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE
+);
+
+if ($article_content_editor_json === false) {
+  $article_content_editor_json = '""';
+}
+
 // Clear after retrieving
 ?>
 <!DOCTYPE html>
 <html lang="<?= $nova_lang_code ?>">
 <head>
     <!-- Quill Editor CSS (load before Nova styles) -->
-    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
 
     <?php include '../inc/inc_nova_head.php'; ?>
 </head>
@@ -283,7 +297,7 @@ unset($_SESSION['articles_form_data']);
     <?php include '../inc/inc_nova_footer.php'; ?>
 
     <!-- Quill Editor JS -->
-    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 
     <!-- Quill Editor Custom Styles -->
     <style>
@@ -311,6 +325,15 @@ unset($_SESSION['articles_form_data']);
         // Initialize Quill Editor on article_content
         var quill = new Quill('#article_content', {
             theme: 'snow',
+            formats: [
+                'bold',
+                'italic',
+                'underline',
+                'strike',
+                'list',
+                'code-block',
+                'link'
+            ],
             modules: {
                 toolbar: [
                     ['bold', 'italic', 'underline', 'strike'],
@@ -324,7 +347,7 @@ unset($_SESSION['articles_form_data']);
 
         // Restore content from session if validation failed
         <?php if (!empty($form_data['article_content'])): ?>
-        quill.root.innerHTML = <?= json_encode($form_data['article_content']) ?>;
+        quill.root.innerHTML = <?= $article_content_editor_json ?>;
         <?php endif; ?>
 
         // CHECK TOTAL FILE SIZE before form submit
@@ -377,8 +400,8 @@ unset($_SESSION['articles_form_data']);
                 return false;
             }
 
-            // If file check passed, copy Quill content to hidden field
-            document.getElementById('article_content_hidden').value = quill.root.innerHTML;
+            // If file check passed, copy Quill semantic HTML to hidden field
+            document.getElementById('article_content_hidden').value = quill.getSemanticHTML();
         });
 
         // Bootstrap form validation

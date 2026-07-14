@@ -2,6 +2,66 @@
 
 All notable changes to Star51 will be documented in this file.
 
+## [1.0.2] - 2026-07-14
+
+Star51 v1.0.2 is a maintenance and hardening release focused on safer
+password recovery, reliable article image updates, and improved rich-text
+handling in Nova.
+
+This release preserves the lightweight, single-user architecture of Star51
+Solo and requires no database migration.
+
+### Security
+
+- Hardened the Nova password recovery flow with stricter rate-limit handling.
+- Added neutral recovery responses to prevent account enumeration.
+- Normalized password-reset token expiration handling to UTC.
+- Invalidated reset tokens when email delivery fails.
+- Separated Nova administrator translations from frontend language data,
+  preventing authentication pages from loading the wrong language context.
+- Added server-side sanitization for article rich-text content using an
+  explicit HTML allowlist.
+
+### Improved
+
+- Aligned the Nova article editor with the hardened Quill implementation
+  developed for Star51 Team.
+- Preserved semantic HTML for paragraphs, lists, links, formatting, and code
+  blocks when articles are created, edited, and displayed.
+- Added a dedicated HTML-to-Quill adapter so existing semantic content can be
+  edited without losing list or code-block structure.
+- Restricted Quill to the supported formatting set.
+- Safely encoded restored editor content and translated JavaScript messages.
+- Improved the layout, messages, and navigation of the password recovery
+  pages.
+- Added dedicated Nova styles for semantic article content.
+
+### Fixed
+
+- Fixed expired rate-limit records remaining active longer than intended.
+- Preserved active lockouts and partial attempt counters while removing only
+  expired records.
+- Made article image replacement atomic: old `max`, `med`, and `min` image
+  variants are deleted only after the database update succeeds.
+- Prevented failed article updates from deleting the previously stored images.
+- Preserved Star51 Solo's intentional `time()`-based image filename policy.
+
+### Compatibility and upgrade notes
+
+- No database migration is required.
+- No configuration changes are required.
+- Existing article content is not modified in bulk.
+- Rich-text sanitization is applied when an article is created or updated.
+- Star51 Team-only CSV import features are not included in Star51 Solo.
+
+### Verification
+
+- Star51 Solo regression suite: **85/85 tests passed**.
+- PHP syntax validation passed for every changed PHP file.
+- Package and credential-cleanliness checks passed.
+- Article creation, editing, image replacement, validation errors, Quill
+  formatting, and password recovery were functionally tested.
+
 ## [1.0.1] - 2026-07-06
 
 ### Changed

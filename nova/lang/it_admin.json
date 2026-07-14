@@ -289,10 +289,11 @@
         "captcha_error": "Errore sistema CAPTCHA. Riprova.",
         "captcha_expired": "Il CAPTCHA è scaduto. Riprova.",
         "captcha_wrong": "Risposta CAPTCHA errata. Riprova.",
-        "reset_email_exists": "Se l'email è presente nel sistema, riceverai un link di recupero entro pochi minuti.",
-        "reset_email_already_sent": "Email di recupero già inviata. Controlla la tua casella di posta (e la cartella spam).",
-        "reset_email_sent": "Email di recupero inviata! Controlla la tua casella di posta (e la cartella spam).",
-        "reset_email_error": "Errore durante l'invio dell'email. Riprova più tardi.",
+        "lockout_singular": "Troppi tentativi di recupero password. Riprova tra 1 minuto.",
+        "lockout_plural": "Troppi tentativi di recupero password. Riprova tra {minutes} minuti.",
+        "request_received_title": "Richiesta ricevuta",
+        "request_received_message": "Se l'indirizzo inserito è associato a un account attivo, riceverai un'email con il link per reimpostare la password. Controlla anche la cartella spam. Il link sarà valido per 30 minuti.",
+        "request_again": "Invia un'altra richiesta",
         "link_invalid": "Link non valido. Richiedi un nuovo recupero password.",
         "token_invalid_used": "Token non valido o già utilizzato. Richiedi un nuovo recupero password.",
         "link_expired": "Il link è scaduto. Richiedi un nuovo recupero password.",
@@ -305,6 +306,30 @@
         "system_error": "Si è verificato un errore di sistema. Riprova più tardi."
     },
 
+    "captcha": {
+        "numbers": [
+            "zero",
+            "uno",
+            "due",
+            "tre",
+            "quattro",
+            "cinque",
+            "sei",
+            "sette",
+            "otto",
+            "nove",
+            "dieci",
+            "undici",
+            "dodici"
+        ],
+        "questions": [
+            "Quanto fa %s + %s?",
+            "Quanto fa %s piu %s?",
+            "Somma %s e %s:",
+            "%s + %s uguale?",
+            "Calcola %s piu %s:"
+        ]
+    },
     "categories": {
         "page": {
             "title": "Gestione Categorie",
