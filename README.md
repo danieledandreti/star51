@@ -1,8 +1,16 @@
 # Star51 — Free Personal Collection Manager
 
+[![Latest release](https://img.shields.io/github/v/release/danieledandreti/star51?display_name=tag&sort=semver)](https://github.com/danieledandreti/star51/releases/latest)
+[![PHP 8.0+](https://img.shields.io/badge/PHP-8.0%2B-777BB4?logo=php&logoColor=white)](#requirements)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL_v3-blue.svg)](LICENSE)
+
 A lightweight, self-hosted collection manager for individuals. Catalog your movies, books, comics, vinyl records, or anything you collect — with categories, subcategories, images, and multilingual support.
 
 **Star51** is the free edition of the Star51 ecosystem. Simple to install, easy to use, zero recurring costs.
+
+**Current stable release: [v1.0.2](https://github.com/danieledandreti/star51/releases/tag/v1.0.2)** — safer password recovery, atomic article image updates, and hardened semantic rich-text handling. No database migration or configuration change is required.
+
+[Release notes](https://github.com/danieledandreti/star51/releases/latest) · [Changelog](CHANGELOG.md)
 
 ## Features
 
@@ -16,6 +24,15 @@ A lightweight, self-hosted collection manager for individuals. Catalog your movi
 - **YouTube Integration** — Embed video links on item detail pages
 - **SEO Ready** — Sitemap, robots.txt, Open Graph, JSON-LD structured data
 - **Secure** — CSRF protection, prepared statements, rate limiting, security headers
+
+## What's New in v1.0.2
+
+- **Safer Password Recovery** — Neutral anti-enumeration responses, stricter rate limiting, UTC token expiry, and cleanup after email delivery failures.
+- **Atomic Image Updates** — Existing article images remain available until the database update succeeds.
+- **Hardened Rich Text** — Server-side HTML sanitization, semantic Quill round-tripping, safer links, lists, and code blocks.
+- **Straightforward Upgrade** — No database migration, configuration change, or bulk rewrite of existing article content.
+
+See the [v1.0.2 release notes](https://github.com/danieledandreti/star51/releases/tag/v1.0.2) for the complete technical summary.
 
 ## Requirements
 
