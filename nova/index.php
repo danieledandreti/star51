@@ -35,7 +35,7 @@ if (!file_exists(__DIR__ . '/../.installed')) {
 <?php exit();
 }
 
-session_start();
+require_once 'inc/inc_nova_session_start.php';
 require_once 'legas/nova_config.php';
 require_once 'inc/inc_nova_constants.php';
 
@@ -92,6 +92,7 @@ if (!empty($_POST['username']) && !empty($_POST['password']) && !$rate_limit_loc
       $_SESSION['admin_first_name'] = $admin_data['first_name'];
       $_SESSION['admin_last_name'] = $admin_data['last_name'];
       $_SESSION['admin_level'] = 0; // Solo Edition: single Super Admin
+      $_SESSION['last_activity'] = time();
 
       // Redirect to dashboard
       header('Location: home.php');

@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once 'inc/inc_nova_session_start.php';
 
 // Load database connection and email sender
 require_once 'legas/nova_config.php';

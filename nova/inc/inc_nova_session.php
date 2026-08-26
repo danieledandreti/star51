@@ -3,27 +3,11 @@
 // Simple procedural PHP with English comments
 // Based on Star50 pattern adapted for Nova session structure
 
-// Session Configuration & Start - Security hardened
-if (session_status() === PHP_SESSION_NONE) {
-  $http_host = (string)($_SERVER['HTTP_HOST'] ?? '');
-  $normalized_host = preg_replace('/:\d+$/', '', $http_host);
-  $cookie_domain = '';
+// Shared session startup for both pre-auth and protected Nova pages.
+require_once __DIR__ . '/inc_nova_session_start.php';
 
-  if ($normalized_host !== '' && $normalized_host !== 'localhost' && filter_var($normalized_host, FILTER_VALIDATE_IP) === false) {
-    $cookie_domain = $normalized_host;
-  }
-
-  // Set secure cookie parameters before session start
-  session_set_cookie_params([
-    'lifetime' => 0,           // Session cookie (expires when browser closes)
-    'path' => '/',
-    'domain' => $cookie_domain,
-    'secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on', // HTTPS only (if available)
-    'httponly' => true,        // No JavaScript access (XSS protection)
-    'samesite' => 'Strict'     // CSRF protection
-  ]);
-  session_start();
-}
+// Database connection and dynamic Nova paths required by protected sessions.
+require_once dirname(__DIR__) . '/legas/nova_config.php';
 
 // Session Timeout - Auto logout after 1 hour of inactivity (only for logged users)
 $timeout_duration = 3600; // 1 hour (3600 seconds)
@@ -33,7 +17,7 @@ if (isset($_SESSION['nova_logged']) && $_SESSION['nova_logged'] === true) {
     // Session expired - cleanup and redirect to login
     session_unset();
     session_destroy();
-    header('Location: index.php?timeout=1');
+    header('Location: ' . NOVA_BASE_PATH . '/index.php?timeout=1');
     exit();
   }
   // Update last activity timestamp
@@ -42,7 +26,7 @@ if (isset($_SESSION['nova_logged']) && $_SESSION['nova_logged'] === true) {
 
 // Session validation - redirect to login if not authenticated
 if (!isset($_SESSION['nova_logged']) || $_SESSION['nova_logged'] !== true) {
-  header('Location: index.php');
+  header('Location: ' . NOVA_BASE_PATH . '/index.php');
   exit();
 }
 
@@ -57,7 +41,21 @@ if (!isset($_SESSION['admin_level']) || $_SESSION['admin_level'] !== 0) {
   // Invalid or missing level - force logout (corrupted/attacked session)
   session_unset();
   session_destroy();
-  header('Location: index.php');
+  header('Location: ' . NOVA_BASE_PATH . '/index.php');
+  exit();
+}
+
+// Confirm that the authenticated Solo administrator still exists and is active.
+$active_admin_query = 'SELECT id_admin FROM ns_admins WHERE id_admin = ? AND is_active = 1 LIMIT 1';
+$active_admin_stmt = mysqli_prepare($conn, $active_admin_query);
+mysqli_stmt_bind_param($active_admin_stmt, 'i', $admin_id);
+mysqli_stmt_execute($active_admin_stmt);
+$active_admin_result = mysqli_stmt_get_result($active_admin_stmt);
+
+if (!$active_admin_result || mysqli_num_rows($active_admin_result) !== 1) {
+  session_unset();
+  session_destroy();
+  header('Location: ' . NOVA_BASE_PATH . '/index.php');
   exit();
 }
 
@@ -69,19 +67,11 @@ if (empty($_SESSION['csrf_token'])) {
   $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-// Database connection required for protected pages
-require_once dirname(__DIR__) . "/legas/nova_config.php";
-
 // System configuration constants (dimensions, limits, paths, etc.)
 require_once __DIR__ . "/inc_nova_constants.php";
 
 // Language loader (i18n system)
 require_once __DIR__ . "/inc_nova_lang.php";
-
-// Security headers for admin pages
-header('X-Frame-Options: DENY');
-header('X-Content-Type-Options: nosniff');
-header('Referrer-Policy: strict-origin-when-cross-origin');
 
 /**
  * Safe redirect using HTTP_REFERER with same-host validation
