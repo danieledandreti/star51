@@ -51,14 +51,14 @@ if (!defined('NOVA_BASE_PATH')) {
          title="<?= __admin('nav.search') ?>">
         <i class="bi bi-search"></i>
       </a>
-      <!-- Language Switcher Mobile -->
+      <!-- Profile Mobile -->
       <a href="#"
          class="mobile-nav-icon"
          data-bs-toggle="offcanvas"
-         data-bs-target="#mobileLangMenu"
-         aria-label="<?= __admin('nav.language') ?>"
-         title="<?= __admin('nav.language') ?>">
-        <i class="bi bi-translate"></i>
+         data-bs-target="#mobileProfileMenu"
+         aria-label="<?= __admin('nav.profile') ?>"
+         title="<?= __admin('nav.profile') ?>">
+        <i class="bi bi-person-circle"></i>
       </a>
     </div>
 
@@ -294,14 +294,14 @@ if (!defined('NOVA_BASE_PATH')) {
   </div>
 </div>
 
-<!-- Mobile Offcanvas Menu - Language -->
+<!-- Mobile Offcanvas Menu - Profile -->
 <div class="offcanvas offcanvas-bottom"
      tabindex="-1"
-     id="mobileLangMenu"
-     aria-labelledby="mobileLangMenuLabel">
+     id="mobileProfileMenu"
+     aria-labelledby="mobileProfileMenuLabel">
   <div class="offcanvas-header nova-bg-offcanvas-header">
-    <h5 class="offcanvas-title" id="mobileLangMenuLabel">
-      <i class="bi bi-translate me-2"></i><?= __admin('nav.language') ?>
+    <h5 class="offcanvas-title" id="mobileProfileMenuLabel">
+      <i class="bi bi-person-circle me-2"></i><?= __admin('nav.profile') ?>
     </h5>
     <button type="button"
             class="btn-close"
@@ -310,6 +310,16 @@ if (!defined('NOVA_BASE_PATH')) {
   </div>
   <div class="offcanvas-body">
     <div class="list-group list-group-flush">
+      <div class="list-group-item">
+        <i class="bi bi-person me-2"></i><?= htmlspecialchars($admin_full_name) ?>
+      </div>
+      <a href="<?= $nova_base ?>/admins/admins_edit.php"
+         class="list-group-item list-group-item-action">
+        <i class="bi bi-pencil-square me-2"></i><?= __admin('admins.page.title_edit_self') ?>
+      </a>
+      <div class="list-group-item">
+        <i class="bi bi-translate me-2"></i><?= __admin('nav.language') ?>
+      </div>
       <?php foreach (nova_get_available_languages() as $lang): ?>
       <a href="<?= $nova_base ?>/admins/admins_lang_switch.php?lang=<?= $lang['code'] ?>&redirect=<?= urlencode($_SERVER['REQUEST_URI']) ?>"
          class="list-group-item list-group-item-action <?= $nova_lang_code === $lang['code'] ? 'active' : '' ?>">
@@ -319,6 +329,10 @@ if (!defined('NOVA_BASE_PATH')) {
         <?php endif; ?>
       </a>
       <?php endforeach; ?>
+      <a href="<?= $nova_base ?>/logout.php"
+         class="list-group-item list-group-item-action">
+        <i class="bi bi-box-arrow-right me-2"></i><?= __admin('nav.logout') ?>
+      </a>
     </div>
   </div>
 </div>
