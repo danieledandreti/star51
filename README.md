@@ -8,7 +8,7 @@ A lightweight, self-hosted collection manager for individuals. Catalog your movi
 
 **Star51** is the free edition of the Star51 ecosystem. Simple to install, easy to use, zero recurring costs.
 
-**Current stable release: [v1.0.2](https://github.com/danieledandreti/star51/releases/tag/v1.0.2)** — safer password recovery, atomic article image updates, and hardened semantic rich-text handling. No database migration or configuration change is required.
+**Current stable release: [v1.1.0](https://github.com/danieledandreti/star51/releases/tag/v1.1.0)** — isolated Nova sessions, a safer contact form, improved mobile administration, and stronger installer protections. No database migration is required.
 
 [Release notes](https://github.com/danieledandreti/star51/releases/latest) · [Changelog](CHANGELOG.md)
 
@@ -23,16 +23,18 @@ A lightweight, self-hosted collection manager for individuals. Catalog your movi
 - **Search** — Full-text search across your collection
 - **YouTube Integration** — Embed video links on item detail pages
 - **SEO Ready** — Sitemap, robots.txt, Open Graph, JSON-LD structured data
-- **Secure** — CSRF protection, prepared statements, rate limiting, security headers
+- **Secure** — Isolated admin sessions, CSRF protection, prepared statements, rate limiting, and security headers
 
-## What's New in v1.0.2
+## What's New in v1.1.0
 
-- **Safer Password Recovery** — Neutral anti-enumeration responses, stricter rate limiting, UTC token expiry, and cleanup after email delivery failures.
-- **Atomic Image Updates** — Existing article images remain available until the database update succeeds.
-- **Hardened Rich Text** — Server-side HTML sanitization, semantic Quill round-tripping, safer links, lists, and code blocks.
-- **Straightforward Upgrade** — No database migration, configuration change, or bulk rewrite of existing article content.
+- **Isolated Nova Sessions** — A dedicated, portable admin session protects login, recovery, authenticated pages, and logout across different installation paths.
+- **Safer Contact Form** — Explicit field limits, a live 2500-character counter, UTF-8-aware trimming, and clear visitor feedback.
+- **Improved Mobile Administration** — Profile editing, language selection, and logout are grouped in one compact mobile menu.
+- **Clearer System Diagnostics** — Installation files and the persistent `.installed` safety lock are reported separately.
+- **Protected Sensitive Directories** — Direct HTTP access to `nova/conf` and `nova/logs` is denied by distributed Apache rules.
+- **Straightforward Upgrade** — No database migration is required. Administrators sign in again once after upgrading because Nova now uses its own session cookie.
 
-See the [v1.0.2 release notes](https://github.com/danieledandreti/star51/releases/tag/v1.0.2) for the complete technical summary.
+See the [v1.1.0 release notes](https://github.com/danieledandreti/star51/releases/tag/v1.1.0) for the complete technical summary.
 
 ## Requirements
 
@@ -45,7 +47,7 @@ See the [v1.0.2 release notes](https://github.com/danieledandreti/star51/release
 1. Download or clone this repository
 2. Upload files to your web server
 3. Navigate to `http://your-site/install/`
-4. Follow the installation wizard (database, admin account, SMTP)
+4. Follow the installation wizard (database, administrator account, optional Gmail SMTP)
 5. Log in to the admin panel at `http://your-site/nova/`
 
 The wizard generates the configuration file, database tables, and SEO files automatically.
@@ -57,16 +59,22 @@ star51/
 ├── *.php              Frontend pages
 ├── inc/               Frontend includes (navbar, footer, head, lang)
 ├── css/ js/ img/      Frontend assets
+├── favicon/           Browser icons and web app manifest
 ├── nova/              Admin panel (NovaStar51)
-│   ├── conf/          Configuration
-│   ├── inc/           Admin includes
-│   ├── lang/          i18n JSON files
+│   ├── conf/ inc/     Configuration and shared admin includes
+│   ├── lang/          Admin and frontend i18n JSON files
 │   ├── articles/      Article CRUD
-│   ├── cat/           Category management
-│   ├── admins/        Administrator account management
+│   ├── cat/ subcat/   Category and subcategory management
+│   ├── admins/        Solo administrator profile management
+│   ├── requests/      Contact request management
 │   ├── system/        System configuration and maintenance
-│   └── requests/      Contact request management
-├── file_db_max/med/min/  Image uploads (3 sizes)
+│   ├── legas/         Legal content configuration
+│   ├── logs/          Protected application logs
+│   ├── mail-templates/  Localized email templates
+│   └── css/ js/       Admin assets
+├── file_db_max/       Original uploaded images
+├── file_db_med/       Medium generated images
+├── file_db_min/       Thumbnail generated images
 └── install/           Installation wizard
 ```
 

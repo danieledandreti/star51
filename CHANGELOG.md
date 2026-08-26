@@ -2,6 +2,58 @@
 
 All notable changes to Star51 will be documented in this file.
 
+## [1.1.0] - 2026-08-26
+
+Star51 v1.1.0 is a backward-compatible security and usability release for
+Nova administration, the public contact form, and installation maintenance.
+It requires no database migration.
+
+### Security
+
+- Introduced the dedicated `NOVASESSID` bootstrap for login, password
+  recovery, protected pages, and logout.
+- Derived the Nova cookie path from the deployed directory so installations
+  are no longer tied to `/star51-dev/` or another fixed path.
+- Validated that the Solo administrator still exists and is active on every
+  protected request.
+- Centralized directory guards and administrative security headers.
+- Reliably expired the Nova session cookie during logout.
+- Blocked direct HTTP access to `nova/conf` and `nova/logs` with Apache 2.4
+  rules and a legacy compatibility fallback.
+- Added matching installer templates so new installations deploy both
+  directory protections automatically.
+
+### Improved
+
+- Displayed Nova log entries from newest to oldest while preserving the
+  existing line limit.
+- Replaced the standalone mobile language entry with one profile menu for
+  profile editing, language selection, and logout.
+- Added explicit contact form limits and a live 2500-character message
+  counter that highlights the final 500 characters.
+- Trimmed oversized contact messages consistently in the browser and on the
+  server with UTF-8-aware counting and clear visitor feedback.
+- Separated the removable `/install/` directory from the persistent
+  `.installed` safety lock in System Configuration.
+- Clarified installation removal states and actions in Italian and English.
+
+### Compatibility and upgrade notes
+
+- No database migration is required.
+- No existing configuration values need to be changed.
+- Existing administrators must sign in again once after upgrading because
+  Nova now uses its dedicated session cookie.
+- Deploy the complete release so the new `nova/conf/.htaccess` and
+  `nova/logs/.htaccess` protections are present.
+- The Installation Guide keeps its independent version number `2.5.0`.
+
+### Verification
+
+- Star51 Solo regression suite: **85/85 tests passed**.
+- Dedicated session, contact form, mobile navigation, installer copy, package
+  structure, and HTTP protection checks passed.
+- PHP syntax and Italian/English JSON validation passed for the changed files.
+
 ## [1.0.2] - 2026-07-14
 
 Star51 v1.0.2 is a maintenance and hardening release focused on safer
