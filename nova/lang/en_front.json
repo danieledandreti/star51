@@ -84,6 +84,8 @@
         "captcha_hint": "Write the result in words (e.g.: three, five, ten)",
         "message": "Message",
         "message_placeholder": "Describe your request...",
+        "characters": "characters",
+        "message_trimmed": "Excess text has been removed. The first 2500 characters will be sent.",
         "privacy_label": "I accept the processing of personal data according to the",
         "privacy_link": "Privacy Policy",
         "submit": "Send Request",
@@ -91,13 +93,18 @@
         "error": "Error",
         "validation": {
             "first_name": "First name is required",
+            "first_name_max": "First name cannot exceed 100 characters",
             "last_name": "Last name is required",
+            "last_name_max": "Last name cannot exceed 100 characters",
             "email": "Valid email is required",
+            "email_max": "Email cannot exceed 255 characters",
+            "phone_max": "Phone cannot exceed 20 characters",
             "captcha": "Please enter the security verification result",
             "captcha_expired": "Session expired. Please reload the page and try again",
             "captcha_timeout": "Security verification expired. Please reload the page",
             "captcha_wrong": "Verification result is incorrect. Please try again",
             "message": "Message is required",
+            "message_max": "Message cannot exceed 2500 characters",
             "privacy": "You must accept the Privacy Policy"
         },
         "success": {

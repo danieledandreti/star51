@@ -84,6 +84,8 @@
         "captcha_hint": "Scrivi il risultato in lettere (es: tre, cinque, dieci)",
         "message": "Messaggio",
         "message_placeholder": "Descrivi la tua richiesta...",
+        "characters": "caratteri",
+        "message_trimmed": "Il testo eccedente è stato rimosso. Verranno inviati i primi 2500 caratteri.",
         "privacy_label": "Accetto il trattamento dei dati personali secondo la",
         "privacy_link": "Privacy Policy",
         "submit": "Invia Richiesta",
@@ -91,13 +93,18 @@
         "error": "Errore",
         "validation": {
             "first_name": "Il nome è obbligatorio",
+            "first_name_max": "Il nome non può superare 100 caratteri",
             "last_name": "Il cognome è obbligatorio",
+            "last_name_max": "Il cognome non può superare 100 caratteri",
             "email": "Email valida è obbligatoria",
+            "email_max": "L'email non può superare 255 caratteri",
+            "phone_max": "Il telefono non può superare 20 caratteri",
             "captcha": "Inserisci il risultato della verifica di sicurezza",
             "captcha_expired": "Sessione scaduta. Ricarica la pagina e riprova",
             "captcha_timeout": "Verifica di sicurezza scaduta. Ricarica la pagina",
             "captcha_wrong": "Risultato della verifica non corretto. Riprova",
             "message": "Il messaggio è obbligatorio",
+            "message_max": "Il messaggio non può superare 2500 caratteri",
             "privacy": "Devi accettare la Privacy Policy"
         },
         "success": {

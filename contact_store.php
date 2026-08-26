@@ -104,7 +104,7 @@ try {
   $last_name = trim($_POST['last_name'] ?? '');
   $email = trim($_POST['email'] ?? '');
   $phone = trim($_POST['phone'] ?? '');
-  $message = trim($_POST['message'] ?? '');
+  $message = mb_substr(trim($_POST['message'] ?? ''), 0, 2500, 'UTF-8');
   $privacy = isset($_POST['privacy']) ? 1 : 0;
   $captcha = strtolower(trim($_POST['captcha'] ?? ''));
 
@@ -113,14 +113,26 @@ try {
 
   if (empty($first_name)) {
     $errors[] = __front('contact.validation.first_name');
+  } elseif (mb_strlen($first_name, 'UTF-8') > 100) {
+    $errors[] = __front('contact.validation.first_name_max');
   }
 
   if (empty($last_name)) {
     $errors[] = __front('contact.validation.last_name');
+  } elseif (mb_strlen($last_name, 'UTF-8') > 100) {
+    $errors[] = __front('contact.validation.last_name_max');
   }
 
-  if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+  if (empty($email)) {
     $errors[] = __front('contact.validation.email');
+  } elseif (mb_strlen($email, 'UTF-8') > 255) {
+    $errors[] = __front('contact.validation.email_max');
+  } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $errors[] = __front('contact.validation.email');
+  }
+
+  if (mb_strlen($phone, 'UTF-8') > 20) {
+    $errors[] = __front('contact.validation.phone_max');
   }
 
   if (empty($message)) {

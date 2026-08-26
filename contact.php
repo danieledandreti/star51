@@ -126,6 +126,7 @@ include 'inc/inc_navbar.php';
       // Retrieve form data if there was an error
       $form_data = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : [];
       unset($_SESSION['form_data']);
+      $message_length = mb_strlen($form_data['message'] ?? '', 'UTF-8');
       ?>
 
       <!-- Contact Form Section -->
@@ -142,7 +143,16 @@ include 'inc/inc_navbar.php';
                     <!-- First Row: Nome, Cognome, Email -->
                     <div class="col-md-4">
                       <label for="firstName" class="form-label star51-label"><?= __front('contact.first_name') ?> *</label>
-                      <input type="text" class="form-control form-control-lg" id="firstName" name="first_name" value="<?= htmlspecialchars($form_data['first_name'] ?? '') ?>" autocomplete="given-name" required aria-required="true" aria-describedby="firstNameFeedback">
+                      <input type="text"
+                             class="form-control form-control-lg"
+                             id="firstName"
+                             name="first_name"
+                             value="<?= htmlspecialchars($form_data['first_name'] ?? '') ?>"
+                             autocomplete="given-name"
+                             maxlength="100"
+                             required
+                             aria-required="true"
+                             aria-describedby="firstNameFeedback">
                       <div class="invalid-feedback" id="firstNameFeedback">
                         <?= __front('contact.validation.first_name') ?>
                       </div>
@@ -150,7 +160,16 @@ include 'inc/inc_navbar.php';
 
                     <div class="col-md-4">
                       <label for="lastName" class="form-label star51-label"><?= __front('contact.last_name') ?> *</label>
-                      <input type="text" class="form-control form-control-lg" id="lastName" name="last_name" value="<?= htmlspecialchars($form_data['last_name'] ?? '') ?>" autocomplete="family-name" required aria-required="true" aria-describedby="lastNameFeedback">
+                      <input type="text"
+                             class="form-control form-control-lg"
+                             id="lastName"
+                             name="last_name"
+                             value="<?= htmlspecialchars($form_data['last_name'] ?? '') ?>"
+                             autocomplete="family-name"
+                             maxlength="100"
+                             required
+                             aria-required="true"
+                             aria-describedby="lastNameFeedback">
                       <div class="invalid-feedback" id="lastNameFeedback">
                         <?= __front('contact.validation.last_name') ?>
                       </div>
@@ -158,7 +177,16 @@ include 'inc/inc_navbar.php';
 
                     <div class="col-md-4">
                       <label for="email" class="form-label star51-label"><?= __front('contact.email') ?> *</label>
-                      <input type="email" class="form-control form-control-lg" id="email" name="email" value="<?= htmlspecialchars($form_data['email'] ?? '') ?>" autocomplete="email" required aria-required="true" aria-describedby="emailFeedback">
+                      <input type="email"
+                             class="form-control form-control-lg"
+                             id="email"
+                             name="email"
+                             value="<?= htmlspecialchars($form_data['email'] ?? '') ?>"
+                             autocomplete="email"
+                             maxlength="255"
+                             required
+                             aria-required="true"
+                             aria-describedby="emailFeedback">
                       <div class="invalid-feedback" id="emailFeedback">
                         <?= __front('contact.validation.email') ?>
                       </div>
@@ -167,7 +195,14 @@ include 'inc/inc_navbar.php';
                     <!-- Second Row: Phone and Captcha -->
                     <div class="col-md-6">
                       <label for="phone" class="form-label star51-label"><?= __front('contact.phone') ?></label>
-                      <input type="tel" class="form-control form-control-lg" id="phone" name="phone" value="<?= htmlspecialchars($form_data['phone'] ?? '') ?>" autocomplete="tel" aria-describedby="phoneHint">
+                      <input type="tel"
+                             class="form-control form-control-lg"
+                             id="phone"
+                             name="phone"
+                             value="<?= htmlspecialchars($form_data['phone'] ?? '') ?>"
+                             autocomplete="tel"
+                             maxlength="20"
+                             aria-describedby="phoneHint">
                       <small class="form-text text-muted" id="phoneHint"><?= __front('contact.phone_hint') ?></small>
                     </div>
 
@@ -184,8 +219,24 @@ include 'inc/inc_navbar.php';
 
                     <!-- Third Row: Message -->
                     <div class="col-12">
-                      <label for="message" class="form-label star51-label"><?= __front('contact.message') ?> *</label>
-                      <textarea class="form-control form-control-lg" id="message" name="message" rows="5" placeholder="<?= __front('contact.message_placeholder') ?>" required aria-required="true" aria-describedby="messageFeedback"><?= htmlspecialchars($form_data['message'] ?? '') ?></textarea>
+                      <div class="d-flex align-items-baseline gap-2 mb-2">
+                        <label for="message" class="form-label star51-label mb-0"><?= __front('contact.message') ?> *</label>
+                        <small class="form-text <?= $message_length >= 2000 ? 'text-danger' : 'text-muted' ?>" id="messageCharacterCounter">
+                          <span id="messageCharacterCount"><?= $message_length ?></span>/2500 <?= __front('contact.characters') ?>
+                        </small>
+                      </div>
+                      <textarea class="form-control form-control-lg"
+                                id="message"
+                                name="message"
+                                rows="5"
+                                maxlength="2500"
+                                placeholder="<?= __front('contact.message_placeholder') ?>"
+                                required
+                                aria-required="true"
+                                aria-describedby="messageCharacterCounter messageTrimmedNotice messageFeedback"><?= htmlspecialchars($form_data['message'] ?? '') ?></textarea>
+                      <small class="form-text text-danger d-none mt-1" id="messageTrimmedNotice" role="status">
+                        <?= __front('contact.message_trimmed') ?>
+                      </small>
                       <div class="invalid-feedback" id="messageFeedback"><?= __front('contact.validation.message') ?></div>
                     </div>
 
@@ -387,6 +438,33 @@ include 'inc/inc_scripts.php';
       const progressBar = document.getElementById('contactProgressBar');
       const closeBtn = document.getElementById('closeContactOverlay');
       const successAlert = document.querySelector('.alert-success');
+      const messageField = document.getElementById('message');
+      const messageCharacterCounter = document.getElementById('messageCharacterCounter');
+      const messageCharacterCount = document.getElementById('messageCharacterCount');
+      const messageTrimmedNotice = document.getElementById('messageTrimmedNotice');
+
+      const updateMessageCharacterCounter = function() {
+        if (!messageField || !messageCharacterCounter || !messageCharacterCount) {
+          return;
+        }
+
+        if (messageField.value.length > 2500) {
+          messageField.value = messageField.value.slice(0, 2500);
+          if (messageTrimmedNotice) {
+            messageTrimmedNotice.classList.remove('d-none');
+          }
+        }
+
+        messageCharacterCount.textContent = messageField.value.length;
+        const isNearLimit = messageField.value.length >= 2000;
+        messageCharacterCounter.classList.toggle('text-danger', isNearLimit);
+        messageCharacterCounter.classList.toggle('text-muted', !isNearLimit);
+      };
+
+      if (messageField && messageCharacterCounter && messageCharacterCount) {
+        messageField.addEventListener('input', updateMessageCharacterCounter);
+        updateMessageCharacterCounter();
+      }
 
       // ============================================================
       // SCENARIO 1: Page reload AFTER server finished (success message exists)
@@ -426,6 +504,8 @@ include 'inc/inc_scripts.php';
       // ============================================================
       if (contactForm && overlay && progressBar) {
         contactForm.addEventListener('submit', function(e) {
+          updateMessageCharacterCounter();
+
           // Check Bootstrap validation first
           if (!contactForm.checkValidity()) {
             // Validation failed, let Bootstrap show errors
@@ -485,4 +565,3 @@ include 'inc/inc_scripts.php';
       });
     });
   </script>
-
