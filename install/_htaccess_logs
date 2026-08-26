@@ -1,4 +1,9 @@
-# Block direct access to log files
-<Files "*.log">
-    Require all denied
-</Files>
+# Block every direct HTTP request to current and archived log files.
+<IfModule mod_authz_core.c>
+  Require all denied
+</IfModule>
+
+<IfModule !mod_authz_core.c>
+  Order allow,deny
+  Deny from all
+</IfModule>

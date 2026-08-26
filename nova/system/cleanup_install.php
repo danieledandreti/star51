@@ -1,5 +1,5 @@
 <?php
-// Install Cleanup Handler
+// Installation File Removal Handler
 // Removes /install/ directory only — .installed is kept as safety lock
 // Super Admin (level 0) only
 
@@ -64,7 +64,7 @@ if (is_dir($install_dir)) {
     error_log("Nova: Install directory removed by Admin ID: " . $_SESSION['admin_id']);
   } else {
     $cleanup_errors[] = __admin('settings.cleanup.install_error');
-    error_log('Nova: Install cleanup failed - Unable to remove /install/ directory');
+    error_log('Nova: Installation file removal failed - Unable to remove /install/ directory');
   }
 } else {
   $cleanup_success[] = __admin('settings.cleanup.install_absent');
@@ -77,7 +77,7 @@ if (is_dir($install_dir)) {
 if (empty($cleanup_errors)) {
   // Full success
   $_SESSION['success'] = __admin('settings.cleanup.complete') . ' ' . implode('. ', $cleanup_success);
-  error_log("Nova: Install cleanup completed successfully by Admin ID: " . $_SESSION['admin_id']);
+  error_log("Nova: Installation file removal completed successfully by Admin ID: " . $_SESSION['admin_id']);
 } else {
   // Partial or full failure
   $message = __admin('settings.cleanup.partial') . ' ';

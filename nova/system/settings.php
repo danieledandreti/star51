@@ -59,10 +59,10 @@ unset($_SESSION['success'], $_SESSION['error']);
 
       <!-- Utilities Section -->
       <section class="content-section mb-5">
-        <!-- Install Cleanup & Log Management -->
+        <!-- Installation File Removal & Log Management -->
         <div class="row g-4">
 
-          <!-- Install Cleanup -->
+          <!-- Installation File Removal -->
           <div class="col-md-4">
             <div class="card h-100">
               <div class="card-header bg-light border-bottom">
@@ -72,65 +72,80 @@ unset($_SESSION['success'], $_SESSION['error']);
               </div>
               <div class="card-body d-flex flex-column">
                 <?php
-                // Check installation state
-                $install_dir = '../../install';
+                // Check removable installation files and the persistent lock separately.
+                $project_root = dirname(__DIR__, 2);
+                $install_dir = $project_root . '/install';
+                $installed_file = $project_root . '/.installed';
                 $install_dir_exists = is_dir($install_dir);
-                $lock_file_exists = file_exists('../../.installed');
+                $lock_file_exists = file_exists($installed_file);
                 ?>
 
-                <?php if ($install_dir_exists): ?>
-                  <!-- CASE 1: /install/ present — cleanup needed -->
+                <div class="table-responsive mb-3">
+                  <table class="table table-sm align-middle mb-0">
+                    <thead>
+                      <tr>
+                        <th><?= __admin('settings.cleanup.element') ?></th>
+                        <th class="text-end"><?= __admin('settings.cleanup.status') ?></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <i class="bi bi-folder-fill me-1 text-secondary"></i>
+                          <?= __admin('settings.cleanup.install_directory') ?>
+                        </td>
+                        <td class="text-end <?= $install_dir_exists ? 'text-warning' : 'text-success' ?>">
+                          <i class="bi <?= $install_dir_exists ? 'bi-exclamation-circle-fill' : 'bi-check-circle-fill' ?> me-1"></i>
+                          <?= $install_dir_exists
+                            ? __admin('settings.cleanup.remove_required')
+                            : __admin('settings.cleanup.removed') ?>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <i class="bi bi-shield-lock-fill me-1 text-secondary"></i>
+                          <?= __admin('settings.cleanup.lock_file') ?>
+                        </td>
+                        <td class="text-end <?= $lock_file_exists ? 'text-success' : 'text-danger' ?>">
+                          <i class="bi <?= $lock_file_exists ? 'bi-check-circle-fill' : 'bi-x-circle-fill' ?> me-1"></i>
+                          <?= $lock_file_exists
+                            ? __admin('settings.cleanup.protection_active')
+                            : __admin('settings.cleanup.protection_missing') ?>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
 
-                  <!-- Warning -->
+                <?php if ($install_dir_exists): ?>
                   <div class="alert alert-warning mb-3">
                     <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                    <strong><?= __admin('settings.cleanup.files_detected') ?></strong>
+                    <strong><?= __admin('settings.cleanup.install_detected') ?></strong>
+                    <p class="mb-0 mt-2 small"><?= __admin('settings.cleanup.install_detected_desc') ?></p>
                   </div>
+                <?php endif; ?>
 
-                  <!-- Box 1: File to remove + security note -->
-                  <div class="alert alert-warning border small mb-3">
-                    <small class="text-muted d-block mb-2"><?= __admin('settings.cleanup.files_to_remove') ?></small>
-                    <div class="text-danger mb-2">
-                      <i class="bi bi-folder-fill me-1"></i>
-                      <code>/install/</code>
-                    </div>
-                    <i class="bi bi-shield-exclamation me-1"></i>
-                    <?= __admin('settings.cleanup.security_note') ?>
+                <?php if (!$lock_file_exists): ?>
+                  <div class="alert alert-danger mb-3">
+                    <i class="bi bi-shield-exclamation me-2"></i>
+                    <strong><?= __admin('settings.cleanup.unprotected') ?></strong>
+                    <p class="mb-0 mt-2 small"><?= __admin('settings.cleanup.unprotected_desc') ?></p>
                   </div>
-
-                  <?php if ($lock_file_exists): ?>
-                  <!-- Box 2: Safety lock info -->
-                  <div class="alert alert-light border small mb-3">
-                    <i class="bi bi-lock-fill me-1"></i>
-                    <?= __admin('settings.cleanup.safety_lock_note') ?>
+                <?php elseif (!$install_dir_exists): ?>
+                  <div class="alert alert-success mb-3">
+                    <i class="bi bi-shield-check me-2"></i>
+                    <strong><?= __admin('settings.cleanup.protected') ?></strong>
+                    <p class="mb-0 mt-2 small"><?= __admin('settings.cleanup.protected_desc') ?></p>
                   </div>
-                  <?php endif; ?>
+                <?php endif; ?>
 
-                  <!-- Cleanup button -->
+                <?php if ($install_dir_exists): ?>
                   <a href="cleanup_install.php?csrf_token=<?= $_SESSION['csrf_token'] ?>"
                      class="btn btn-danger btn-sm w-100 mt-auto"
                      onclick="return confirm('<?= __admin('settings.cleanup.remove_confirm') ?>');">
                     <i class="bi bi-trash3-fill me-1"></i>
                     <?= __admin('settings.cleanup.remove_button') ?>
                   </a>
-
-                <?php else: ?>
-                  <!-- CASE 2 & 3: /install/ removed — system clean -->
-
-                  <div class="alert alert-success mb-3">
-                    <i class="bi bi-check-circle-fill me-2"></i>
-                    <strong><?= __admin('settings.cleanup.system_clean') ?></strong>
-                    <p class="mb-0 mt-2 small"><?= __admin('settings.cleanup.system_clean_desc') ?></p>
-                  </div>
-
-                  <?php if ($lock_file_exists): ?>
-                  <!-- Safety lock info -->
-                  <div class="alert alert-light border small mb-0">
-                    <i class="bi bi-lock-fill me-1"></i>
-                    <?= __admin('settings.cleanup.safety_lock_note') ?>
-                  </div>
-                  <?php endif; ?>
-
                 <?php endif; ?>
 
               </div>

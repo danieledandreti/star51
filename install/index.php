@@ -63,7 +63,7 @@ if (file_exists(__DIR__ . '/' . $config['paths']['lock'])) {
             <div class="mb-4">
               <strong data-it="Elimina /install/ per sicurezza:" data-en="Delete /install/ for security:">Elimina /install/ per sicurezza:</strong>
               <ul class="mb-3 mt-2">
-                <li><strong>Nova Administrator &gt; System Configuration &gt; Install Cleanup</strong></li>
+                <li><strong>Nova Administrator &gt; System Configuration &gt; Installation File Removal</strong></li>
                 <li><span data-it="Manualmente:" data-en="Manually:">Manualmente:</span> <span data-it="elimina la cartella" data-en="delete the folder">elimina la cartella</span> <code>/install/</code> <span data-it="via FTP/terminale" data-en="via FTP/terminal">via FTP/terminale</span></li>
               </ul>
 
@@ -591,16 +591,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
                 logMsg("Permessi: $chmod_success/$chmod_total cartelle configurate", "Permissions: $chmod_success/$chmod_total directories configured");
             }
 
-            // STEP 6: Copy _htaccess_logs to nova/logs/.htaccess
+            // STEP 6: Protect Nova configuration and logs from direct HTTP access.
             if (empty($install_errors)) {
-                $htaccess_source = __DIR__ . '/_htaccess_logs';
-                $htaccess_dest = __DIR__ . '/../nova/logs/.htaccess';
+                $nova_protections = [
+                    'configurazione Nova' => [
+                        'source' => $config['paths']['htaccess_conf'],
+                        'destination' => $config['paths']['htaccess_conf_dest'],
+                        'label_en' => 'Nova configuration',
+                    ],
+                    'log Nova' => [
+                        'source' => $config['paths']['htaccess_logs'],
+                        'destination' => $config['paths']['htaccess_logs_dest'],
+                        'label_en' => 'Nova logs',
+                    ],
+                ];
 
-                if (file_exists($htaccess_source)) {
+                foreach ($nova_protections as $label_it => $protection) {
+                    $htaccess_source = __DIR__ . '/' . $protection['source'];
+                    $htaccess_dest = __DIR__ . '/' . $protection['destination'];
+
+                    if (!file_exists($htaccess_source)) {
+                        logMsg("⚠ Template protezione $label_it non trovato", "⚠ {$protection['label_en']} protection template not found");
+                        continue;
+                    }
+
                     if (copy($htaccess_source, $htaccess_dest)) {
-                        logMsg('✓ Protezione logs attivata (.htaccess)', '✓ Logs protection enabled (.htaccess)');
+                        logMsg("✓ Protezione $label_it attivata (.htaccess)", "✓ {$protection['label_en']} protection enabled (.htaccess)");
                     } else {
-                        logMsg('⚠ Impossibile attivare protezione logs', '⚠ Could not enable logs protection');
+                        logMsg("⚠ Impossibile attivare protezione $label_it", "⚠ Could not enable {$protection['label_en']} protection");
                     }
                 }
             }
@@ -753,7 +771,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
                             <strong data-it="Nota di Sicurezza:" data-en="Security Note:">Nota di Sicurezza:</strong><br>
                             <span data-it="Per sicurezza, ELIMINA la cartella" data-en="For security, DELETE the folder">Per sicurezza, <strong>ELIMINA la cartella</strong></span> <code>/install/</code>
                             <ul class="mb-0 mt-2">
-                                <li><strong>Nova Administrator &gt; System Configuration &gt; Install Cleanup</strong></li>
+                                <li><strong data-it="Nova Administrator &gt; Configurazione di Sistema &gt; Rimozione file di installazione" data-en="Nova Administrator &gt; System Configuration &gt; Installation File Removal">Nova Administrator &gt; Configurazione di Sistema &gt; Rimozione file di installazione</strong></li>
                                 <li><span data-it="Manualmente:" data-en="Manually:">Manualmente:</span> <span data-it="via FTP o terminale" data-en="via FTP or terminal">via FTP o terminale</span></li>
                             </ul>
                         </div>

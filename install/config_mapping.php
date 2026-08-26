@@ -39,6 +39,10 @@ return [
     'lock' => '../.installed', // Installation lock file
     'nova_login' => '../nova/index.php', // Nova login page
     'htaccess_root' => '_htaccess_root', // .htaccess template for project root
+    'htaccess_conf' => '_htaccess_conf', // .htaccess template for Nova configuration
+    'htaccess_conf_dest' => '../nova/conf/.htaccess', // Nova configuration protection path
+    'htaccess_logs' => '_htaccess_logs', // .htaccess template for Nova logs
+    'htaccess_logs_dest' => '../nova/logs/.htaccess', // Nova logs protection path
     'robots_txt' => '../robots.txt', // robots.txt output path
     'sitemap_xml' => '../sitemap.xml', // sitemap.xml output path
     'htaccess_dest' => '../.htaccess', // .htaccess output path
