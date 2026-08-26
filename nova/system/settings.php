@@ -164,10 +164,11 @@ unset($_SESSION['success'], $_SESSION['error']);
                   $log_size_mb = round($log_size_bytes / (1024 * 1024), 2);
                   $log_modified = filemtime($log_file);
 
-                  // Read last 100 lines
+                  // Read newest 100 lines
                   $log_lines = file($log_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
                   $total_lines = count($log_lines);
-                  $last_100_lines = array_slice($log_lines, -100);
+                  $log_lines = array_reverse($log_lines);
+                  $last_100_lines = array_slice($log_lines, 0, 100);
                 }
                 ?>
 
