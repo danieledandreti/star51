@@ -2,7 +2,7 @@
 
 All notable changes to Star51 will be documented in this file.
 
-## [1.2.0] - 2026-10-16 (main; tag and GitHub Release pending)
+## [1.2.0] - 2026-10-16
 
 ### Improved
 

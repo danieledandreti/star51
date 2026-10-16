@@ -8,11 +8,11 @@ A lightweight, self-hosted collection manager for individuals. Catalog your movi
 
 **Star51** is the free edition of the Star51 ecosystem. Simple to install, easy to use, zero recurring costs.
 
-**Current stable release: [v1.1.0](https://github.com/danieledandreti/star51/releases/tag/v1.1.0)** — isolated Nova sessions, a safer contact form, improved mobile administration, and stronger installer protections. No database migration is required.
+**Current stable release: [v1.2.0](https://github.com/danieledandreti/star51/releases/tag/v1.2.0)** — easier collection search, short-title support, punctuation-aware matching and newest-year-first results. No database migration is required.
 
 [Release notes](https://github.com/danieledandreti/star51/releases/latest) · [Changelog](CHANGELOG.md)
 
-**Version 1.2.0 is available on main.** The v1.2.0 tag and GitHub Release are pending. See [release notes](RELEASE_NOTES.md) and the [search guide](SEARCH.md).
+See the [v1.2.0 release notes](RELEASE_NOTES.md) and the [search guide](SEARCH.md).
 
 ## Features
 

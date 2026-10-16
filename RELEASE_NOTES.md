@@ -1,6 +1,6 @@
 # Star51 v1.2.0 - Easier Collection Search
 
-Code and release notes updated on main on 16 October 2026. The v1.2.0 tag and GitHub Release are pending.
+Released on 16 October 2026.
 
 ## English
 
