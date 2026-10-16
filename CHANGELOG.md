@@ -2,6 +2,14 @@
 
 All notable changes to Star51 will be documented in this file.
 
+## [1.2.1] - 2026-10-16
+
+### Documentation
+
+- Consolidate search explanations in the bilingual [release notes](RELEASE_NOTES.md).
+- Remove the standalone search document and update its incoming links.
+- No application code, configuration or database changes from v1.2.0.
+
 ## [1.2.0] - 2026-10-16
 
 ### Improved
@@ -20,7 +28,7 @@ All notable changes to Star51 will be documented in this file.
 - No database migration; existing PHP 8.0+ and MySQL 8.0+ requirements remain.
 - Nova retains its three-character minimum and alphabetical ordering.
 - Preserve installed configuration and uploaded files when upgrading.
-- See [release notes](RELEASE_NOTES.md) and [search guide](SEARCH.md).
+- See [release notes](RELEASE_NOTES.md).
 
 ## [1.1.0] - 2026-08-26
 
