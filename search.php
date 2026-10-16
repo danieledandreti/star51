@@ -1,7 +1,7 @@
 <?php
 /**
  * Star51 - Search Page
- * Full-text search across articles with pagination
+ * Search article titles and summaries with pagination
  */
 
 // Database connection
@@ -22,12 +22,12 @@ if ($current_page_num < 1) {
 }
 
 // Search settings
-$min_search_length = 3;
 $max_search_length = 255;
 if (mb_strlen($search_query) > $max_search_length) {
   $search_query = mb_substr($search_query, 0, $max_search_length);
 }
-$has_valid_search = !empty($search_query) && mb_strlen($search_query) >= $min_search_length;
+$search_words = preg_split('/[^\p{L}\p{N}]+/u', $search_query, -1, PREG_SPLIT_NO_EMPTY);
+$has_valid_search = !empty($search_words);
 $results_per_page = 9;
 $offset = ($current_page_num - 1) * $results_per_page;
 
@@ -37,8 +37,28 @@ $total_results = 0;
 $total_pages = 0;
 
 if ($has_valid_search) {
- // Prepare search pattern for LIKE query
- $search_pattern = '%' . $search_query . '%';
+  // Require every word in either the title or the summary.
+  $search_conditions = [];
+  $search_params = [];
+  $search_types = '';
+  $title_words = 'CONCAT(\' \', REGEXP_REPLACE(a.article_title, \'[^[:alnum:]]+\', \' \'), \' \')';
+  $summary_words = 'CONCAT(\' \', REGEXP_REPLACE(a.article_summary, \'[^[:alnum:]]+\', \' \'), \' \')';
+
+  foreach ($search_words as $word) {
+    if (mb_strlen($word) <= 2) {
+      // Normalize separators with a constant regex, then match the whole short term.
+      $search_conditions[] = '(' . $title_words . ' LIKE ? OR ' . $summary_words . ' LIKE ?)';
+      $search_pattern = '% ' . $word . ' %';
+    } else {
+      $search_conditions[] = '(a.article_title LIKE ? OR a.article_summary LIKE ?)';
+      $search_pattern = '%' . $word . '%';
+    }
+    $search_params[] = $search_pattern;
+    $search_params[] = $search_pattern;
+    $search_types .= 'ss';
+  }
+
+  $search_where = implode(' AND ', $search_conditions);
 
  // Count total results - exclude system reserved categories and orphan articles
  $count_query = "
@@ -50,17 +70,11 @@ if ($has_valid_search) {
     AND s.is_active = 1
     AND c.is_active = 1
     AND c.id_category NOT IN (" . CATEGORY_EXTRA . ", " . CATEGORY_INFO . ")
-    AND (
-      a.article_title LIKE ?
-      OR a.article_summary LIKE ?
-      OR a.article_content LIKE ?
-      OR a.item_collection LIKE ?
-      OR a.item_year LIKE ?
-    )
+    AND " . $search_where . "
  ";
 
  $count_stmt = mysqli_prepare($conn, $count_query);
- mysqli_stmt_bind_param($count_stmt, 'sssss', $search_pattern, $search_pattern, $search_pattern, $search_pattern, $search_pattern);
+ mysqli_stmt_bind_param($count_stmt, $search_types, ...$search_params);
  mysqli_stmt_execute($count_stmt);
  $count_result = mysqli_stmt_get_result($count_stmt);
  $count_row = mysqli_fetch_assoc($count_result);
@@ -83,19 +97,15 @@ if ($has_valid_search) {
     AND s.is_active = 1
     AND c.is_active = 1
     AND c.id_category NOT IN (" . CATEGORY_EXTRA . ", " . CATEGORY_INFO . ")
-    AND (
-      a.article_title LIKE ?
-      OR a.article_summary LIKE ?
-      OR a.article_content LIKE ?
-      OR a.item_collection LIKE ?
-      OR a.item_year LIKE ?
-    )
-  ORDER BY a.id_article DESC
+    AND " . $search_where . "
+  ORDER BY NULLIF(a.item_year, 0) DESC, a.article_title ASC, a.id_article DESC
   LIMIT ? OFFSET ?
  ";
 
  $search_stmt = mysqli_prepare($conn, $search_sql);
- mysqli_stmt_bind_param($search_stmt, 'sssssii', $search_pattern, $search_pattern, $search_pattern, $search_pattern, $search_pattern, $results_per_page, $offset);
+ $result_params = array_merge($search_params, [$results_per_page, $offset]);
+ $result_types = $search_types . 'ii';
+ mysqli_stmt_bind_param($search_stmt, $result_types, ...$result_params);
  mysqli_stmt_execute($search_stmt);
  $search_results = mysqli_stmt_get_result($search_stmt);
 }
@@ -132,13 +142,13 @@ include 'inc/inc_navbar.php';
               <div class="card-body p-4">
                 <!-- Search Instructions -->
                 <div class="text-center mb-4">
-                  <p class="text-muted mb-2" id="searchHint"><?= __front('search.min_chars') ?></p>
+                  <p class="text-muted mb-2" id="searchHint"><?= __front('search.input_hint') ?></p>
                 </div>
 
                 <!-- Main Search Form -->
                 <form action="search.php" method="GET" class="star51-form">
                   <div class="input-group input-group-lg">
-                    <input type="search" class="form-control form-control-lg" name="q" placeholder="<?= __front('search.input_placeholder') ?>" value="<?= $search_query_display ?>" aria-label="<?= __front('search.title') ?>" aria-describedby="searchHint" required aria-required="true" minlength="<?= $min_search_length ?>" />
+                    <input type="search" class="form-control form-control-lg" name="q" placeholder="<?= __front('search.input_placeholder') ?>" value="<?= $search_query_display ?>" aria-label="<?= __front('search.title') ?>" aria-describedby="searchHint" required aria-required="true" />
                     <button type="submit" class="btn btn-star51 btn-lg btn-pill" aria-label="<?= __front('search.title') ?>">
                       <i class="bi bi-search"></i>
                     </button>

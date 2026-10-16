@@ -31,7 +31,7 @@ if (isset($_GET['as']) && !empty(trim($_GET['as']))) {
     $words = explode(' ', $search_query);
 
     // Build WHERE clause for LIKE search
-    // Search in: article_title, article_summary, article_content
+    // Search in: article_title, article_summary
     $where_conditions = [];
     $params = [];
     $types = '';
@@ -40,12 +40,11 @@ if (isset($_GET['as']) && !empty(trim($_GET['as']))) {
       $word = trim($word);
       if (!empty($word)) {
         $where_conditions[] =
-          '(a.article_title LIKE ? OR a.article_summary LIKE ? OR a.article_content LIKE ?)';
+          '(a.article_title LIKE ? OR a.article_summary LIKE ?)';
         $search_param = '%' . $word . '%';
         $params[] = $search_param;
         $params[] = $search_param;
-        $params[] = $search_param;
-        $types .= 'sss';
+        $types .= 'ss';
       }
     }
 

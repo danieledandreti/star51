@@ -138,10 +138,10 @@
     },
     "search": {
         "title": "Ricerca",
-        "subtitle": "Trova prodotti, articoli e contenuti di Star51",
+        "subtitle": "Cerca nella collezione per titolo o testo breve",
         "placeholder": "Cerca nella collezione...",
         "input_placeholder": "Cosa stai cercando?",
-        "min_chars": "Inserisci almeno 3 caratteri per avviare la ricerca",
+        "input_hint": "Cerca per titolo o testo breve",
         "results": "Risultati per",
         "results_found": "Risultati trovati per",
         "no_results": "Nessun risultato trovato",

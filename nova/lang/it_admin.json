@@ -84,7 +84,7 @@
     },
     "search": {
         "articles_placeholder": "Cerca articoli...",
-        "articles_hint": "Cerca tra gli articoli per titolo, testo breve o testo esteso.",
+        "articles_hint": "Cerca tra gli articoli per titolo o testo breve.",
         "requests_placeholder": "Cerca richieste...",
         "requests_hint": "Cerca tra le richieste per nome, cognome, email o messaggio."
     },

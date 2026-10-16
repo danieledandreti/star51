@@ -2,6 +2,26 @@
 
 All notable changes to Star51 will be documented in this file.
 
+## [1.2.0] - 2026-10-16 (main; tag and GitHub Release pending)
+
+### Improved
+
+- Limit public and Nova search matches to item titles and summaries.
+- Require all public search words, independently of word order.
+- Allow short public queries; one- and two-character terms match whole words.
+- Normalize punctuation separators without modifying stored content.
+- Ignore public queries containing no letters or digits.
+- Sort public results by item year descending, title ascending and ID descending;
+  missing or zero years appear last.
+- Share public count and result conditions for consistent pagination.
+
+### Compatibility
+
+- No database migration; existing PHP 8.0+ and MySQL 8.0+ requirements remain.
+- Nova retains its three-character minimum and alphabetical ordering.
+- Preserve installed configuration and uploaded files when upgrading.
+- See [release notes](RELEASE_NOTES.md) and [search guide](SEARCH.md).
+
 ## [1.1.0] - 2026-08-26
 
 Star51 v1.1.0 is a backward-compatible security and usability release for

@@ -138,10 +138,10 @@
     },
     "search": {
         "title": "Search",
-        "subtitle": "Find products, articles and content from Star51",
+        "subtitle": "Search the collection by title or summary",
         "placeholder": "Search the collection...",
         "input_placeholder": "What are you looking for?",
-        "min_chars": "Enter at least 3 characters to start searching",
+        "input_hint": "Search by title or summary",
         "results": "Results for",
         "results_found": "Results found for",
         "no_results": "No results found",

@@ -12,6 +12,8 @@ A lightweight, self-hosted collection manager for individuals. Catalog your movi
 
 [Release notes](https://github.com/danieledandreti/star51/releases/latest) · [Changelog](CHANGELOG.md)
 
+**Version 1.2.0 is available on main.** The v1.2.0 tag and GitHub Release are pending. See [release notes](RELEASE_NOTES.md) and the [search guide](SEARCH.md).
+
 ## Features
 
 - **Universal Collections** — Manage any type of collection (films, books, comics, cards, stamps...)
@@ -20,12 +22,22 @@ A lightweight, self-hosted collection manager for individuals. Catalog your movi
 - **Multilingual** — Italian and English out of the box, easily extensible
 - **Responsive Design** — Bootstrap 5, works on desktop and mobile
 - **Rich Text Editor** — Quill editor for item descriptions
-- **Search** — Full-text search across your collection
+- **Search** — All-word matching across titles and summaries, short-title support and newest-year-first results
 - **YouTube Integration** — Embed video links on item detail pages
 - **SEO Ready** — Sitemap, robots.txt, Open Graph, JSON-LD structured data
 - **Secure** — Isolated admin sessions, CSRF protection, prepared statements, rate limiting, and security headers
 
-## What's New in v1.1.0
+## What's New in v1.2.0
+
+- Search titles and summaries using all requested words, in any order.
+- Find short titles such as IT and Up with whole-word matching.
+- Treat punctuation and hyphens as word separators: x-men and x men are equivalent.
+- Order public results by item year descending, then title and ID.
+- No database migration. Preserve configuration and uploaded images when upgrading.
+
+See [release notes](RELEASE_NOTES.md) for compatibility, behavior changes and validation.
+
+## Previous Release: v1.1.0
 
 - **Isolated Nova Sessions** — A dedicated, portable admin session protects login, recovery, authenticated pages, and logout across different installation paths.
 - **Safer Contact Form** — Explicit field limits, a live 2500-character counter, UTF-8-aware trimming, and clear visitor feedback.
