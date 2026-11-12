@@ -107,7 +107,7 @@ $page_description = __admin('pages.dashboard_overview') . ' ' . $nova_settings['
       <header class="page-header">
         <h1 class="page-title"><?= __admin('pages.dashboard_overview') ?></h1>
         <p class="universal-subtitle">
-          <i class="bi bi-stars me-1"></i>
+          <i class="bi bi-collection me-1"></i>
           <?= __admin('dashboard.universal_collection') ?>
         </p>
         <p class="page-subtitle">
@@ -146,112 +146,34 @@ $page_description = __admin('pages.dashboard_overview') . ' ' . $nova_settings['
         </div>
       </section>
 
+      <?php
+      $overview_rows = [
+        ['tag', 'nav.categories', $num_categories, $mod_categories, 'cat/cat_list.php'],
+        ['tags', 'nav.subcategories', $num_subcategories, $mod_subcategories, 'subcat/subcat_list.php'],
+        ['card-heading', 'nav.articles', $num_articles, $mod_articles, 'articles/articles_list.php'],
+        ['envelope', 'nav.requests', $num_requests, $mod_requests, 'requests/requests_list.php'],
+      ];
+      if ($num_misc_articles > 0) {
+        $overview_rows[] = ['inbox', 'dashboard.overview_list.articles_misc', $num_misc_articles, $mod_misc_articles, 'articles/articles_list.php?subcat=' . SUBCATEGORY_VARIE];
+      }
+      ?>
       <!-- Statistics Section -->
-      <section class="nova-section">
-        <div class="row g-4">
-
-          <!-- 4. Categories -->
-          <div class="col-md-6 col-lg-4">
-            <div class="nova-card nova-stats-card h-100">
-              <div class="card-header">
-                <h6 class="card-title mb-0">
-                  <a href="cat/cat_list.php"><?= $num_categories ?> <?= __admin('dashboard.categories') ?></a>
-                </h6>
-              </div>
-              <div class="nova-card-body">
-                <div class="nova-stats-content">
-                  <i class="bi bi-tag nova-stats-icon"></i>
-                  <div>
-                    <p class="mb-1 text-muted"><?= __admin('dashboard.updated_at') ?></p>
-                    <p class="mb-0"><small><?= $mod_categories ?></small></p>
+      <section class="nova-section" aria-labelledby="nova-overview-title">
+        <div class="nova-card">
+          <div class="nova-card-body">
+            <h2 class="h5 mb-3" id="nova-overview-title"><?= __admin('dashboard.overview_list.title') ?></h2>
+            <ul class="nova-overview-grid list-unstyled mb-0">
+              <?php foreach ($overview_rows as [$icon, $label, $count, $updated, $url]): ?>
+                <li class="nova-overview-row border-bottom py-2">
+                  <div class="d-flex gap-2 align-items-baseline">
+                    <i class="bi bi-<?= $icon ?> nova-overview-icon" aria-hidden="true"></i>
+                    <a class="nova-overview-link" href="<?= htmlspecialchars($url) ?>"><?= __admin($label) ?>: <strong><?= (int) $count ?></strong></a>
                   </div>
-                </div>
-              </div>
-            </div>
+                  <span class="small text-muted"><?= __admin('dashboard.updated_at') ?>: <?= htmlspecialchars($updated) ?></span>
+                </li>
+              <?php endforeach; ?>
+            </ul>
           </div>
-
-          <!-- 5. Subcategories -->
-          <div class="col-md-6 col-lg-4">
-            <div class="nova-card nova-stats-card h-100">
-              <div class="card-header">
-                <h6 class="card-title mb-0">
-                  <a href="subcat/subcat_list.php"><?= $num_subcategories ?> <?= __admin('dashboard.subcategories') ?></a>
-                </h6>
-              </div>
-              <div class="nova-card-body">
-                <div class="nova-stats-content">
-                  <i class="bi bi-tags nova-stats-icon"></i>
-                  <div>
-                    <p class="mb-1 text-muted"><?= __admin('dashboard.updated_at') ?></p>
-                    <p class="mb-0"><small><?= $mod_subcategories ?></small></p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 6. Articoli -->
-          <div class="col-md-6 col-lg-4">
-            <div class="nova-card nova-stats-card h-100">
-              <div class="card-header">
-                <h6 class="card-title mb-0">
-                  <a href="articles/articles_list.php"><?= $num_articles ?> <?= __admin('dashboard.articles') ?></a>
-                </h6>
-              </div>
-              <div class="nova-card-body">
-                <div class="nova-stats-content">
-                  <i class="bi bi-collection nova-stats-icon"></i>
-                  <div>
-                    <p class="mb-1 text-muted"><?= __admin('dashboard.updated_at') ?></p>
-                    <p class="mb-0"><small><?= $mod_articles ?></small></p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 7. Richieste -->
-          <div class="col-md-6 col-lg-4">
-            <div class="nova-card nova-stats-card h-100">
-              <div class="card-header">
-                <h6 class="card-title mb-0">
-                  <a href="requests/requests_list.php"><?= $num_requests ?> <?= __admin('dashboard.requests') ?></a>
-                </h6>
-              </div>
-              <div class="nova-card-body">
-                <div class="nova-stats-content">
-                  <i class="bi bi-envelope nova-stats-icon"></i>
-                  <div>
-                    <p class="mb-1 text-muted"><?= __admin('dashboard.updated_at') ?></p>
-                    <p class="mb-0"><small><?= $mod_requests ?></small></p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 8. Articoli in Varie -->
-          <?php if ($num_misc_articles > 0): ?>
-          <div class="col-md-6 col-lg-4">
-            <div class="nova-card nova-stats-card h-100">
-              <div class="card-header">
-                <h6 class="card-title mb-0">
-                  <a href="articles/articles_list.php?subcat=<?= SUBCATEGORY_VARIE ?>"><?= $num_misc_articles ?> <?= __admin('dashboard.articles_misc') ?></a>
-                </h6>
-              </div>
-              <div class="nova-card-body">
-                <div class="nova-stats-content">
-                  <i class="bi bi-inbox nova-stats-icon"></i>
-                  <div>
-                    <p class="mb-1 text-muted"><?= __admin('dashboard.updated_at') ?></p>
-                    <p class="mb-0"><small><?= $mod_misc_articles ?></small></p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <?php endif; ?>
-
         </div>
       </section>
 

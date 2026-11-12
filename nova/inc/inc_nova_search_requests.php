@@ -11,11 +11,14 @@ $search_query = $search_query ?? '';
 ?>
 <form action="<?= $form_action ?>" method="get" role="search">
   <div class="input-group">
-    <input type="text"
-           name="rs"
-           value="<?= htmlspecialchars($search_query) ?>"
-           class="form-control"
-           required>
+    <input
+      type="text"
+      name="rs"
+      value="<?= htmlspecialchars($search_query, ENT_QUOTES, 'UTF-8') ?>"
+      class="form-control"
+      maxlength="255"
+      required
+    >
     <button type="submit" class="btn btn-primary">
       <i class="bi bi-search me-1"></i><?= __admin('buttons.search') ?>
     </button>

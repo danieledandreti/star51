@@ -8,7 +8,7 @@
   <div class="container-nova">
     <div class="footer-content">
       <div class="footer-left">
-        2004&nbsp;-&nbsp;<?= date('Y') ?> <i class="bi bi-star-fill" aria-hidden="true"></i> NovaStar51
+        <i class="bi bi-star-fill" aria-hidden="true"></i> NovaStar51 v<?= htmlspecialchars(STAR51_VERSION, ENT_QUOTES, 'UTF-8') ?>
       </div>
       <div class="footer-right">
         <a href="https://medium.com/@daniele.dandreti" target="_blank" rel="noopener noreferrer" title="Passione + Tecnologia + Sogni = Daniele D'Andreti">

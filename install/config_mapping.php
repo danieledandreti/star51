@@ -69,9 +69,9 @@ return [
   // PASSWORD POLICY
   // ============================================
   'password' => [
-    'min_length' => 8, // Minimum password length
-    'temp_length' => 12, // Auto-generated temp password length
-    'temp_charset' => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', // No ambiguous chars (no 0/O, 1/I)
+    'min_length' => 12, // Minimum password length
+    'generated_length' => 12, // Auto-generated secure password length
+    'generated_charset' => 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789', // Exclude 0/O/o, 1/I/i and L/l
   ],
 
   // ============================================

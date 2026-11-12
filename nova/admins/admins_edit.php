@@ -205,7 +205,7 @@ include '../inc/inc_nova_form_helpers.php';
                                class="form-control"
                                id="password"
                                name="password"
-                               minlength="8"
+                               minlength="<?= NOVA_PASSWORD_MIN_LENGTH ?>"
                                autocomplete="new-password">
                         <button class="btn btn-outline-orange toggle-password"
                                 type="button"
@@ -229,7 +229,7 @@ include '../inc/inc_nova_form_helpers.php';
                                class="form-control"
                                id="password_confirm"
                                name="password_confirm"
-                               minlength="8"
+                               minlength="<?= NOVA_PASSWORD_MIN_LENGTH ?>"
                                autocomplete="new-password">
                         <button class="btn btn-outline-orange toggle-password"
                                 type="button"

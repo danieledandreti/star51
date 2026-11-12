@@ -2,6 +2,19 @@
 
 All notable changes to Star51 will be documented in this file.
 
+## [1.3.0]
+
+- Redesigned the bilingual installer and its checks, including first-run
+  detection, installation lock handling and support for non-standard URL ports.
+- Restore non-sensitive installer fields on reload; recheck restored steps.
+- Require at least 12 characters for new administrator passwords and provide
+  separate visibility controls for password and confirmation in the installer.
+- Improve article and request search in Nova. Public search is unchanged.
+- Replace separate dashboard cards with one responsive overview; clarify
+  collection icons and improve icon contrast in desktop navigation.
+- Remove decorative fields from category forms and show the version in Nova.
+- No database migration from v1.2.1. See [upgrade instructions](RELEASE_NOTES.md#upgrade-from-v121).
+
 ## [1.2.1] - 2026-10-16
 
 ### Documentation

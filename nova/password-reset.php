@@ -184,7 +184,7 @@ $page_description = 'Nova Administration - Password Recovery';
             <!-- Request Complete Footer -->
             <div class="nova-card-footer login-footer-neutral d-flex justify-content-between align-items-center">
               <small class="text-muted">
-                NovaStar51 Solo
+                NovaStar51
               </small>
               <small class="text-muted">
                 <a href="https://medium.com/@daniele.dandreti"

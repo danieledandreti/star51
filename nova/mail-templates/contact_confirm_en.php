@@ -29,6 +29,6 @@ Our team will review your request and respond within 24-48 hours.
 
 Thank you for contacting us.
 
-{site_name} Team
+{site_name}
 {site_url}
 EOT;

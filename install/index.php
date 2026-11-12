@@ -1,114 +1,52 @@
 <?php
 /**
- * Star51 Express Install
+ * NovaStar51 Express Install
  *
- * Fast one-page installation for developers and testing labs
- * All fields visible, optional test buttons, one-shot install
+ * Progressive one-page setup with verified steps and editable summaries.
+ * Real installation POST with server validation and a no-JavaScript fallback.
+ *
+ * Created: 11 November 2025 - Session 29
+ * Updated: 24 November 2025 - Session 35 (New Design)
+ * Updated: 17 January 2026 - Session 57 (nova/conf refactoring, chmod 777 auto)
+ * Updated: 31 October 2026 - Session 103 (redesign V4 interface, progressive setup and aligned bilingual guide)
+ * Philosophy: "Copy-Paste and Go" 🍷
  */
+
+// ============================================
+// DEBUG MODE - Show all errors
+// ============================================
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 
 // ============================================
 // LOAD CONFIGURATION
 // ============================================
 $config = require 'config_mapping.php';
+require_once dirname(__DIR__) . '/nova/inc/inc_nova_version.php';
 require 'system_detect.php';
 
-// ============================================
-// SECURITY: Block ALL requests if already installed
-// ============================================
-if (file_exists(__DIR__ . '/' . $config['paths']['lock'])) {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        header('Content-Type: application/json');
-        echo json_encode(['success' => false, 'message' => 'Already installed']);
-        exit;
-    }
-    // GET → show "already installed" page
-    $lock_raw = trim(file_get_contents(__DIR__ . '/' . $config['paths']['lock']));
-    $install_date = '';
-    if (preg_match('/installed on (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})/', $lock_raw, $m)) {
-        $install_date = $m[1];
-    }
-    ?>
-    <!DOCTYPE html>
-    <html lang="it">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>NovaStar51 - Già Installato</title>
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
-    </head>
-    <body class="bg-light py-5">
-      <div class="container" style="max-width: 680px;">
-        <header class="text-center mb-4">
-          <h1 class="fw-bold">NovaStar51</h1>
-          <div class="btn-group btn-group-sm mt-2" role="group">
-            <button type="button" class="btn btn-outline-primary lang-btn" onclick="setLang('it')">Italiano</button>
-            <button type="button" class="btn btn-primary lang-btn active" onclick="setLang('en')">English</button>
-          </div>
-        </header>
+// The language belongs to this request, never to a previous application session.
+$installer_lang = in_array($_POST['installer_lang'] ?? '', ['en', 'it'], true) ? $_POST['installer_lang'] : 'en';
+$install_success = false;
+header('Cache-Control: no-store');
 
-        <div class="card shadow">
-          <div class="card-header bg-danger text-white text-center py-4">
-            <h2 class="h4 mb-0" data-it="NovaStar51 Già Installato" data-en="NovaStar51 Already Installed">NovaStar51 Già Installato</h2>
-          </div>
-          <div class="card-body p-4">
-            <div class="alert alert-danger">
-              <strong data-it="Installazione bloccata." data-en="Installation is locked.">Installazione bloccata.</strong><br>
-              <span data-it="Il sistema è già configurato." data-en="The system is already configured.">Il sistema è già configurato.</span>
-              <?php if ($install_date): ?>
-              <br><small class="text-muted" data-it="Installato il: <?= $install_date ?>" data-en="Installed on: <?= $install_date ?>">Installato il: <?= $install_date ?></small>
-              <?php endif; ?>
-            </div>
+// The installation lock must be evaluated before any AJAX or install handler.
+$installation_locked = file_exists($config['paths']['lock']);
 
-            <div class="mb-4">
-              <strong data-it="Elimina /install/ per sicurezza:" data-en="Delete /install/ for security:">Elimina /install/ per sicurezza:</strong>
-              <ul class="mb-3 mt-2">
-                <li><strong>Nova Administrator &gt; System Configuration &gt; Installation File Removal</strong></li>
-                <li><span data-it="Manualmente:" data-en="Manually:">Manualmente:</span> <span data-it="elimina la cartella" data-en="delete the folder">elimina la cartella</span> <code>/install/</code> <span data-it="via FTP/terminale" data-en="via FTP/terminal">via FTP/terminale</span></li>
-              </ul>
-
-              <strong data-it="Per reinstallare:" data-en="To reinstall:">Per reinstallare:</strong>
-              <ul class="mb-3 mt-2">
-                <li><span data-it="Elimina manualmente il file" data-en="Manually delete the file">Elimina manualmente il file</span> <code>.installed</code> <span data-it="dalla root del progetto" data-en="from the project root">dalla root del progetto</span></li>
-                <li><span data-it="Ripristina la cartella" data-en="Restore the folder">Ripristina la cartella</span> <code>/install/</code></li>
-              </ul>
-
-              <div class="alert alert-danger mb-0">
-                <i class="bi bi-exclamation-triangle-fill me-1"></i>
-                <strong data-it="ATTENZIONE:" data-en="WARNING:">ATTENZIONE:</strong> <span data-it="Reinstallare eliminerà tutti i dati esistenti!" data-en="Reinstalling will delete all existing data!">Reinstallare eliminerà tutti i dati esistenti!</span>
-              </div>
-            </div>
-
-            <a href="<?= $config['paths']['nova_login'] ?>" class="btn btn-primary btn-lg w-100 py-3" data-it="Vai a Nova Login" data-en="Go to Nova Login">
-              Vai a Nova Login
-            </a>
-          </div>
-        </div>
-
-        <footer class="text-center text-muted py-4">
-          NovaStar51 Express Install
-        </footer>
-      </div>
-      <script>
-        let currentLang = 'en';
-        function setLang(lang) {
-          currentLang = lang;
-          document.querySelectorAll('.lang-btn').forEach(btn => {
-            const isActive = (lang === 'it' && btn.textContent === 'Italiano') || (lang === 'en' && btn.textContent === 'English');
-            btn.classList.toggle('active', isActive);
-            btn.classList.toggle('btn-primary', isActive);
-            btn.classList.toggle('btn-outline-primary', !isActive);
-          });
-          document.querySelectorAll('[data-' + lang + ']').forEach(el => {
-            el.textContent = el.getAttribute('data-' + lang);
-          });
-        }
-        setLang('en');
-      </script>
-    </body>
-    </html>
-    <?php
+if ($installation_locked && isset($_POST['action'])) {
+    http_response_code(423);
+    header('Content-Type: application/json');
+    echo json_encode([
+        'success' => false,
+        'message_it' => 'Installazione bloccata.',
+        'message_en' => 'Installation is locked.'
+    ]);
     exit;
+}
+
+if ($installation_locked && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    http_response_code(423);
 }
 
 // ============================================
@@ -116,14 +54,14 @@ if (file_exists(__DIR__ . '/' . $config['paths']['lock'])) {
 // ============================================
 
 /**
- * Generate temporary password
+ * Generate a secure administration password
  *
- * @param int $length Password length
  * @return string Generated password
  */
-function generate_temp_password($length = 12) {
+function generate_secure_password() {
     global $config;
-    $charset = $config['password']['temp_charset'];
+    $length = $config['password']['generated_length'];
+    $charset = $config['password']['generated_charset'];
     $password = '';
     $charset_length = strlen($charset);
 
@@ -137,7 +75,7 @@ function generate_temp_password($length = 12) {
 // ============================================
 // AJAX HANDLER: Test Database Connection
 // ============================================
-if (isset($_POST['action']) && $_POST['action'] === 'test_db') {
+if (!$installation_locked && isset($_POST['action']) && $_POST['action'] === 'test_db') {
     header('Content-Type: application/json');
 
     $response = [
@@ -160,20 +98,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'test_db') {
         exit;
     }
 
-    // Quick test: MySQL port reachable?
-    $mysql_port = $config['db']['port'];
-    $fp = @fsockopen($db_host, $mysql_port, $errno, $errstr, 5);
-
-    if (!$fp) {
-        $response['error_field'] = 'host';
-        $response['message_it'] = "Impossibile raggiungere MySQL su '$db_host' (porta $mysql_port)";
-        $response['message_en'] = "Cannot reach MySQL server at '$db_host' (port $mysql_port)";
-        echo json_encode($response);
-        exit;
-    }
-    fclose($fp);
-
-    // Try MySQL connection
+    // Match installation transport: localhost may use a socket instead of TCP.
     try {
         $conn = mysqli_connect($db_host, $db_user, $db_pass);
 
@@ -224,8 +149,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'test_db') {
     // Check MySQL version
     $mysql_version = mysqli_get_server_info($conn);
     $response['data']['mysql_version'] = $mysql_version;
+    $response['data']['mysql_version_ok'] = version_compare($mysql_version, $config['db']['min_version'], '>=');
 
-    if (version_compare($mysql_version, $config['db']['min_version'], '<')) {
+    if (!$response['data']['mysql_version_ok']) {
         mysqli_close($conn);
         $response['message_it'] = "Richiesto MySQL {$config['db']['min_version']}+ (attuale: $mysql_version)";
         $response['message_en'] = "MySQL {$config['db']['min_version']}+ required (current: $mysql_version)";
@@ -287,7 +213,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'test_db') {
 // ============================================
 // AJAX HANDLER: Test SMTP Connection
 // ============================================
-if (isset($_POST['action']) && $_POST['action'] === 'test_smtp') {
+if (!$installation_locked && isset($_POST['action']) && $_POST['action'] === 'test_smtp') {
     header('Content-Type: application/json');
 
     $response = ['success' => false, 'message' => ''];
@@ -341,17 +267,19 @@ if (isset($_POST['action']) && $_POST['action'] === 'test_smtp') {
 // ============================================
 // POST HANDLER: Install NovaStar51
 // ============================================
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
+if (!$installation_locked && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
 
     $install_errors = [];
     $install_log_it = [];  // Log in italiano
     $install_log_en = [];  // Log in inglese
+    $install_log_states = [];
 
     // Helper: Add bilingual log message
-    function logMsg($it, $en) {
-        global $install_log_it, $install_log_en;
+    function logMsg($it, $en, $state = 'info') {
+        global $install_log_it, $install_log_en, $install_log_states;
         $install_log_it[] = $it;
         $install_log_en[] = $en;
+        $install_log_states[] = $state;
     }
 
     // Get form data
@@ -364,18 +292,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
     $admin_last = trim($_POST['admin_last'] ?? '');
     $admin_email = trim($_POST['admin_email'] ?? '');
     $admin_username = trim($_POST['admin_username'] ?? '');
+    $password_mode = $_POST['password_mode'] ?? 'generated';
     $admin_password = $_POST['admin_password'] ?? '';
     $admin_password_confirm = $_POST['admin_password_confirm'] ?? '';
 
-    $gmail_email = trim($_POST['gmail_email'] ?? '');
-    $gmail_app_password = trim($_POST['gmail_app_password'] ?? '');
+    $smtp_enabled = ($_POST['smtp_enabled'] ?? '') === '1';
+    $gmail_email = $smtp_enabled ? trim($_POST['gmail_email'] ?? '') : '';
+    $gmail_app_password = $smtp_enabled ? preg_replace('/[\\s-]+/', '', trim($_POST['gmail_app_password'] ?? '')) : '';
 
+    // Site URL (manual override or auto-detect)
     $site_url = rtrim(trim($_POST['site_url'] ?? ''), '/');
     $site_url_final = $site_url;
 
     if ($site_url_final === '') {
         $scheme = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
-        $host = preg_replace('/:\d+$/', '', (string)($_SERVER['HTTP_HOST'] ?? 'localhost'));
+        $host = (string)($_SERVER['HTTP_HOST'] ?? 'localhost');
         $script_name = str_replace('\\', '/', (string)($_SERVER['SCRIPT_NAME'] ?? ''));
         $project_path = preg_replace('#/install(?:/index\.php)?$#', '', $script_name);
         $project_path = rtrim((string)$project_path, '/');
@@ -387,20 +318,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
     if (empty($db_host) || empty($db_name) || empty($db_user)) {
         $install_errors[] = 'Tutti i campi database sono obbligatori / All database fields are required';
     }
-    if (empty($admin_first) || empty($admin_last) || empty($admin_email) || empty($admin_username) || empty($admin_password)) {
+    if (empty($admin_first) || empty($admin_last) || empty($admin_email) || empty($admin_username)) {
         $install_errors[] = 'Tutti i campi Super Admin sono obbligatori / All Super Admin fields are required';
     }
-    if (strlen($admin_password) < $config['password']['min_length']) {
-        $install_errors[] = "Password deve essere almeno {$config['password']['min_length']} caratteri / Password must be at least {$config['password']['min_length']} characters";
+
+    if ($admin_email !== '' && !filter_var($admin_email, FILTER_VALIDATE_EMAIL)) {
+        $install_errors[] = 'Indirizzo email non valido / Invalid email address';
     }
-    if ($admin_password !== $admin_password_confirm) {
-        $install_errors[] = 'Le password non corrispondono / Passwords do not match';
+    if ($admin_username !== '' && !preg_match('/^[A-Za-z0-9_]+$/D', $admin_username)) {
+        $install_errors[] = 'Username: usa lettere, numeri e trattino basso / Username: use letters, numbers and underscores';
     }
-    if (!filter_var($admin_email, FILTER_VALIDATE_EMAIL)) {
-        $install_errors[] = 'Formato email non valido / Invalid email format';
+    if ($smtp_enabled && (!filter_var($gmail_email, FILTER_VALIDATE_EMAIL) || !preg_match('/@gmail\\.com$/iD', $gmail_email) || !preg_match('/^[A-Za-z0-9]{16}$/D', $gmail_app_password))) {
+        $install_errors[] = 'Controlla indirizzo Gmail e password per app di 16 caratteri / Check the Gmail address and 16-character app password';
     }
-    if (!preg_match('/^[a-zA-Z0-9_]+$/', $admin_username)) {
-        $install_errors[] = 'Username può contenere solo lettere, numeri e _ / Username can only contain letters, numbers and _';
+    if ($site_url !== '' && (!filter_var($site_url, FILTER_VALIDATE_URL) || !in_array(strtolower((string)parse_url($site_url, PHP_URL_SCHEME)), ['http', 'https'], true))) {
+        $install_errors[] = 'URL del sito non valido: usa http:// o https:// / Invalid site URL: use http:// or https://';
+    }
+
+    if (!in_array($password_mode, ['generated', 'custom'], true)) {
+        $install_errors[] = 'Modalità password non valida / Invalid password mode';
+    }
+
+    if ($password_mode === 'custom') {
+        if ($admin_password === '' || $admin_password_confirm === '') {
+            $install_errors[] = 'Password e conferma sono obbligatorie / Password and confirmation are required';
+        } elseif ($admin_password !== $admin_password_confirm) {
+            $install_errors[] = 'Le password non corrispondono / Passwords do not match';
+        } elseif (strlen($admin_password) < $config['password']['min_length']) {
+            $install_errors[] = "Password deve essere almeno {$config['password']['min_length']} caratteri / Password must be at least {$config['password']['min_length']} characters";
+        }
     }
 
     if (empty($install_errors)) {
@@ -460,17 +406,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
             if (empty($install_errors)) {
                 logMsg('Creazione account Super Admin...', 'Creating Super Admin account...');
 
-                // PASSWORD LOGIC: Gmail configured? Use user password : Generate temp password
+                // Password mode is independent from SMTP configuration.
                 $force_password_change = 0;
-                $final_password = $admin_password;
-                $temp_password_generated = null;
+                $generated_password = null;
 
-                if (empty($gmail_email) || empty($gmail_app_password)) {
-                    // Gmail not configured → generate temp password
-                    $temp_password_generated = generate_temp_password($config['password']['temp_length']);
-                    $final_password = $temp_password_generated;
-                    $force_password_change = 1;
-                    logMsg('⚠️ Email disabilitata → Password temporanea generata', '⚠️ Email disabled → Temporary password generated');
+                if ($password_mode === 'generated') {
+                    $generated_password = generate_secure_password();
+                    $final_password = $generated_password;
+                    logMsg('Password sicura generata', 'Secure password generated');
+                } else {
+                    $final_password = $admin_password;
+                    logMsg('Password personale configurata', 'Custom password configured');
                 }
 
                 $password_hash = password_hash($final_password, PASSWORD_DEFAULT);
@@ -542,15 +488,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
                 // Generate PHP file with var_export
                 $config_content = "<?php
 /**
- * Star51 Solo — System Configuration
- * Generated by Express Install on " . date('Y-m-d H:i:s') . "
- * Edit this file manually to change settings
+ * Nova System Configuration
+ * Auto-generated by Express Install
+ * Created: " . date('Y-m-d H:i:s') . "
+ *
+ * This file contains all system settings (dimensions, database, email)
+ * Edit installation settings in nova/conf/nova_config_values.php
  */
 
 \$nova_settings = " . var_export($nova_settings, true) . ";
 ?>";
 
-                if (!file_put_contents(__DIR__ . '/' . $config['paths']['config_values'], $config_content)) {
+                if (!file_put_contents($config['paths']['config_values'], $config_content)) {
                     $install_errors[] = "Impossibile scrivere / Cannot write {$config['paths']['config_values']}";
                 } else {
                     logMsg('Database configurato per Ambiente Locale', 'Database configured for Local Environment');
@@ -562,8 +511,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
                 logMsg('Creazione file lock...', 'Creating installation lock file...');
 
                 $lock_content = "NovaStar51 installed on " . date('Y-m-d H:i:s') . "\n";
+                $lock_content .= "Super Admin: $admin_username\n";
+                $lock_content .= "Database: $db_name\n";
 
-                if (!file_put_contents(__DIR__ . '/' . $config['paths']['lock'], $lock_content)) {
+                if (!file_put_contents($config['paths']['lock'], $lock_content)) {
                     $install_errors[] = "Impossibile creare / Cannot create {$config['paths']['lock']}";
                 } else {
                     logMsg('Installazione completata - /install/ può essere eliminata', 'Installation locked - /install/ can be deleted');
@@ -581,17 +532,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
                 foreach ($chmod_results as $dir => $result) {
                     if ($result['success']) {
                         $chmod_success++;
-                        logMsg("✓ $dir: {$result['message']}", "✓ $dir: {$result['message']}");
+                        logMsg("✓ $dir: {$result['message']}", "✓ $dir: {$result['message']}", 'passed');
                     } else {
                         // Log warning but don't fail installation
-                        logMsg("⚠ $dir: {$result['message']}", "⚠ $dir: {$result['message']}");
+                        logMsg("⚠ $dir: {$result['message']}", "⚠ $dir: {$result['message']}", 'warning');
                     }
                 }
 
                 logMsg("Permessi: $chmod_success/$chmod_total cartelle configurate", "Permissions: $chmod_success/$chmod_total directories configured");
             }
 
-            // STEP 6: Protect Nova configuration and logs from direct HTTP access.
+            // STEP 6: Protect Nova configuration and logs from direct HTTP access
             if (empty($install_errors)) {
                 $nova_protections = [
                     'configurazione Nova' => [
@@ -611,14 +562,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
                     $htaccess_dest = __DIR__ . '/' . $protection['destination'];
 
                     if (!file_exists($htaccess_source)) {
-                        logMsg("⚠ Template protezione $label_it non trovato", "⚠ {$protection['label_en']} protection template not found");
+                        logMsg("⚠ Template protezione $label_it non trovato", "⚠ {$protection['label_en']} protection template not found", 'warning');
                         continue;
                     }
 
                     if (copy($htaccess_source, $htaccess_dest)) {
-                        logMsg("✓ Protezione $label_it attivata (.htaccess)", "✓ {$protection['label_en']} protection enabled (.htaccess)");
+                        logMsg("✓ Protezione $label_it attivata (.htaccess)", "✓ {$protection['label_en']} protection enabled (.htaccess)", 'passed');
                     } else {
-                        logMsg("⚠ Impossibile attivare protezione $label_it", "⚠ Could not enable {$protection['label_en']} protection");
+                        logMsg("⚠ Impossibile attivare protezione $label_it", "⚠ Could not enable {$protection['label_en']} protection", 'warning');
                     }
                 }
             }
@@ -630,9 +581,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
 
                 if (file_exists($htaccess_root_source)) {
                     if (copy($htaccess_root_source, $htaccess_root_dest)) {
-                        logMsg('✓ .htaccess creato (compressione, cache, sicurezza)', '✓ .htaccess created (compression, cache, security)');
+                        logMsg('✓ .htaccess creato (compressione, cache, sicurezza)', '✓ .htaccess created (compression, cache, security)', 'passed');
                     } else {
-                        logMsg('⚠ Impossibile creare .htaccess nella root', '⚠ Could not create .htaccess in root');
+                        logMsg('⚠ Impossibile creare .htaccess nella root', '⚠ Could not create .htaccess in root', 'warning');
                     }
                 }
             }
@@ -653,9 +604,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
                 $robots_content = implode("\n", $robots_lines) . "\n";
 
                 if (file_put_contents(__DIR__ . '/' . $config['paths']['robots_txt'], $robots_content)) {
-                    logMsg('✓ robots.txt generato', '✓ robots.txt generated');
+                    logMsg('✓ robots.txt generato', '✓ robots.txt generated', 'passed');
                 } else {
-                    logMsg('⚠ Impossibile creare robots.txt', '⚠ Could not create robots.txt');
+                    logMsg('⚠ Impossibile creare robots.txt', '⚠ Could not create robots.txt', 'warning');
                 }
             }
 
@@ -683,9 +634,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
                 $sitemap .= '</urlset>' . "\n";
 
                 if (file_put_contents(__DIR__ . '/' . $config['paths']['sitemap_xml'], $sitemap)) {
-                    logMsg('✓ sitemap.xml generato (' . count($config['seo']['sitemap_pages']) . ' pagine)', '✓ sitemap.xml generated (' . count($config['seo']['sitemap_pages']) . ' pages)');
+                    logMsg('✓ sitemap.xml generato (' . count($config['seo']['sitemap_pages']) . ' pagine)', '✓ sitemap.xml generated (' . count($config['seo']['sitemap_pages']) . ' pages)', 'passed');
                 } else {
-                    logMsg('⚠ Impossibile creare sitemap.xml', '⚠ Could not create sitemap.xml');
+                    logMsg('⚠ Impossibile creare sitemap.xml', '⚠ Could not create sitemap.xml', 'warning');
                 }
             }
 
@@ -693,666 +644,1343 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
         }
     }
 
-    // Show results
-    if (empty($install_errors)) {
-        // SUCCESS!
-        ?>
-        <!DOCTYPE html>
-        <html lang="it">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>NovaStar51 - Installazione Completata</title>
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
-        </head>
-        <body class="bg-light py-5">
-            <div class="container" style="max-width: 680px;">
-                <header class="text-center mb-4">
-                    <h1 class="fw-bold">NovaStar51</h1>
-                    <p class="text-muted mb-2"><small>v2.5.0</small></p>
-                    <div class="btn-group btn-group-sm" role="group">
-                        <button type="button" class="btn btn-outline-primary lang-btn" onclick="setLang('it')">Italiano</button>
-                        <button type="button" class="btn btn-primary lang-btn active" onclick="setLang('en')">English</button>
-                    </div>
-                </header>
 
-                <div class="card shadow">
-                    <div class="card-header bg-success text-white text-center py-4">
-                        <h2 class="h4 mb-0" data-it="Installazione Completata!" data-en="Installation Complete!">Installazione Completata!</h2>
-                    </div>
-                    <div class="card-body p-4">
-                        <div class="alert alert-success border-success border-3">
-                            <i class="bi bi-check-circle-fill text-success me-2"></i>
-                            <strong data-it="NovaStar51 è pronto!" data-en="NovaStar51 is ready!">NovaStar51 è pronto!</strong><br>
-                            <span data-it="Il CMS è stato installato con successo." data-en="Your CMS has been installed successfully.">Il CMS è stato installato con successo.</span>
-                        </div>
-
-                        <h5 class="mb-2" data-it="Log Installazione:" data-en="Installation Log:">Log Installazione:</h5>
-                        <div class="bg-light p-3 rounded font-monospace small mb-4 border border-2 border-secondary">
-                            <!-- Italian Log -->
-                            <div class="log-it">
-                                <?php foreach ($install_log_it as $log): ?>
-                                    &bull; <?= htmlspecialchars($log) ?><br>
-                                <?php endforeach; ?>
-                            </div>
-                            <!-- English Log -->
-                            <div class="log-en" style="display: none;">
-                                <?php foreach ($install_log_en as $log): ?>
-                                    &bull; <?= htmlspecialchars($log) ?><br>
-                                <?php endforeach; ?>
-                            </div>
-                        </div>
-
-                        <?php if ($temp_password_generated): ?>
-                            <div class="alert alert-warning border-warning border-3 p-4 mb-4">
-                                <h5 class="text-warning fw-bold" data-it="PASSWORD TEMPORANEA" data-en="TEMPORARY PASSWORD">PASSWORD TEMPORANEA</h5>
-                                <div class="bg-white p-3 rounded text-center my-3">
-                                    <code class="fs-4 fw-bold letter-spacing-2"><?= htmlspecialchars($temp_password_generated) ?></code>
-                                </div>
-                                <p class="mb-0">
-                                    <strong data-it="ANNOTALA!" data-en="WRITE IT DOWN!">ANNOTALA!</strong><br>
-                                    <span data-it="Devi cambiare questa password al primo login." data-en="You MUST change this password on first login.">Devi cambiare questa password al primo login.</span><br>
-                                    <span data-it="Email disabilitata, questa è l'unica via di accesso." data-en="Email is disabled, this is your only way to access Nova.">Email disabilitata, questa è l'unica via di accesso.</span>
-                                </p>
-                            </div>
-                        <?php else: ?>
-                            <div class="alert alert-info border-info border-3 mb-4">
-                                <strong data-it="Credenziali di Login" data-en="Login Credentials">Credenziali di Login</strong><br>
-                                <strong>Username:</strong> <?= htmlspecialchars($admin_username) ?><br>
-                                <strong>Password:</strong> <span data-it="(quella inserita)" data-en="(the one you entered)">(quella inserita)</span><br>
-                                <strong>Email:</strong> <?= htmlspecialchars($admin_email) ?>
-                            </div>
-                        <?php endif; ?>
-
-                        <!-- Nota di Sicurezza (SOPRA il pulsante) -->
-                        <div class="alert alert-warning border-warning border-3 mb-3">
-                            <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
-                            <strong data-it="Nota di Sicurezza:" data-en="Security Note:">Nota di Sicurezza:</strong><br>
-                            <span data-it="Per sicurezza, ELIMINA la cartella" data-en="For security, DELETE the folder">Per sicurezza, <strong>ELIMINA la cartella</strong></span> <code>/install/</code>
-                            <ul class="mb-0 mt-2">
-                                <li><strong data-it="Nova Administrator &gt; Configurazione di Sistema &gt; Rimozione file di installazione" data-en="Nova Administrator &gt; System Configuration &gt; Installation File Removal">Nova Administrator &gt; Configurazione di Sistema &gt; Rimozione file di installazione</strong></li>
-                                <li><span data-it="Manualmente:" data-en="Manually:">Manualmente:</span> <span data-it="via FTP o terminale" data-en="via FTP or terminal">via FTP o terminale</span></li>
-                            </ul>
-                        </div>
-
-                        <!-- Pulsante Login -->
-                        <a href="<?= htmlspecialchars($config['paths']['nova_login']) ?>" class="btn btn-primary btn-lg w-100 py-3 shadow-sm" data-it="Vai alla login di Nova" data-en="Go to Nova Login">
-                            <i class="bi bi-box-arrow-in-right me-2"></i>Vai alla login di Nova
-                        </a>
-                    </div>
-                </div>
-
-                <footer class="text-center text-muted py-4">
-                    NovaStar51 Express Install
-                </footer>
-            </div>
-            <script>
-                let currentLang = 'en';
-                function setLang(lang) {
-                    currentLang = lang;
-                    document.querySelectorAll('.lang-btn').forEach(btn => {
-                        const isActive = (lang === 'it' && btn.textContent === 'Italiano') || (lang === 'en' && btn.textContent === 'English');
-                        btn.classList.toggle('active', isActive);
-                        btn.classList.toggle('btn-primary', isActive);
-                        btn.classList.toggle('btn-outline-primary', !isActive);
-                    });
-                    document.querySelectorAll('[data-' + lang + ']').forEach(el => {
-                        el.textContent = el.getAttribute('data-' + lang);
-                    });
-
-                    // Toggle installation log language
-                    const logIt = document.querySelector('.log-it');
-                    const logEn = document.querySelector('.log-en');
-                    if (logIt && logEn) {
-                        logIt.style.display = (lang === 'it') ? 'block' : 'none';
-                        logEn.style.display = (lang === 'en') ? 'block' : 'none';
-                    }
-                }
-                setLang('en');
-            </script>
-        </body>
-        </html>
-        <?php
-        exit;
-
-    } else {
-        // ERRORS - will be shown in form below
-        $form_data = $_POST;
-        $form_errors = $install_errors;
+    $install_success = empty($install_errors);
+    if (!$install_success) {
+      $form_data = $_POST;
+      unset($form_data['db_pass'], $form_data['admin_password'], $form_data['admin_password_confirm'], $form_data['gmail_app_password']);
+      $form_errors = $install_errors;
     }
 }
 
-// ============================================
-// DETECT SYSTEM
-// ============================================
-$system_info = detect_system();
-
-// Prepare form defaults
+// Render all installer states through the same interface.
+$system = detect_system();
+$critical_requirements_ok = $system['php']['ok'] && $system['mysql_available'];
+$requirements_have_issues = !$system['php']['ok'] || !$system['extensions']['all_ok'] || !$system['writable']['all_ok'];
+$requirements_have_warnings = false;
+$requirement_colors = ['passed' => 'text-success', 'warning' => 'text-warning-emphasis', 'error' => 'text-danger', 'pending' => 'text-body-secondary'];
+$requirement_icons = ['passed' => 'bi-check-circle-fill', 'warning' => 'bi-exclamation-triangle-fill', 'error' => 'bi-x-circle-fill', 'pending' => 'bi-clock'];
+$mysql_initial_state = $system['mysql_available'] ? 'pending' : 'error';
+$requirement_rows = [[
+  'kind' => 'php', 'name' => 'php',
+  'label' => 'PHP ' . $system['php']['version'] . ' (' . $system['php']['required'] . '+)',
+  'state' => $system['php']['ok'] ? 'passed' : 'error',
+  'en' => $system['php']['ok'] ? 'Compatible version' : 'Minimum PHP version not met',
+  'it' => $system['php']['ok'] ? 'Versione compatibile' : 'Versione minima di PHP non soddisfatta',
+]];
+foreach ($system['extensions']['list'] as $extension => $available) {
+  $state = $available ? 'passed' : ($extension === 'mysqli' ? 'error' : 'warning');
+  if ($state === 'warning') $requirements_have_warnings = true;
+  $requirement_rows[] = [
+    'kind' => 'extension', 'name' => $extension, 'label' => $extension, 'state' => $state,
+    'en' => $available ? 'Available' : ($extension === 'mysqli' ? 'Required extension missing' : 'Extension unavailable'),
+    'it' => $available ? 'Disponibile' : ($extension === 'mysqli' ? 'Estensione richiesta assente' : 'Estensione non disponibile'),
+  ];
+}
+foreach ($system['writable']['list'] as $path => $folder) {
+  $writable = !empty($folder['writable']);
+  if (!$writable) $requirements_have_warnings = true;
+  $requirement_rows[] = [
+    'kind' => 'folder', 'name' => $path, 'label' => $path, 'state' => $writable ? 'passed' : 'warning',
+    'en' => $writable ? 'Writable' : (!empty($folder['exists']) ? 'Not writable; permissions will be attempted during installation' : 'Missing folder; creation will be attempted during installation'),
+    'it' => $writable ? 'Scrivibile' : (!empty($folder['exists']) ? 'Non scrivibile: tentativo di impostare i permessi durante il setup' : 'Cartella assente: tentativo di creazione durante il setup'),
+  ];
+}
 $form_data = $form_data ?? [];
 $form_errors = $form_errors ?? [];
-
-$db_host = $form_data['db_host'] ?? 'localhost';
-$db_name = $form_data['db_name'] ?? suggest_db_name();
-$db_user = $form_data['db_user'] ?? 'root';
-$db_pass = $form_data['db_pass'] ?? '';
-
-$admin_first = $form_data['admin_first'] ?? '';
-$admin_last = $form_data['admin_last'] ?? '';
-$admin_email = $form_data['admin_email'] ?? '';
-$admin_username = $form_data['admin_username'] ?? 'admin';
-$admin_password = '';  // Never pre-fill password
-
-$gmail_email = $form_data['gmail_email'] ?? '';
-$gmail_app_password = '';  // Never pre-fill password
-
+$form_value = static fn($name) => htmlspecialchars((string)($form_data[$name] ?? ''), ENT_QUOTES, 'UTF-8');
+$escape = static fn($value) => htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
+$selected_password_mode = ($form_data['password_mode'] ?? '') === 'custom' ? 'custom' : 'generated';
 ?>
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NovaStar51 - Express Install</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
-</head>
-<body class="bg-light py-5">
-    <div class="container" style="max-width: 680px;">
-        <header class="text-center mb-4">
-            <h1 class="fw-bold">NovaStar51</h1>
-            <p class="text-muted mb-0">
-                <small>v2.5.0</small>
-                <span class="mx-2">·</span>
-                <span data-it="Setup Rapido" data-en="Quick Setup">Setup Rapido</span>
-                <span class="mx-2">·</span>
-                <a href="install_guide.html" target="_blank" class="text-muted text-decoration-none"><i class="bi bi-book me-1"></i><span data-it="Guida" data-en="Guide">Guida</span></a>
-            </p>
-        </header>
+<!doctype html>
+<html lang="<?= $installer_lang ?>">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Star51 - Installation</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@<?= $escape($config['ui']['bootstrap_version']) ?>/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@<?= $escape($config['ui']['bootstrap_icons_version']) ?>/font/bootstrap-icons.min.css">
+    <style>
+      /* Installer-local styles: no dependency on the installed application. */
+      :root {
+        --nova-brand-orange: #ff5b19;
+        --nova-mint: #aecacd;
+        --nova-mint-dark: #578a8f;
+        --nova-charcoal: #161616;
+        --nova-white: #ffffff;
+        --nova-gray-border: #dee2e6;
+        --nova-gray-muted: #6c757d;
+        --bs-body-color: var(--nova-charcoal);
+        --bs-body-bg: var(--nova-white);
+        --bs-border-radius: 6px;
+        --bs-link-color: var(--nova-brand-orange);
+        --bs-link-hover-color: var(--nova-charcoal);
+        --bs-link-color-rgb: 255, 91, 25;
+        --bs-link-hover-color-rgb: 22, 22, 22;
+      }
+      [hidden] { display: none !important; }
+      body { min-height: 100vh; padding-inline: 20px; letter-spacing: 0; background: rgb(174 202 205 / 30%); }
+      a { color: var(--nova-brand-orange); text-decoration: none; transition: color .2s ease; }
+      button, a { touch-action: manipulation; }
+      :is(button, a, input):focus-visible { outline: 3px solid var(--nova-charcoal); outline-offset: 3px; }
+      .wrap { width: 100%; max-width: 720px; margin-inline: auto; padding-inline: 32px; }
+      .setup-panel { width: 100%; margin: 16px auto 32px; background: var(--nova-white); border: 1px solid var(--nova-gray-border); border-radius: 8px; box-shadow: 0 6px 20px rgb(22 22 22 / 7%); }
+      .installer-shell { max-width: 720px; }
+      .topbar { margin-inline: 32px; border-bottom: 1px solid var(--nova-gray-border); }
+      .topbar .wrap { min-height: 80px; padding-inline: 0; }
+      .brand strong { display: block; font-size: 20px; }
+      .brand small { font-size: 12px; color: var(--nova-gray-muted); }
+      .langs .btn {
+        --bs-btn-color: var(--nova-mint-dark);
+        --bs-btn-bg: var(--nova-white);
+        --bs-btn-border-color: var(--nova-mint);
+        --bs-btn-hover-color: var(--nova-charcoal);
+        --bs-btn-hover-bg: rgb(174 202 205 / 20%);
+        --bs-btn-hover-border-color: var(--nova-mint-dark);
+        --bs-btn-active-color: var(--nova-charcoal);
+        --bs-btn-active-bg: var(--nova-mint);
+        --bs-btn-active-border-color: var(--nova-mint-dark);
+        width: 44px;
+        height: 44px;
+        padding-inline: 0;
+        border-radius: 0;
+      }
+      .langs .btn:first-child { border-radius: 6px 0 0 6px; }
+      .langs .btn:last-child { border-radius: 0 6px 6px 0; }
+      .langs [aria-pressed="true"] { background: var(--nova-mint-dark); border-color: var(--nova-mint-dark); color: var(--nova-white); font-weight: 600; }
+      .langs .btn:focus-visible { position: relative; z-index: 1; outline: 3px solid var(--nova-mint-dark); outline-offset: 3px; }
+      .page-title { display: flex; align-items: start; justify-content: space-between; gap: 24px; padding: 48px 0 40px; }
+      h1 { font-size: 24px; font-weight: 600; line-height: 1.3; margin: 0 0 12px; }
+      h2 { font-size: 18px; font-weight: 600; line-height: 1.4; margin: 0 0 12px; }
+      p { margin: 0; }
+      .muted, .section-copy > p, .hint, .optional { color: var(--nova-gray-muted); }
+      .title-copy, .section-copy > p, .hint, .smtp-off { font-size: 14px; }
+      .guide-link { white-space: nowrap; font-size: 14px; }
+      .guide-link i { margin-right: 6px; }
+      .requirements-panel { border-block: 1px solid var(--nova-gray-border); padding: 32px 0; }
+      .section-heading > .bi { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 25px; width: 25px; height: 25px; font-size: 18px; line-height: 1; }
+      .check-status { display: block; margin: 12px 0 0 !important; font-size: 13px; color: var(--nova-gray-muted); }
+      .check-status.is-passed { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--bs-success-text-emphasis); }
+      .form-section { padding: 40px 0; border-bottom: 1px solid var(--nova-gray-border); }
+      .form-section[data-state="active"] { padding-block: 40px; background: var(--nova-white); }
+      .section-copy { position: relative; }
+      .section-heading i { color: var(--nova-gray-muted); }
+      .section-controls { width: 100%; min-width: 0; padding: 0; border: 0; margin: 32px 0 0; }
+      .fields, .password-options { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+      .password-options { gap: 12px; }
+      .field { min-width: 0; }
+      label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+      .hint { margin-bottom: 8px; }
+      .form-control { min-height: 46px; border-color: #adb5bd; }
+      .form-control:focus, .form-check-input:focus { border-color: var(--nova-mint-dark); box-shadow: 0 0 0 3px rgb(174 202 205 / 40%); }
+      .form-check-input:checked { background-color: var(--nova-mint-dark); border-color: var(--nova-mint-dark); }
+      .password-input { position: relative; }
+      .password-input .form-control { padding-right: 48px; }
+      .eye { position: absolute; top: 1px; right: 1px; min-width: 44px; min-height: 44px; color: var(--nova-charcoal); }
+      .btn { min-height: 44px; letter-spacing: 0; transition: background-color .12s ease, border-color .12s ease, box-shadow .12s ease; }
+      .btn-primary {
+        --bs-btn-color: var(--nova-brand-orange);
+        --bs-btn-bg: transparent;
+        --bs-btn-border-color: var(--nova-brand-orange);
+        --bs-btn-hover-color: var(--nova-white);
+        --bs-btn-hover-bg: var(--nova-brand-orange);
+        --bs-btn-hover-border-color: var(--nova-brand-orange);
+        --bs-btn-active-color: var(--nova-white);
+        --bs-btn-active-bg: var(--nova-brand-orange);
+        --bs-btn-active-border-color: var(--nova-brand-orange);
+        --bs-btn-disabled-color: var(--nova-brand-orange);
+        --bs-btn-disabled-bg: transparent;
+        --bs-btn-disabled-border-color: var(--nova-brand-orange);
+      }
+      .btn i { margin-right: 6px; }
+      .eye i { margin: 0; }
+      .step-action { margin-top: 32px; }
+      .step-continue.btn { position: absolute; top: 0; right: 0; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border-radius: 50%; }
+      .step-continue i { margin: 0; font-size: 20px; line-height: 1; }
+      .step-continue:focus-visible { outline: 2px solid var(--nova-brand-orange); outline-offset: 3px; }
+      .section-copy:has(> .step-continue:not([hidden])) { padding-right: 60px; }
+      .option { display: flex; align-items: center; gap: 12px; padding: 12px 16px; min-height: 48px; margin: 0; border: 1px solid var(--nova-gray-border); border-radius: 6px; font-weight: 400; cursor: pointer; }
+      .option:has(input:checked) { background: rgb(174 202 205 / 20%); }
+      .option .form-check-input, .switch-label .form-check-input { flex-shrink: 0; float: none; margin: 0; }
+      .optional { font-size: 14px; font-weight: 400; color: var(--nova-gray-muted); }
+      .switch-row.form-switch { padding-left: 0; }
+      .switch-label { display: flex; align-items: center; gap: 12px; min-height: 44px; font-size: 16px; cursor: pointer; }
+      .switch-label .form-check-input { width: 40px; height: 22px; cursor: pointer; }
+      .smtp-content, .smtp-off { margin-top: 16px; }
+      .section-state { display: flex; align-items: center; gap: 7px; margin-top: 10px; font-size: 14px; font-weight: 400; }
+      .draft-notice { display: flex; align-items: baseline; gap: 8px; width: fit-content; max-width: 100%; margin: 12px 0 0; padding: 8px 12px; border: 1px solid #aecacd; border-left: 3px solid #578a8f; border-radius: 4px; background: #edf4f5; color: #294c50; font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+      .draft-notice[hidden] { display: none; }
+      .draft-notice i { flex-shrink: 0; }
+      .form-section[data-state="complete"] .section-state { gap: 8px; font-size: 14px; font-weight: 600; color: var(--bs-success-text-emphasis); }
+      .section-state .bi-check-circle-fill, .check-status .bi-check-circle-fill { flex-shrink: 0; font-size: 20px; line-height: 1; }
+      .form-section[data-state="complete"] .section-heading { padding-right: 104px; }
+      .step-edit { position: absolute; right: 0; top: 0; font-size: 14px; font-weight: 600; }
+      .step-edit {
+        --bs-btn-color: var(--nova-mint-dark);
+        --bs-btn-bg: transparent;
+        --bs-btn-border-color: var(--nova-mint);
+        --bs-btn-hover-color: var(--nova-white);
+        --bs-btn-hover-bg: var(--nova-mint-dark);
+        --bs-btn-hover-border-color: var(--nova-mint-dark);
+        --bs-btn-active-color: var(--nova-white);
+        --bs-btn-active-bg: var(--nova-mint-dark);
+        --bs-btn-active-border-color: var(--nova-mint-dark);
+      }
+      .step-edit:focus { background: var(--nova-mint-dark); color: var(--nova-white); border-color: var(--nova-mint-dark); box-shadow: none; }
+      .step-edit:focus-visible { outline-color: var(--nova-mint-dark); }
+      .btn:active { box-shadow: inset 0 2px 3px rgb(22 22 22 / 18%); }
+      @media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+      .step-recap { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 8px 16px; margin: 24px 0 0; font-size: 14px; }
+      .step-recap:empty { display: none; }
+      .step-recap dt { font-weight: 400; color: var(--nova-gray-muted); }
+      .step-recap dd { margin: 0; min-width: 0; overflow-wrap: anywhere; font-weight: 600; }
+      .notice, .verification-feedback { padding: 16px; border: 0; border-radius: 6px; background: rgb(174 202 205 / 15%); font-size: 14px; }
+      #generated-note { border-left: 0; border-radius: 6px; }
+      .verification-feedback { display: flex; gap: 10px; align-items: start; margin-top: 16px; }
+      .verification-feedback::before { content: "\f431"; font-family: bootstrap-icons; }
+      .verification-feedback[data-kind="error"] { background: var(--bs-danger-bg-subtle); color: var(--bs-danger-text-emphasis); border: 0; border-radius: 6px; }
+      .verification-feedback[data-kind="error"]::before { content: "\f33a"; }
+      .form-control[aria-invalid="true"], .form-control[aria-invalid="true"]:focus { border-color: var(--bs-danger); }
+      .form-control[aria-invalid="true"]:focus { box-shadow: 0 0 0 3px rgba(var(--bs-danger-rgb), .2); outline-color: var(--bs-danger); }
+      .install-footer { display: grid; gap: 16px; padding-block: 32px; }
+      .install-footer p { font-size: 13px; color: var(--nova-gray-muted); }
+      .bottom { gap: 12px; padding-block: 24px; border-top: 1px solid var(--nova-gray-border); font-size: 12px; color: var(--nova-gray-muted); }
+      .review-list { margin-bottom: 20px; }
+      .review-list div { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 14px; padding-block: 12px; border-bottom: 1px solid var(--nova-gray-border); font-size: 14px; }
+      .review-list dt { font-weight: 400; color: var(--nova-gray-muted); }
+      .review-list dd { margin: 0; overflow-wrap: anywhere; }
+      .result-screen { padding-block: 32px; }
+      .result-screen .review-list { margin-top: 24px; }
+      @media (max-width: 480px) {
+        body { padding-inline: 12px; }
+        .wrap { padding-inline: 16px; }
+        .topbar { margin-inline: 16px; }
+        .brand strong { font-size: 17px; }
+        .page-title { flex-wrap: wrap; gap: 12px; padding-top: 24px; }
+        h1 { font-size: 24px; }
+        .form-section, .form-section[data-state="active"] { padding-block: 32px; }
+        .step-edit { position: static; margin-top: 12px; }
+        .form-section[data-state="complete"] .section-heading { padding-right: 0; }
+        .step-recap, .review-list div { grid-template-columns: minmax(0, 1fr); gap: 3px; }
+        .step-recap dd { margin-bottom: 8px; }
+        .bottom { flex-direction: column; gap: 12px; }
+      }
 
-        <div class="card shadow mb-4 position-relative">
-            <!-- Language Toggle (floating on card border) -->
-            <div class="position-absolute" style="top: -1px; right: 16px; transform: translateY(-50%);">
-                <div class="btn-group btn-group-sm shadow-sm" role="group">
-                    <button type="button" class="btn btn-outline-primary lang-btn bg-white" onclick="setLang('it')">IT</button>
-                    <button type="button" class="btn btn-primary lang-btn active" onclick="setLang('en')">EN</button>
-                </div>
-            </div>
-            <!-- Requirements Check -->
-            <div class="card-header bg-light">
-                <small class="text-uppercase fw-semibold text-muted" data-it="Requisiti di Sistema" data-en="System Requirements">Requisiti di Sistema</small>
-            </div>
-            <div class="card-body">
-                <div class="row g-2">
-                    <div class="col-md-6">
-                        <div class="d-flex align-items-center gap-2 p-2 bg-light rounded border">
-                            <span class="badge rounded-pill <?= $system_info['php']['ok'] ? 'bg-success' : 'bg-danger' ?>"><?= $system_info['php']['ok'] ? '✓' : '✗' ?></span>
-                            <small>PHP <?= $system_info['php']['version'] ?> <span class="text-muted">(req. <?= $config['requirements']['php_min'] ?>+)</span></small>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="d-flex align-items-center gap-2 p-2 bg-light rounded border">
-                            <span class="badge rounded-pill <?= $system_info['mysql_available'] ? 'bg-success' : 'bg-danger' ?>"><?= $system_info['mysql_available'] ? '✓' : '✗' ?></span>
-                            <small>MySQL Extension <span class="text-muted">(req. <?= $config['db']['min_version'] ?>+)</span></small>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="d-flex align-items-center gap-2 p-2 bg-light rounded border">
-                            <span class="badge rounded-pill <?= $system_info['extensions']['all_ok'] ? 'bg-success' : 'bg-danger' ?>"><?= $system_info['extensions']['all_ok'] ? '✓' : '✗' ?></span>
-                            <small><span data-it="Estensioni" data-en="Extensions">Estensioni</span> <span class="text-muted">(<?= $system_info['extensions']['ok_count'] ?>/<?= $system_info['extensions']['total'] ?>)</span></small>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="d-flex align-items-center gap-2 p-2 bg-light rounded border">
-                            <span class="badge rounded-pill <?= $system_info['writable']['all_ok'] ? 'bg-success' : 'bg-danger' ?>"><?= $system_info['writable']['all_ok'] ? '✓' : '✗' ?></span>
-                            <small><span data-it="Directory scrivibili" data-en="Writable dirs">Directory scrivibili</span> <span class="text-muted">(<?= $system_info['writable']['ok_count'] ?>/<?= $system_info['writable']['total'] ?>)</span></small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <?php if (!$system_info['php']['ok'] || !$system_info['mysql_available']): ?>
-                <!-- Critical errors -->
-                <div class="card-body border-top">
-                    <div class="alert alert-danger mb-0">
-                        <h5 class="alert-heading" data-it="Impossibile Continuare" data-en="Cannot Continue">Impossibile Continuare</h5>
-                        <p class="mb-0" data-it="Risolvi gli errori sopra prima di installare NovaStar51." data-en="Please fix the critical errors above before installing NovaStar51.">Risolvi gli errori sopra prima di installare NovaStar51.</p>
-                    </div>
-                </div>
-            <?php else: ?>
-
-                <?php if (!empty($form_errors)): ?>
-                    <!-- Installation Errors -->
-                    <div class="card-body border-top pb-0">
-                        <div class="alert alert-danger">
-                            <h6 class="alert-heading" data-it="Installazione Fallita" data-en="Installation Failed">Installazione Fallita</h6>
-                            <ul class="mb-0">
-                                <?php foreach ($form_errors as $error): ?>
-                                    <li><?= htmlspecialchars($error) ?></li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </div>
-                    </div>
-                <?php endif; ?>
-
-                <form id="setup-form" method="POST" action="">
-
-                    <!-- Database Section -->
-                    <div class="card-body border-top border-primary border-3 py-4">
-                        <h5 class="d-flex align-items-center gap-2 mb-4">
-                            <i class="bi bi-database text-primary"></i>
-                            <span data-it="Configurazione Database" data-en="Database Configuration">Configurazione Database</span>
-                        </h5>
-
-                        <div class="row g-4 mb-4">
-                            <div class="col-md-6">
-                                <label class="form-label">Host Database <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control font-monospace border-warning border-2" id="db_host" name="db_host" required>
-                                <div class="form-text" data-it="Es: localhost o 127.0.0.1" data-en="E.g.: localhost or 127.0.0.1">Es: localhost o 127.0.0.1</div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label"><span data-it="Nome Database" data-en="Database Name">Nome Database</span> <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control font-monospace border-warning border-2" id="db_name" name="db_name" required>
-                                <div class="form-text"><strong data-it="Deve essere creato prima via phpMyAdmin" data-en="Must be created first via phpMyAdmin">Deve essere creato prima via phpMyAdmin</strong><br>
-                                <small class="text-muted">Collation: <code>utf8mb4_unicode_ci</code></small></div>
-                            </div>
-                        </div>
-
-                        <div class="row g-4 mb-4">
-                            <div class="col-md-6">
-                                <label class="form-label">Username <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control font-monospace border-warning border-2" id="db_user" name="db_user" required>
-                                <div class="form-text" data-it="Es: root" data-en="E.g.: root">Es: root</div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Password</label>
-                                <div class="input-group">
-                                    <input type="password" class="form-control font-monospace border-warning border-2" id="db_pass" name="db_pass">
-                                    <button class="btn btn-outline-secondary toggle-password" type="button" data-target="db_pass"><i class="bi bi-eye-slash"></i></button>
-                                </div>
-                                <div class="form-text" data-it="Spesso vuota in locale, consigliata in produzione" data-en="Often empty locally, recommended in production">Spesso vuota in locale, consigliata in produzione</div>
-                            </div>
-                        </div>
-
-                        <button type="button" class="btn btn-warning" id="btn-test-db">
-                            <i class="bi bi-plug-fill"></i>
-                            <span data-it="Testa Connessione" data-en="Test Connection">Testa Connessione</span>
-                        </button>
-                        <div class="alert mt-3 mb-0 small" id="db-result" style="display: none;"></div>
-                    </div>
-
-                    <!-- Admin Account Section -->
-                    <div class="card-body border-top border-success border-3 py-4">
-                        <h5 class="d-flex align-items-center gap-2 mb-4">
-                            <i class="bi bi-person-badge text-success"></i>
-                            <span data-it="Account Super Admin" data-en="Super Admin Account">Account Super Admin</span>
-                        </h5>
-
-                        <div class="row g-4 mb-4">
-                            <div class="col-md-6">
-                                <label class="form-label"><span data-it="Nome" data-en="First Name">Nome</span> <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control border-warning border-2" id="admin_first" name="admin_first" required>
-                                <div class="form-text" data-it="Es: Mario" data-en="E.g.: Mario">Es: Mario</div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label"><span data-it="Cognome" data-en="Last Name">Cognome</span> <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control border-warning border-2" id="admin_last" name="admin_last" required>
-                                <div class="form-text" data-it="Es: Rossi" data-en="E.g.: Rossi">Es: Rossi</div>
-                            </div>
-                        </div>
-
-                        <div class="row g-4 mb-4">
-                            <div class="col-md-6">
-                                <label class="form-label">Email <span class="text-danger">*</span></label>
-                                <input type="email" class="form-control border-warning border-2" id="admin_email" name="admin_email" required>
-                                <div class="form-text" data-it="Email per login e recupero password" data-en="Email for login and password recovery">Email per login e recupero password</div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Username <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control font-monospace border-warning border-2" id="admin_username" name="admin_username" required>
-                                <div class="form-text" data-it="Es: mario_rossi (lettere, numeri, _)" data-en="E.g.: mario_rossi (letters, numbers, _)">Es: mario_rossi (lettere, numeri, _)</div>
-                            </div>
-                        </div>
-
-                        <div class="row g-4 mb-0">
-                            <div class="col-md-6">
-                                <label class="form-label">Password <span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <input type="password" class="form-control font-monospace border-warning border-2" id="admin_password" name="admin_password" minlength="<?= $config['password']['min_length'] ?>" required>
-                                    <button class="btn btn-outline-secondary toggle-password" type="button" data-target="admin_password"><i class="bi bi-eye-slash"></i></button>
-                                </div>
-                                <div class="form-text" data-it="Minimo <?= $config['password']['min_length'] ?> caratteri" data-en="Minimum <?= $config['password']['min_length'] ?> characters">Minimo <?= $config['password']['min_length'] ?> caratteri</div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label"><span data-it="Conferma Password" data-en="Confirm Password">Conferma Password</span> <span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <input type="password" class="form-control font-monospace border-warning border-2" id="admin_password_confirm" name="admin_password_confirm" minlength="<?= $config['password']['min_length'] ?>" required>
-                                    <button class="btn btn-outline-secondary toggle-password" type="button" data-target="admin_password_confirm"><i class="bi bi-eye-slash"></i></button>
-                                </div>
-                                <div class="form-text" data-it="Ripeti la password" data-en="Repeat the password">Ripeti la password</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- SMTP Section -->
-                    <div class="card-body border-top border-info border-3 py-4">
-                        <h5 class="d-flex align-items-center gap-2 mb-4">
-                            <i class="bi bi-envelope text-info"></i>
-                            <span data-it="Configurazione Gmail SMTP" data-en="Gmail SMTP Configuration">Configurazione Gmail SMTP</span>
-                            <span class="badge bg-secondary" data-it="Facoltativo" data-en="Optional">Facoltativo</span>
-                        </h5>
-
-                        <div id="smtpSection">
-                            <div class="alert alert-warning small mb-4">
-                                <i class="bi bi-exclamation-triangle-fill me-1"></i>
-                                <strong data-it="Senza Gmail configurato:" data-en="Without Gmail configured:">Senza Gmail configurato:</strong><br>
-                                <span data-it="- Niente recupero password via email" data-en="- No password recovery via email">- Niente recupero password via email</span><br>
-                                <span data-it="- Se dimentichi la password, devi intervenire sul database" data-en="- If you forget password, you must fix it in database">- Se dimentichi la password, devi intervenire sul database</span>
-                            </div>
-
-                            <div id="gmail-fields">
-                                <div class="row g-4 mb-4">
-                                    <div class="col-md-6">
-                                        <label class="form-label" data-it="Indirizzo Gmail" data-en="Gmail Address">Indirizzo Gmail</label>
-                                        <input type="email" class="form-control border-warning border-2" id="gmail_email" name="gmail_email">
-                                        <div class="form-text" data-it="Es: tuonome@gmail.com" data-en="E.g.: yourname@gmail.com">Es: tuonome@gmail.com</div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Gmail App Password</label>
-                                        <div class="input-group">
-                                            <input type="password" class="form-control font-monospace border-warning border-2" id="gmail_app_password" name="gmail_app_password">
-                                            <button class="btn btn-outline-secondary toggle-password" type="button" data-target="gmail_app_password"><i class="bi bi-eye-slash"></i></button>
-                                        </div>
-                                        <div class="form-text">
-                                            <span data-it="16 car." data-en="16 char.">16 car.</span> &middot;
-                                            <a href="https://support.google.com/accounts/answer/185833" target="_blank" data-it="Come generarla" data-en="How to generate">Come generarla</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row g-3 mb-3">
-                                    <div class="col-md-6">
-                                        <div class="d-flex align-items-center gap-2 p-2 bg-light rounded border">
-                                            <span class="badge rounded-pill border text-muted bg-transparent" id="smtp-check-host">✓</span>
-                                            <small><strong>SMTP Host:</strong> smtp.gmail.com</small>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="d-flex align-items-center gap-2 p-2 bg-light rounded border">
-                                            <span class="badge rounded-pill border text-muted bg-transparent" id="smtp-check-port">✓</span>
-                                            <small><strong>SMTP Port:</strong> 587 (TLS)</small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <button type="button" class="btn btn-info text-white" id="btn-test-smtp">
-                                    <i class="bi bi-send-fill"></i>
-                                    <span data-it="Testa Connessione SMTP" data-en="Test SMTP Connection">Testa Connessione SMTP</span>
-                                </button>
-                                <div class="alert alert-warning mt-3 mb-0 small" id="smtp-error" style="display: none;"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Site URL Section (SEO) -->
-                    <div class="card-body border-top border-warning border-3 py-4">
-                        <h5 class="d-flex align-items-center gap-2 mb-4">
-                            <i class="bi bi-globe2 text-warning"></i>
-                            <span data-it="URL del Sito (SEO)" data-en="Site URL (SEO)">URL del Sito (SEO)</span>
-                            <span class="badge bg-secondary" data-it="Facoltativo" data-en="Optional">Facoltativo</span>
-                        </h5>
-
-                        <div class="alert alert-info small mb-4">
-                            <i class="bi bi-info-circle-fill me-1"></i>
-                            <span
-                              data-it="Se lasci vuoto, l'URL del sito viene rilevato automaticamente. Compila questo campo solo se vuoi forzare un URL pubblico diverso."
-                              data-en="If left empty, the site URL will be detected automatically. Fill in this field only if you want to force a different public URL."
-                            >Se lasci vuoto, l'URL del sito viene rilevato automaticamente. Compila questo campo solo se vuoi forzare un URL pubblico diverso.</span>
-                        </div>
-
-                        <div class="row g-4 mb-0">
-                            <div class="col-md-8">
-                                <label class="form-label">URL <span class="text-muted">(https://)</span></label>
-                                <input
-                                  type="url"
-                                  class="form-control font-monospace border-warning border-2"
-                                  id="site_url"
-                                  name="site_url"
-                                  placeholder="https://www.tuosito.com"
-                                >
-                                <div class="form-text" data-it="URL pubblico completo, senza slash finale. Se lasci vuoto, Star51 proverà a rilevarlo automaticamente. Es: https://www.tuosito.com o https://tuosito.com/star51" data-en="Full public URL, no trailing slash. If left empty, Star51 will try to detect it automatically. E.g.: https://www.example.com or https://example.com/star51">URL pubblico completo, senza slash finale. Se lasci vuoto, Star51 proverà a rilevarlo automaticamente. Es: https://www.tuosito.com o https://tuosito.com/star51</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Install Button -->
-                    <div class="card-body border-top text-center py-4">
-                        <button type="submit" name="install" class="btn btn-primary btn-lg w-100 py-3">
-                            <i class="bi bi-rocket-takeoff-fill"></i>
-                            <span data-it="Installa NovaStar51 Ora!" data-en="Install NovaStar51 Now!">Installa NovaStar51 Ora!</span>
-                        </button>
-                    </div>
-
-                </form>
-
-            <?php endif; ?>
+      .installation-log { font-size: 14px; line-height: 1.6; overflow-wrap: anywhere; }
+      .credentials { margin-block: 24px; padding: 20px; background: rgb(174 202 205 / 15%); border-radius: 6px; overflow-wrap: anywhere; }
+      .credentials code { display: block; margin-top: 12px; font-size: 20px; color: var(--nova-charcoal); }
+      .waiting-layer { position: fixed; inset: 0; z-index: 1100; display: grid; place-items: center; padding: 24px; background: rgb(22 22 22 / 45%); }
+      .waiting-content { width: min(440px, 100%); padding: 32px; background: white; border-radius: 8px; text-align: center; }
+      .waiting-content p { margin-top: 16px; }
+      .server-errors { margin-bottom: 24px; }
+      .server-errors ul { margin: 0; }
+      .check-details { margin-bottom: 20px; font-size: 14px; overflow-wrap: anywhere; }
+      .check-details > summary { min-height: 44px; list-style: none; }
+      .check-details > summary::-webkit-details-marker { display: none; }
+      .check-details[open] > summary .bi-chevron-down { transform: rotate(180deg); }
+      summary { cursor: pointer; }
+      .check-details ul { margin-top: 12px; }
+      .verification-feedback[data-kind="warning"] { background: var(--bs-warning-bg-subtle); color: var(--bs-warning-text-emphasis); }
+    </style>
+  </head>
+  <body>
+    <div class="installer-shell setup-panel">
+      <header class="topbar">
+        <div class="wrap d-flex align-items-center justify-content-between">
+          <div class="brand"><div><strong>Star51</strong><small data-en="Version <?= $escape(STAR51_VERSION) ?>" data-it="Versione <?= $escape(STAR51_VERSION) ?>">Version <?= $escape(STAR51_VERSION) ?></small></div></div>
+          <nav class="langs d-flex" aria-label="Language">
+            <button
+              class="btn"
+              type="button"
+              data-lang="en"
+              aria-pressed="<?= $installer_lang === 'en' ? 'true' : 'false' ?>"
+              title="English"
+              aria-label="English"
+            >EN</button>
+            <button
+              class="btn"
+              type="button"
+              data-lang="it"
+              aria-pressed="<?= $installer_lang === 'it' ? 'true' : 'false' ?>"
+              title="Italiano"
+              aria-label="Italiano"
+            >IT</button>
+          </nav>
         </div>
+      </header>
+      <main class="wrap">
+        <div class="page-title<?= $install_success ? ' py-4' : '' ?>">
+          <div>
+            <?php if ($install_success): ?>
+              <h1 data-en="Installation complete" data-it="Installazione completata">Installation complete</h1>
+            <?php elseif ($installation_locked): ?>
+              <h1 data-en="Installation is locked." data-it="Installazione bloccata.">Installation is locked.</h1>
+              <p
+                class="title-copy muted"
+                data-en="Star51 is already installed."
+                data-it="Star51 e gia installato."
+              >Star51 is already installed.</p>
+            <?php else: ?>
+              <h1 data-en="Install Star51" data-it="Installa Star51">Install Star51</h1>
+              <p
+                class="title-copy muted"
+                data-en="Connect your database and create your administrator account."
+                data-it="Collega il database e crea il tuo account amministratore."
+              >Connect your database and create your administrator account.</p>
+            <?php endif; ?>
+          </div>
+          <a
+            class="guide-link"
+            href="install_guide.html"
+            target="_blank"
+            rel="noopener"
+          ><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i><span data-en="Installation Guide" data-it="Guida di installazione">Installation Guide</span></a>
+        </div>
+        <?php if ($install_success || $installation_locked): ?>
+          <section class="result-screen<?= $install_success ? ' pt-0' : '' ?>">
+            <?php if ($install_success): ?>
+              <p class="check-status is-passed"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><span data-en="Installation completed successfully" data-it="Installazione completata con successo">Installation completed successfully</span></p>
+              <div class="credentials">
+                <dl class="review-list">
+                  <div><dt>Username</dt><dd><?= $escape($admin_username) ?></dd></div>
+                  <div><dt>Email</dt><dd><?= $escape($admin_email) ?></dd></div>
+                </dl>
+                <?php if ($generated_password !== null): ?>
+                  <strong data-en="Secure password generated" data-it="Password sicura generata">Secure password generated</strong>
+                  <code><?= $escape($generated_password) ?></code>
+                  <div
+                    class="alert alert-warning mt-3 mb-0"
+                    id="password-save-warning"
+                    role="alert"
+                  >
+                    <strong class="d-block mb-1"><i class="bi bi-exclamation-triangle me-2" aria-hidden="true"></i><span data-en="Save your password" data-it="Conserva la password">Save your password</span></strong>
+                    <span
+                      data-en="Save it before continuing to the administration area. It will not be shown again."
+                      data-it="Conservala prima di proseguire nell'amministrazione. Non verra mostrata nuovamente."
+                    >Save it before continuing to the administration area. It will not be shown again.</span>
+                  </div>
+                <?php else: ?>
+                  <p data-en="Use the password you chose during installation." data-it="Usa la password che hai scelto durante l'installazione.">Use the password you chose during installation.</p>
+                <?php endif; ?>
+              </div>
+              <details class="check-details mb-4" id="installation-details">
+                <summary class="d-flex align-items-center justify-content-between gap-2 fs-6 fw-semibold py-2 px-3 rounded bg-body-tertiary">
+                  <span data-en="Installation log" data-it="Registro installazione">Installation log</span>
+                  <i class="bi bi-chevron-down" aria-hidden="true"></i>
+                </summary>
+                <div class="pt-3">
+                  <ul class="installation-log mb-0">
+                    <?php foreach ($install_log_en as $index => $entry): ?>
+                      <?php $log_state = $install_log_states[$index] ?? 'info'; ?>
+                      <li
+                        class="<?= $requirement_colors[$log_state] ?? '' ?>"
+                        data-log-state="<?= $escape($log_state) ?>"
+                        data-en="<?= $escape($entry) ?>"
+                        data-it="<?= $escape($install_log_it[$index]) ?>"
+                      ><?= $escape($entry) ?></li>
+                    <?php endforeach; ?>
+                  </ul>
+                </div>
+              </details>
+            <?php endif; ?>
+            <div
+              class="alert alert-warning mb-4"
+              id="installation-removal-warning"
+              role="alert"
+            >
+              <strong class="d-block mb-2"><i class="bi bi-exclamation-triangle me-2" aria-hidden="true"></i><span data-en="Remove installation files" data-it="Rimuovi i file di installazione">Remove installation files</span></strong>
+              <p class="mb-2">
+                <span data-en="From Nova:" data-it="Da Nova:">From Nova:</span>
+                <span data-en="Nova Admin &gt; System Configuration &gt; Installation File Removal" data-it="Nova Admin &gt; Configurazione di Sistema &gt; Rimozione file di installazione">Nova Admin &gt; System Configuration &gt; Installation File Removal</span>.
+              </p>
+              <p>
+                <span data-en="Alternatively, delete the entire" data-it="In alternativa, elimina l'intera cartella">Alternatively, delete the entire</span>
+                <code>/install/</code>
+                <span data-en="folder using FTP or your server file manager." data-it="tramite FTP o il file manager del server.">folder using FTP or your server file manager.</span>
+              </p>
+            </div>
+            <a
+              class="btn btn-primary w-100 fw-semibold"
+              href="<?= $escape($config['paths']['nova_login']) ?>"
+            ><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i><span data-en="Administration area" data-it="Area di amministrazione">Administration area</span></a>
+          </section>
+        <?php else: ?>
+          <?php if ($form_errors): ?>
+            <div
+              class="verification-feedback server-errors"
+              data-kind="error"
+              role="alert"
+              tabindex="-1"
+              id="server-errors"
+            >
+              <ul>
+                <?php foreach ($form_errors as $error): ?>
+                  <li><?= $escape($error) ?></li>
+                <?php endforeach; ?>
+              </ul>
+            </div>
+          <?php endif; ?>
+          <section class="requirements-panel" aria-labelledby="requirements-heading">
+            <h2
+              id="requirements-heading"
+              data-en="1. System requirements"
+              data-it="1. Requisiti di sistema"
+            >1. System requirements</h2>
+            <p
+              class="hint mt-3 mb-4"
+              id="minimum-requirements"
+              data-en="Requires PHP <?= $escape($config['requirements']['php_min']) ?> or later, MySQL <?= $escape($config['db']['min_version']) ?> or later, the PHP extensions listed in the details, and writable working folders."
+              data-it="Richiede PHP <?= $escape($config['requirements']['php_min']) ?> o superiore, MySQL <?= $escape($config['db']['min_version']) ?> o superiore, le estensioni PHP indicate nei dettagli e le cartelle di lavoro scrivibili."
+            >Requires PHP <?= $escape($config['requirements']['php_min']) ?> or later, MySQL <?= $escape($config['db']['min_version']) ?> or later, the PHP extensions listed in the details, and writable working folders.</p>
+            <details
+              class="check-details"
+              id="requirements-details"
+              <?= $requirements_have_issues ? 'open' : '' ?>
+            >
+              <summary class="d-flex align-items-center justify-content-between gap-2 fw-semibold py-2 px-3 rounded bg-body-tertiary">
+                <span data-en="Check details" data-it="Dettagli dei controlli">Check details</span>
+                <i class="bi bi-chevron-down" aria-hidden="true"></i>
+              </summary>
+              <ul class="list-unstyled mb-0">
+                <?php foreach ($requirement_rows as $requirement): ?>
+                  <li
+                    class="d-flex align-items-start gap-2 py-2 <?= $requirement_colors[$requirement['state']] ?>"
+                    data-check-kind="<?= $escape($requirement['kind']) ?>"
+                    data-check-name="<?= $escape($requirement['name']) ?>"
+                    data-check-state="<?= $requirement['state'] ?>"
+                  >
+                    <i class="bi <?= $requirement_icons[$requirement['state']] ?>" aria-hidden="true"></i>
+                    <span>
+                      <strong class="fw-semibold"><?= $escape($requirement['label']) ?></strong>:
+                      <span data-en="<?= $escape($requirement['en']) ?>" data-it="<?= $escape($requirement['it']) ?>"><?= $escape($requirement['en']) ?></span>
+                    </span>
+                  </li>
+                <?php endforeach; ?>
+                <li
+                  class="d-flex align-items-start gap-2 py-2 <?= $requirement_colors[$mysql_initial_state] ?>"
+                  id="mysql-check-detail"
+                  data-check-state="<?= $mysql_initial_state ?>"
+                  data-driver-available="<?= $system['mysql_available'] ? 'true' : 'false' ?>"
+                  data-required-version="<?= $escape($config['db']['min_version']) ?>"
+                >
+                  <i class="bi <?= $requirement_icons[$mysql_initial_state] ?>" aria-hidden="true"></i>
+                  <span>
+                    <strong class="fw-semibold">MySQL</strong>:
+                    <span
+                      id="mysql-detail-status"
+                      data-en="<?= $system['mysql_available'] ? 'Version to verify at step 2' : 'Required mysqli extension missing' ?>"
+                      data-it="<?= $system['mysql_available'] ? 'Versione da verificare al punto 2' : 'Estensione mysqli richiesta assente' ?>"
+                    ><?= $system['mysql_available'] ? 'Version to verify at step 2' : 'Required mysqli extension missing' ?></span>
+                  </span>
+                </li>
+              </ul>
+            </details>
+            <p class="check-status <?= $critical_requirements_ok ? 'is-passed' : 'text-danger' ?>" role="status">
+              <i class="bi <?= $critical_requirements_ok ? 'bi-check-circle-fill' : 'bi-exclamation-triangle' ?>" aria-hidden="true"></i>
+              <span data-en="<?= $critical_requirements_ok ? 'Preliminary checks passed' : 'Fix the failed requirements before continuing' ?>" data-it="<?= $critical_requirements_ok ? 'Controlli preliminari superati' : 'Correggi i requisiti non superati prima di continuare' ?>"><?= $critical_requirements_ok ? 'Preliminary checks passed' : 'Fix the failed requirements before continuing' ?></span>
+            </p>
+            <?php if ($requirements_have_warnings): ?>
+              <p
+                class="alert alert-warning mt-3"
+                data-en="Review the failed checks above. The installer will try to create missing upload folders and set writable permissions; optional extensions may still need enabling on your server."
+                data-it="Controlla le verifiche non superate. L'installer tentera di creare le cartelle upload mancanti e impostare i permessi; potresti dover abilitare altre estensioni sul server."
+              >Review the failed checks above. The installer will try to create missing upload folders and set writable permissions; optional extensions may still need enabling on your server.</p>
+            <?php endif; ?>
+          </section>
+          <form
+            id="setup-form"
+            method="post"
+            autocomplete="off"
+            data-requirements-ok="<?= $critical_requirements_ok ? 'true' : 'false' ?>"
+            data-password-length="<?= (int)$config['password']['generated_length'] ?>"
+          >
+            <input
+              type="hidden"
+              name="install"
+              value="1"
+            >
+            <input
+              type="hidden"
+              name="installer_lang"
+              value="<?= $installer_lang ?>"
+            >
+            <noscript><p
+              class="notice mb-4"
+              data-en="JavaScript is disabled. Complete the fields and submit the form; the server will validate your settings."
+              data-it="JavaScript non e attivo. Compila i campi e invia il modulo: il server verifichera le impostazioni."
+            >JavaScript is disabled. Complete the fields and submit the form; the server will validate your settings.</p></noscript>
+            <section class="form-section" aria-labelledby="database-heading">
+              <div class="section-copy">
+                <h2 class="section-heading d-flex align-items-center gap-2" id="database-heading"><i class="bi bi-database" aria-hidden="true"></i><span data-en="Database" data-it="Database">Database</span></h2>
+                <p data-en="Connect Star51 to your database." data-it="Collega Star51 al tuo database.">Connect Star51 to your database.</p>
+                <button
+                  class="btn btn-primary step-continue"
+                  type="button"
+                  id="requirements-continue"
+                  title="Continue to database"
+                  <?= $critical_requirements_ok ? '' : 'disabled' ?>
+                  hidden
+                ><i class="bi bi-arrow-down" aria-hidden="true"></i><span class="visually-hidden" data-en="Continue to database" data-it="Continua al database">Continue to database</span></button>
+              </div>
+              <div class="fields d-grid">
+                <div class="field">
+                  <label for="db_host"><span data-en="Database host" data-it="Host del database">Database host</span> <span class="required">*</span></label
+                  ><input
+                    class="form-control"
+                    id="db_host"
+                    name="db_host"
+                    value="<?= $form_value('db_host') ?>"
+                    required
+                    spellcheck="false"
+                    aria-describedby="host-hint"
+                  />
+                  <p
+                    class="hint"
+                    id="host-hint"
+                    data-en="Usually localhost or 127.0.0.1."
+                    data-it="Di solito localhost o 127.0.0.1."
+                  >Usually localhost or 127.0.0.1.</p>
+                </div>
+                <div class="field">
+                  <label for="db_name"><span data-en="Database name" data-it="Nome del database">Database name</span> <span class="required">*</span></label
+                  ><input
+                    class="form-control"
+                    id="db_name"
+                    name="db_name"
+                    value="<?= $form_value('db_name') ?>"
+                    required
+                    spellcheck="false"
+                    aria-describedby="database-hint"
+                  />
+                  <p
+                    class="hint"
+                    id="database-hint"
+                  >
+                    <span data-en="Create it first, for example in phpMyAdmin." data-it="Crealo prima, ad esempio con phpMyAdmin.">Create it first, for example in phpMyAdmin.</span>
+                    <span class="d-block">Collation: <code>utf8mb4_unicode_ci</code></span>
+                  </p>
+                </div>
+                <div class="field">
+                  <label for="db_user"><span data-en="Database username" data-it="Utente del database">Database username</span> <span class="required">*</span></label
+                  ><input
+                    class="form-control"
+                    id="db_user"
+                    name="db_user"
+                    value="<?= $form_value('db_user') ?>"
+                    required
+                    spellcheck="false"
+                  />
+                </div>
+                <div class="field">
+                  <label
+                    for="db_pass"
+                    data-en="Database password"
+                    data-it="Password del database"
+                  >Database password</label>
+                  <div class="password-input">
+                    <input
+                      class="form-control"
+                      id="db_pass"
+                      name="db_pass"
+                      type="password"
+                      autocomplete="new-password"
+                    /><button
+                      class="eye btn btn-light"
+                      type="button"
+                      data-toggle="db_pass"
+                      aria-label="Show password"
+                      title="Show password"
+                    ><i class="bi bi-eye" aria-hidden="true"></i></button>
+                  </div>
+                  <p
+                    class="hint"
+                    data-en="May be empty on a local development server."
+                    data-it="Puo essere vuota su un server di sviluppo locale."
+                  >May be empty on a local development server.</p>
+                </div>
+                <div class="full action-row">
+                  <button
+                    type="button"
+                    class="btn btn-primary w-100 fw-semibold"
+                    id="test-db"
+                    hidden
+                  ><i class="bi bi-plug" aria-hidden="true"></i><span data-en="Test connection" data-it="Verifica connessione">Test connection</span></button><span
+                    class="check-status"
+                    id="db-status"
+                    role="status"
+                    hidden
+                    data-en="Not tested"
+                    data-it="Non verificata"
+                  >Not tested</span>
+                </div>
+              </div>
+            </section>
+            <section class="form-section" aria-labelledby="account-heading">
+              <div class="section-copy">
+                <h2 class="section-heading d-flex align-items-center gap-2" id="account-heading"><i class="bi bi-person-gear" aria-hidden="true"></i><span data-en="Super Admin" data-it="Super Admin">Super Admin</span></h2>
+                <p data-en="Create your administrator account." data-it="Crea il tuo account amministratore.">Create your administrator account.</p>
+              </div>
+              <div class="fields d-grid">
+                <div class="field">
+                  <label for="admin_first"><span data-en="First name" data-it="Nome">First name</span> <span class="required">*</span></label
+                  ><input
+                    class="form-control"
+                    id="admin_first"
+                    name="admin_first"
+                    value="<?= $form_value('admin_first') ?>"
+                    required
+                    autocomplete="given-name"
+                  />
+                </div>
+                <div class="field">
+                  <label for="admin_last"><span data-en="Last name" data-it="Cognome">Last name</span> <span class="required">*</span></label
+                  ><input
+                    class="form-control"
+                    id="admin_last"
+                    name="admin_last"
+                    value="<?= $form_value('admin_last') ?>"
+                    required
+                    autocomplete="family-name"
+                  />
+                </div>
+                <div class="field">
+                  <label for="admin_email">Email <span class="required">*</span></label
+                  ><input
+                    class="form-control"
+                    id="admin_email"
+                    name="admin_email"
+                    value="<?= $form_value('admin_email') ?>"
+                    type="email"
+                    required
+                    autocomplete="email"
+                    spellcheck="false"
+                  />
+                  <p
+                    class="hint"
+                    data-en="Used for account communications and password recovery."
+                    data-it="Per comunicazioni dell'account e recupero password."
+                  >Used for account communications and password recovery.</p>
+                </div>
+                <div class="field">
+                  <label for="admin_username">Username <span class="required">*</span></label
+                  ><input
+                    class="form-control"
+                    id="admin_username"
+                    name="admin_username"
+                    value="<?= $form_value('admin_username') ?>"
+                    required
+                    autocomplete="username"
+                    pattern="[A-Za-z0-9_]+"
+                    aria-describedby="username-hint"
+                  />
+                  <p
+                    class="hint"
+                    id="username-hint"
+                    data-en="Letters, numbers and underscores."
+                    data-it="Lettere, numeri e trattino basso."
+                  >Letters, numbers and underscores.</p>
+                </div>
+                <fieldset class="full border-0 p-0 m-0">
+                  <legend
+                    class="fs-6 fw-semibold mb-2"
+                    data-en="Administrator password"
+                    data-it="Password amministratore"
+                  >Administrator password</legend>
+                  <div class="password-options d-grid">
+                    <label class="option"><input
+                      class="form-check-input"
+                      type="radio"
+                      name="password_mode"
+                      value="generated"
+                      <?= $selected_password_mode === 'generated' ? 'checked' : '' ?>
+                    /><span data-en="Generate a password" data-it="Genera una password">Generate a password</span></label
+                    ><label class="option"><input
+                      class="form-check-input"
+                      type="radio"
+                      name="password_mode"
+                      value="custom"
+                      <?= $selected_password_mode === 'custom' ? 'checked' : '' ?>
+                    /><span data-en="Use my password" data-it="Usa la mia password">Use my password</span></label>
+                  </div>
+                </fieldset>
+                <div class="notice full" id="generated-note">
+                  <i class="bi bi-shield-check" aria-hidden="true"></i><span data-en="A secure <?= (int)$config['password']['generated_length'] ?>-character password will be generated during installation and shown at the end." data-it="Una password sicura di <?= (int)$config['password']['generated_length'] ?> caratteri verra generata durante l'installazione e mostrata alla fine.">A secure <?= (int)$config['password']['generated_length'] ?>-character password will be generated during installation and shown at the end.</span>
+                </div>
+                <div class="field personal-password">
+                  <label
+                    for="admin_password"
+                    data-en="Password"
+                    data-it="Password"
+                  >Password</label>
+                  <div class="password-input">
+                    <input
+                      class="form-control"
+                      id="admin_password"
+                      name="admin_password"
+                      type="password"
+                      minlength="<?= (int)$config['password']['min_length'] ?>"
+                      autocomplete="new-password"
+                    /><button
+                      class="eye btn btn-light"
+                      type="button"
+                      data-toggle="admin_password"
+                      aria-label="Show password"
+                      title="Show password"
+                    ><i class="bi bi-eye" aria-hidden="true"></i></button>
+                  </div>
+                  <p
+                    class="hint"
+                    data-en="At least <?= (int)$config['password']['min_length'] ?> characters."
+                    data-it="Almeno <?= (int)$config['password']['min_length'] ?> caratteri."
+                  >At least <?= (int)$config['password']['min_length'] ?> characters.</p>
+                </div>
+                <div class="field personal-password"><label
+                  for="admin_password_confirm"
+                  data-en="Confirm password"
+                  data-it="Conferma password"
+                >Confirm password</label>
+                  <div class="password-input">
+                    <input
+                      class="form-control"
+                      id="admin_password_confirm"
+                      name="admin_password_confirm"
+                      type="password"
+                      minlength="<?= (int)$config['password']['min_length'] ?>"
+                      autocomplete="new-password"
+                    /><button
+                      class="eye btn btn-light"
+                      type="button"
+                      data-toggle="admin_password_confirm"
+                      aria-label="Show password"
+                      title="Show password"
+                    ><i class="bi bi-eye" aria-hidden="true"></i></button>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section class="form-section" aria-labelledby="email-heading">
+              <div class="section-copy">
+                <h2 class="section-heading d-flex align-items-center gap-2" id="email-heading"><i class="bi bi-envelope" aria-hidden="true"></i><span data-en="Email" data-it="Email">Email</span><span
+                  class="optional"
+                  data-en="Optional"
+                  data-it="Facoltativo"
+                >Optional</span></h2>
+                <p data-en="Configure outgoing password recovery and contact emails." data-it="Configura l'invio delle email di recupero password e contatto.">Configure outgoing password recovery and contact emails.</p>
+              </div>
+              <div>
+                <div class="switch-row form-switch">
+                  <label class="switch-label"><input
+                    class="form-check-input"
+                    id="smtp-toggle"
+                    name="smtp_enabled"
+                    value="1"
+                    type="checkbox"
+                    <?= !empty($form_data['smtp_enabled']) ? 'checked' : '' ?>
+                    role="switch"
+                    aria-controls="smtp-content"
+                  /><span data-en="Set up Gmail SMTP" data-it="Configura Gmail SMTP">Set up Gmail SMTP</span></label>
+                </div>
+                <div
+                  class="smtp-off alert alert-warning"
+                  id="smtp-off"
+                >
+                  <strong class="d-block mb-2" data-en="Without Gmail SMTP" data-it="Senza Gmail SMTP">Without Gmail SMTP</strong>
+                  <ul class="mb-0 ps-3">
+                    <li data-en="Password recovery depends on your server's mail delivery." data-it="Il recupero password dipende dal servizio email del server.">Password recovery depends on your server's mail delivery.</li>
+                    <li data-en="Contact confirmation emails depend on your server's mail delivery." data-it="Le conferme di contatto dipendono dal servizio email del server.">Contact confirmation emails depend on your server's mail delivery.</li>
+                  </ul>
+                </div>
+                <div class="smtp-content fields d-grid" id="smtp-content">
+                  <div class="field"><label
+                    for="gmail_email"
+                    data-en="Gmail address"
+                    data-it="Indirizzo Gmail"
+                  >Gmail address</label><input
+                    class="form-control"
+                    id="gmail_email"
+                    name="gmail_email"
+                    value="<?= $form_value('gmail_email') ?>"
+                    type="email"
+                    autocomplete="off"
+                  /></div>
+                  <div class="field">
+                    <label
+                      for="gmail_app_password"
+                      data-en="Gmail app password"
+                      data-it="Password per app Gmail"
+                    >Gmail app password</label>
+                    <div class="password-input">
+                      <input
+                        class="form-control"
+                        id="gmail_app_password"
+                        name="gmail_app_password"
+                        type="password"
+                        autocomplete="new-password"
+                      /><button
+                        class="eye btn btn-light"
+                        type="button"
+                        data-toggle="gmail_app_password"
+                        aria-label="Show password"
+                        title="Show password"
+                      ><i class="bi bi-eye" aria-hidden="true"></i></button>
+                    </div>
+                    <p class="hint"><span data-en="16 characters. " data-it="16 caratteri. ">16 characters. </span><a
+                      href="https://support.google.com/accounts/answer/185833"
+                      target="_blank"
+                      rel="noopener"
+                    ><i class="bi bi-box-arrow-up-right me-1" aria-hidden="true"></i><span data-en="Create an app password" data-it="Crea una password per app">Create an app password</span></a></p>
+                  </div>
 
-        <footer class="text-center text-muted">
-            NovaStar51 Express Install
+                </div>
+              </div>
+            </section>
+            <section class="form-section" aria-labelledby="site-heading">
+              <div class="section-copy">
+                <h2 class="section-heading d-flex align-items-center gap-2" id="site-heading"><i class="bi bi-globe2" aria-hidden="true"></i><span data-en="Site address" data-it="Indirizzo del sito">Site address</span></h2>
+                <p data-en="Enter your site's URL to generate sitemap.xml and robots.txt." data-it="Indica l'URL del sito per generare sitemap.xml e robots.txt.">Enter your site's URL to generate sitemap.xml and robots.txt.</p>
+              </div>
+              <div class="fields d-grid">
+                <div class="full">
+                  <label for="site_url"><span data-en="Public URL" data-it="URL pubblico">Public URL</span> <span
+                    class="optional"
+                    data-en="Optional"
+                    data-it="Facoltativo"
+                  >Optional</span></label
+                  ><input
+                    class="form-control"
+                    id="site_url"
+                    name="site_url"
+                    value="<?= $form_value('site_url') ?>"
+                    type="url"
+                    spellcheck="false"
+                  />
+                  <p
+                    class="hint"
+                    data-en="Leave empty to detect it automatically. Include the port and subfolder, if present."
+                    data-it="Lascia vuoto per rilevarlo automaticamente. Includi porta e sottocartella, se presenti."
+                  >Leave empty to detect it automatically. Include the port and subfolder, if present.</p>
+                </div>
+              </div>
+            </section>
+            <div class="install-footer">
+              <p><span class="required">*</span> <span data-en="Required fields. Review your settings before installation." data-it="Campi obbligatori. Verifica le impostazioni prima dell'installazione.">Required fields. Review your settings before installation.</span></p>
+              <p data-en="Installation will create the Star51 tables and save your configuration." data-it="L'installazione creera le tabelle Star51 e salvera la configurazione.">Installation will create the Star51 tables and save your configuration.</p>
+              <button
+                type="submit"
+                class="btn btn-primary w-100 fw-semibold"
+                id="install-submit"
+              ><i class="bi bi-play me-1" aria-hidden="true"></i><span data-en="Install Star51" data-it="Installa Star51">Install Star51</span></button>
+            </div>
+          </form>
+
+        <?php endif; ?>
+        <footer class="bottom d-flex align-items-start justify-content-between">
+          <span>Star51 <?= $escape(STAR51_VERSION) ?></span>
+          <a
+            href="install_guide.html"
+            target="_blank"
+            rel="noopener"
+          ><i class="bi bi-box-arrow-up-right me-1" aria-hidden="true"></i><span data-en="Installation Guide" data-it="Guida di installazione">Installation Guide</span></a>
         </footer>
+      </main>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <div
+      class="waiting-layer"
+      id="install-waiting"
+      role="status"
+      aria-live="polite"
+      hidden
+    >
+      <div class="waiting-content">
+        <div class="spinner-border" aria-hidden="true"></div>
+        <p data-en="Installation in progress. Keep this page open and wait for the result." data-it="Installazione in corso. Mantieni aperta questa pagina e attendi il risultato.">Installation in progress. Keep this page open and wait for the result.</p>
+      </div>
+    </div>
+
     <script>
-        // Language Toggle
-        let currentLang = 'en';
-
-        function setLang(lang) {
-            currentLang = lang;
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                const isActive = (lang === 'it' && btn.textContent === 'IT') || (lang === 'en' && btn.textContent === 'EN');
-                btn.classList.toggle('active', isActive);
-                btn.classList.toggle('btn-primary', isActive);
-                btn.classList.toggle('btn-outline-primary', !isActive);
-                btn.classList.toggle('bg-white', !isActive);
-            });
-            document.querySelectorAll('[data-' + lang + ']').forEach(el => {
-                el.textContent = el.getAttribute('data-' + lang);
-            });
-        }
-        setLang('en');
-
-        // Helper: Get localized message from response
-        function getLocalizedMessage(data) {
-            if (data.message_it && data.message_en) {
-                return currentLang === 'it' ? data.message_it : data.message_en;
-            }
-            return data.message || 'Unknown error';
-        }
-
-        // Test Database Connection
-        const btnTestDb = document.getElementById('btn-test-db');
-        if (btnTestDb) {
-            btnTestDb.addEventListener('click', function() {
-                const btn = this;
-                const resultEl = document.getElementById('db-result');
-
-                const dbHost = document.getElementById('db_host').value;
-                const dbName = document.getElementById('db_name').value;
-                const dbUser = document.getElementById('db_user').value;
-                const dbPass = document.getElementById('db_pass').value;
-
-                if (!dbHost || !dbName || !dbUser) {
-                    resultEl.textContent = currentLang === 'it' ? 'Compila i campi database' : 'Fill in database fields';
-                    resultEl.className = 'alert alert-warning mt-3 mb-0 small';
-                    resultEl.style.display = 'block';
-                    return;
-                }
-
-                btn.disabled = true;
-                btn.innerHTML = '<i class="bi bi-hourglass-split"></i> ' + (currentLang === 'it' ? 'Test in corso...' : 'Testing...');
-
-                fetch('index.php', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                    body: 'action=test_db&db_host=' + encodeURIComponent(dbHost) +
-                          '&db_name=' + encodeURIComponent(dbName) +
-                          '&db_user=' + encodeURIComponent(dbUser) +
-                          '&db_pass=' + encodeURIComponent(dbPass)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    resultEl.textContent = getLocalizedMessage(data);
-                    if (data.success) {
-                        resultEl.className = data.warning ? 'alert alert-warning mt-3 mb-0 small' : 'alert alert-success mt-3 mb-0 small';
-                    } else {
-                        resultEl.className = 'alert alert-danger mt-3 mb-0 small';
-                    }
-                    resultEl.style.display = 'block';
-
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="bi bi-plug-fill"></i> ' + (currentLang === 'it' ? 'Testa Connessione' : 'Test Connection');
-                })
-                .catch(error => {
-                    resultEl.textContent = 'Error: ' + error.message;
-                    resultEl.className = 'alert alert-danger mt-3 mb-0 small';
-                    resultEl.style.display = 'block';
-
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="bi bi-plug-fill"></i> ' + (currentLang === 'it' ? 'Testa Connessione' : 'Test Connection');
+      (() => {
+        function installerDraft(form, storage, key, restore = true) {
+          // Only these non-secret fields may be stored, regardless of input type.
+          const names = ['db_host', 'db_name', 'db_user', 'admin_first', 'admin_last',
+            'admin_email', 'admin_username', 'gmail_email', 'site_url', 'installer_lang'];
+          const restoredFields = [];
+          if (!form) {
+            try { if (storage) storage.removeItem(key); } catch (_) {}
+            return;
+          }
+          if (restore) {
+            try {
+              const draft = JSON.parse(storage.getItem(key));
+              if (draft && draft.version === 1 && draft.fields) {
+                names.forEach(name => {
+                  const value = draft.fields[name];
+                  if (typeof value === 'string' && value.length <= 2048) {
+                    form.elements[name].value = value;
+                    if (value.trim() !== '') restoredFields.push(name);
+                  }
                 });
-            });
+                if (['generate', 'custom'].includes(draft.fields.password_mode)) {
+                  form.elements.password_mode.value = draft.fields.password_mode;
+                  if (draft.fields.password_mode === 'custom') restoredFields.push('password_mode');
+                }
+                if (typeof draft.fields.smtp_enabled === 'boolean') {
+                  form.elements.smtp_enabled.checked = draft.fields.smtp_enabled;
+                  if (draft.fields.smtp_enabled) restoredFields.push('smtp_enabled');
+                }
+              }
+            } catch (_) {}
+          }
+          return {
+            restoredFields,
+            save() {
+              try {
+                const fields = {};
+                names.forEach(name => { fields[name] = form.elements[name].value; });
+                fields.password_mode = form.elements.password_mode.value;
+                fields.smtp_enabled = form.elements.smtp_enabled.checked;
+                storage.setItem(key, JSON.stringify({ version: 1, fields }));
+              } catch (_) {}
+            },
+          };
         }
-
-        // Test SMTP Connection
-        const btnTestSmtp = document.getElementById('btn-test-smtp');
-        if (btnTestSmtp) {
-            const checkHost = document.getElementById('smtp-check-host');
-            const checkPort = document.getElementById('smtp-check-port');
-            const smtpError = document.getElementById('smtp-error');
-
-            function setSmtpBadges(status) {
-                const cls = status === 'success' ? 'badge rounded-pill bg-success text-white' : 'badge rounded-pill border text-muted bg-transparent';
-                checkHost.className = cls;
-                checkPort.className = cls;
-            }
-
-            const smtpBtnLabel = {
-                it: 'Testa Connessione SMTP',
-                en: 'Test SMTP Connection'
-            };
-            const smtpBtnLoading = {
-                it: 'Test in corso...',
-                en: 'Testing...'
-            };
-
-            btnTestSmtp.addEventListener('click', function() {
-                const btn = this;
-
-                const gmailEmail = document.getElementById('gmail_email').value;
-                const gmailAppPass = document.getElementById('gmail_app_password').value;
-
-                if (!gmailEmail || !gmailAppPass) {
-                    smtpError.textContent = currentLang === 'it' ? 'Compila i campi Gmail' : 'Fill in Gmail fields';
-                    smtpError.style.display = 'block';
-                    setSmtpBadges('error');
-                    return;
-                }
-
-                smtpError.style.display = 'none';
-                setSmtpBadges('secondary');
-                btn.disabled = true;
-                btn.querySelector('i').className = 'bi bi-hourglass-split';
-                btn.querySelector('span').textContent = smtpBtnLoading[currentLang];
-
-                fetch('index.php', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                    body: 'action=test_smtp&gmail_email=' + encodeURIComponent(gmailEmail) +
-                          '&gmail_app_password=' + encodeURIComponent(gmailAppPass)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        setSmtpBadges('success');
-                        smtpError.style.display = 'none';
-                    } else {
-                        setSmtpBadges('error');
-                        smtpError.textContent = getLocalizedMessage(data);
-                        smtpError.style.display = 'block';
-                    }
-
-                    btn.disabled = false;
-                    btn.querySelector('i').className = 'bi bi-send-fill';
-                    btn.querySelector('span').textContent = smtpBtnLabel[currentLang];
-                })
-                .catch(error => {
-                    setSmtpBadges('error');
-                    smtpError.textContent = 'Error: ' + error.message;
-                    smtpError.style.display = 'block';
-
-                    btn.disabled = false;
-                    btn.querySelector('i').className = 'bi bi-send-fill';
-                    btn.querySelector('span').textContent = smtpBtnLabel[currentLang];
-                });
-            });
+        // End installer draft helper.
+        let language = document.documentElement.lang === 'it' ? 'it' : 'en';
+        const form = document.querySelector('#setup-form');
+        let draftStorage = null;
+        try { draftStorage = window.sessionStorage; } catch (_) {}
+        const draft = installerDraft(form, draftStorage, 'star51:installer-draft:v1:' + window.location.pathname,
+          <?= ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' ? 'false' : 'true' ?>);
+        if (form && ['en', 'it'].includes(form.elements.installer_lang.value)) {
+          language = form.elements.installer_lang.value;
         }
-
-        // Form Validation
-        const setupForm = document.getElementById('setup-form');
-        if (setupForm) {
-            setupForm.addEventListener('submit', function(e) {
-                const pass = document.getElementById('admin_password').value;
-                const passConfirm = document.getElementById('admin_password_confirm').value;
-
-                if (pass !== passConfirm) {
-                    e.preventDefault();
-                    alert(currentLang === 'it' ? 'Le password non corrispondono!' : 'Passwords do not match!');
-                    return false;
-                }
-
-                const confirmMsg = currentLang === 'it'
-                    ? 'Pronto per installare NovaStar51?\n\nVerranno create le tabelle database e configurato il sistema.'
-                    : 'Ready to install NovaStar51?\n\nThis will create database tables and configure the system.';
-
-                if (!confirm(confirmMsg)) {
-                    e.preventDefault();
-                    return false;
-                }
-            });
+        const text = (en, it) => language === 'en' ? en : it;
+        const translated = (element, en, it) => {
+          element.dataset.en = en;
+          element.dataset.it = it;
+          element.textContent = text(en, it);
+        };
+        let refreshSteps = () => {};
+        function updateEye(button) {
+          const visible = document.getElementById(button.dataset.toggle).type === 'text';
+          const label = visible ? text('Hide password', 'Nascondi password') : text('Show password', 'Mostra password');
+          button.setAttribute('aria-label', label);
+          button.title = label;
+          button.querySelector('i').className = visible ? 'bi bi-eye-slash' : 'bi bi-eye';
         }
-
-        // Input border color: yellow (empty) -> green (filled)
-        document.querySelectorAll('.border-warning').forEach(input => {
-            input.addEventListener('input', function() {
-                if (this.value.trim()) {
-                    this.classList.remove('border-warning');
-                    this.classList.add('border-success');
-                } else {
-                    this.classList.remove('border-success');
-                    this.classList.add('border-warning');
-                }
-            });
+        function setLanguage(lang) {
+          language = lang;
+          document.documentElement.lang = lang;
+          document.querySelectorAll('[data-en]').forEach(element => {
+            element.textContent = element.dataset[lang];
+          });
+          document.querySelectorAll('[data-lang]').forEach(button => {
+            button.setAttribute('aria-pressed', String(button.dataset.lang === lang));
+          });
+          document.querySelector('.langs').setAttribute('aria-label', text('Language', 'Lingua'));
+          document.querySelectorAll('[data-toggle]').forEach(updateEye);
+          if (form) form.elements.installer_lang.value = lang;
+          refreshSteps();
+        }
+        document.querySelectorAll('[data-lang]').forEach(button => {
+          button.addEventListener('click', () => setLanguage(button.dataset.lang));
+        });
+        document.querySelectorAll('[data-toggle]').forEach(button => {
+          button.addEventListener('click', () => {
+            const input = document.getElementById(button.dataset.toggle);
+            input.type = input.type === 'password' ? 'text' : 'password';
+            updateEye(button);
+          });
+        });
+        setLanguage(language);
+        if (!form) return;
+        form.addEventListener('input', () => draft.save());
+        form.addEventListener('change', () => draft.save());
+        document.querySelectorAll('[data-lang]').forEach(button => {
+          button.addEventListener('click', () => draft.save());
         });
 
-        // Password Show/Hide Toggle
-        document.querySelectorAll('.toggle-password').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const targetId = this.getAttribute('data-target');
-                const input = document.getElementById(targetId);
-                const icon = this.querySelector('i');
+        // JavaScript enhances an ordinary POST form; the server remains authoritative.
+        form.noValidate = true;
+        const value = id => document.getElementById(id).value;
+        const smtpEnabled = () => document.querySelector('#smtp-toggle').checked;
+        const customPassword = () => form.querySelector('[name="password_mode"]:checked').value === 'custom';
+        const generatedLength = Number(form.dataset.passwordLength);
+        const sections = Array.from(form.querySelectorAll('.form-section'));
+        const completed = [false, false, false];
+        const revisions = [0, 0, 0, 0];
+        const pending = [false, false, false];
+        const remoteMessages = [null, null, null];
+        const controls = [];
+        const states = [];
+        const recaps = [];
+        const edits = [];
+        const draftNotices = [];
+        const draftSectionFields = [
+          ['db_host', 'db_name', 'db_user'],
+          ['admin_first', 'admin_last', 'admin_email', 'admin_username', 'password_mode'],
+          ['gmail_email', 'smtp_enabled'],
+          ['site_url'],
+        ];
+        let requirementsDone = false;
+        let installing = false;
+        const requirementsAction = document.querySelector('#requirements-continue');
+        requirementsAction.hidden = false;
+        const footer = form.querySelector('.install-footer');
 
-                if (input.type === 'password') {
-                    input.type = 'text';
-                    icon.classList.remove('bi-eye-slash');
-                    icon.classList.add('bi-eye');
-                } else {
-                    input.type = 'password';
-                    icon.classList.remove('bi-eye');
-                    icon.classList.add('bi-eye-slash');
-                }
-            });
+        sections.forEach((section, index) => {
+          const body = section.lastElementChild;
+          const fieldset = document.createElement('fieldset');
+          fieldset.className = 'section-controls';
+          fieldset.setAttribute('aria-labelledby', section.querySelector('h2').id);
+          body.before(fieldset);
+          fieldset.append(body);
+          controls.push(fieldset);
+          const copy = section.querySelector('.section-copy');
+          const number = document.createElement('span');
+          number.textContent = (index + 2) + '. ';
+          section.querySelector('h2').prepend(number);
+          const state = document.createElement('p');
+          state.className = 'section-state';
+          state.setAttribute('role', 'status');
+          copy.append(state);
+          states.push(state);
+          const draftNotice = document.createElement('p');
+          draftNotice.className = 'draft-notice';
+          draftNotice.hidden = true;
+          copy.append(draftNotice);
+          draftNotices.push(draftNotice);
+          const recap = document.createElement('dl');
+          recap.className = 'step-recap';
+          copy.append(recap);
+          recaps.push(recap);
+          const edit = document.createElement('button');
+          edit.type = 'button';
+          edit.className = 'step-edit btn';
+          edit.innerHTML = '<i class="bi bi-pencil" aria-hidden="true"></i><span></span>';
+          copy.append(edit);
+          edits.push(edit);
+          edit.addEventListener('click', () => {
+            invalidate(index);
+            delete fieldset.dataset.attempted;
+            clearFeedback(index);
+            renderSteps();
+            fieldset.querySelector('input:not(:disabled), button').focus();
+          });
+          const changed = () => {
+            invalidate(index);
+            syncOptions();
+            if (fieldset.dataset.attempted) validateSection(index, false);
+            else clearFeedback(index);
+            renderSteps();
+          };
+          fieldset.addEventListener('input', changed);
+          fieldset.addEventListener('change', changed);
         });
+        function invalidate(index) {
+          for (let i = index; i < revisions.length; i++) revisions[i]++;
+          if (index < 3) completed.fill(false, index);
+          for (let i = index; i < 3; i++) remoteMessages[i] = null;
+        }
+        function syncOptions() {
+          const custom = customPassword();
+          document.querySelector('#generated-note').hidden = custom;
+          document.querySelectorAll('.personal-password').forEach(field => {
+            field.hidden = !custom;
+            const input = field.querySelector('input');
+            input.disabled = !custom;
+            input.required = custom;
+          });
+          document.querySelector('#smtp-content').hidden = !smtpEnabled();
+          document.querySelector('#smtp-off').hidden = smtpEnabled();
+          document.querySelectorAll('#smtp-content input').forEach(input => {
+            input.disabled = !smtpEnabled();
+            input.required = smtpEnabled();
+          });
+          const confirm = document.getElementById('admin_password_confirm');
+          confirm.setCustomValidity(custom && confirm.value !== value('admin_password')
+            ? text('Passwords do not match.', 'Le password non corrispondono.') : '');
+          const email = document.getElementById('gmail_email');
+          email.setCustomValidity(smtpEnabled() && email.value && !/^[^@\s]+@gmail\.com$/i.test(email.value.trim())
+            ? text('Use a Gmail address.', 'Usa un indirizzo Gmail.') : '');
+          const password = document.getElementById('gmail_app_password');
+          password.setCustomValidity(smtpEnabled() && password.value && !/^[A-Za-z0-9]{16}$/.test(password.value.replace(/[\s-]/g, ''))
+            ? text('Enter the 16-character Gmail app password.', 'Inserisci la password per app Gmail di 16 caratteri.') : '');
+          const url = document.getElementById('site_url');
+          url.setCustomValidity(url.value && !/^https?:\/\/[^\s]+$/i.test(url.value)
+            ? text('Use an http:// or https:// URL.', 'Usa un URL http:// o https://.') : '');
+        }
+        function feedbackFor(index) {
+          let feedback = controls[index].querySelector('.verification-feedback');
+          if (!feedback) {
+            feedback = document.createElement('div');
+            feedback.className = 'verification-feedback';
+            feedback.id = 'step-feedback-' + index;
+            feedback.setAttribute('role', 'alert');
+            controls[index].append(feedback);
+          }
+          return feedback;
+        }
+        function clearFeedback(index) {
+          const feedback = feedbackFor(index);
+          feedback.hidden = true;
+          delete feedback.dataset.inputId;
+          controls[index].querySelectorAll('input').forEach(input => {
+            input.removeAttribute('aria-invalid');
+            const described = (input.getAttribute('aria-describedby') || '').split(/\s+/).filter(id => id && id !== feedback.id);
+            if (described.length) input.setAttribute('aria-describedby', described.join(' '));
+            else input.removeAttribute('aria-describedby');
+          });
+        }
+        function showFeedback(index, message, inputId = '', kind = 'error') {
+          const feedback = feedbackFor(index);
+          feedback.hidden = false;
+          feedback.dataset.kind = kind;
+          feedback.textContent = message;
+          if (inputId) {
+            feedback.dataset.inputId = inputId;
+            const input = document.getElementById(inputId);
+            input.setAttribute('aria-invalid', 'true');
+            const ids = new Set((input.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean));
+            ids.add(feedback.id);
+            input.setAttribute('aria-describedby', Array.from(ids).join(' '));
+          }
+        }
+        function fieldError(input) {
+          const label = input.closest('.field, .full')?.querySelector('label')?.textContent.trim().replace(/\s*\*$/, '') || text('Field', 'Campo');
+          let message = text('Check the value entered.', 'Controlla il valore inserito.');
+          if (input.validity.valueMissing || (input.required && !input.value.trim())) message = text('Complete this field.', 'Completa questo campo.');
+          else if (input.validity.customError) message = input.validationMessage;
+          else if (input.validity.typeMismatch) message = input.type === 'email'
+            ? text('Enter a valid email address.', 'Inserisci un indirizzo email valido.')
+            : text('Enter a complete URL.', 'Inserisci un URL completo.');
+          else if (input.validity.patternMismatch) message = text('Use letters, numbers and underscores only.', 'Usa solo lettere, numeri e trattino basso.');
+          else if (input.minLength > 0 && input.value.length < input.minLength) message = text('Use at least ' + input.minLength + ' characters.', 'Usa almeno ' + input.minLength + ' caratteri.');
+          return text('Check ', 'Controlla ') + label + ': ' + message;
+        }
+        function validateSection(index, focus = true) {
+          controls[index].dataset.attempted = 'true';
+          syncOptions();
+          clearFeedback(index);
+          const invalid = Array.from(controls[index].querySelectorAll('input')).filter(input =>
+            !input.disabled && (!input.checkValidity() || (input.required && !input.value.trim()) || (input.minLength > 0 && input.value && input.value.length < input.minLength))
+          );
+          invalid.forEach(input => input.setAttribute('aria-invalid', 'true'));
+          if (!invalid.length) return true;
+          showFeedback(index, fieldError(invalid[0]), invalid[0].id);
+          if (focus) invalid[0].focus();
+          return false;
+        }
+        function addAction(index, en, it, handler) {
+          const row = document.createElement('div');
+          row.className = 'step-action';
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'btn btn-primary w-100 fw-semibold';
+          translated(button, en, it);
+          button.addEventListener('click', handler);
+          row.append(button);
+          controls[index].append(row);
+          return button;
+        }
+        const databaseAction = document.querySelector('#test-db');
+        databaseAction.hidden = false;
+        document.querySelector('#db-status').remove();
+        translated(databaseAction.querySelector('span'), 'Verify and continue', 'Verifica e continua');
+        const accountAction = addAction(1, 'Confirm administrator', 'Conferma amministratore', () => {
+          if (!validateSection(1)) return;
+          completed[1] = true;
+          renderSteps();
+          focusStep(2);
+        });
+        const emailAction = addAction(2, 'Continue without SMTP', 'Continua senza SMTP', async () => {
+          if (!validateSection(2)) return;
+          if (smtpEnabled()) await checkRemote(2, 'test_smtp', ['gmail_email', 'gmail_app_password']);
+          else {
+            completed[2] = true;
+            renderSteps();
+            focusStep(3);
+          }
+        });
+        databaseAction.addEventListener('click', () => checkRemote(0, 'test_db', ['db_host', 'db_name', 'db_user', 'db_pass']));
+        async function checkRemote(index, action, fields) {
+          if (pending[index] || !validateSection(index)) return;
+          const revision = revisions[index];
+          pending[index] = true;
+          remoteMessages[index] = null;
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 20000);
+          renderSteps();
+          showFeedback(index, text('Checking connection...', 'Verifica della connessione...'), '', 'info');
+          try {
+            const body = new URLSearchParams({ action });
+            fields.forEach(name => body.set(name, value(name)));
+            const response = await fetch(window.location.pathname, { method: 'POST', body, signal: controller.signal, credentials: 'same-origin' });
+            const result = await response.json();
+            if (revisions[index] !== revision) return;
+            remoteMessages[index] = result;
+            if (!response.ok || !result.success) {
+              const inputId = index === 0 ? ({host:'db_host', credentials:'db_user', db_name:'db_name'}[result.error_field] || '') : '';
+              showFeedback(index, result['message_' + language] || text('Connection failed.', 'Connessione fallita.'), inputId);
+            } else {
+              completed[index] = true;
+              clearFeedback(index);
+              renderSteps();
+              focusStep(index + 1);
+            }
+          } catch (error) {
+            if (revisions[index] === revision) showFeedback(index, text('Cannot complete the check. Verify the connection and try again.', 'Impossibile completare la verifica. Controlla la connessione e riprova.'));
+          } finally {
+            clearTimeout(timeout);
+            pending[index] = false;
+            renderSteps();
+          }
+        }
+        function focusStep(index) {
+          const heading = sections[index].querySelector('h2');
+          heading.tabIndex = -1;
+          heading.focus();
+        }
+        function mysqlRequirementState(result, driverAvailable) {
+          if (!driverAvailable) return { state: 'error', version: null };
+          const data = result?.data;
+          if (typeof data?.mysql_version !== 'string' || !data.mysql_version.trim() || typeof data?.mysql_version_ok !== 'boolean') {
+            return { state: 'pending', version: null };
+          }
+          return { state: data.mysql_version_ok ? 'passed' : 'error', version: data.mysql_version };
+        }
+        function renderMysqlRequirement() {
+          const detail = document.querySelector('#mysql-check-detail');
+          const driverAvailable = detail.dataset.driverAvailable === 'true';
+          const result = mysqlRequirementState(remoteMessages[0], driverAvailable);
+          const colors = { pending: 'text-body-secondary', passed: 'text-success', error: 'text-danger' };
+          const icons = { pending: 'bi-clock', passed: 'bi-check-circle-fill', error: 'bi-x-circle-fill' };
+          detail.dataset.checkState = result.state;
+          detail.className = 'd-flex align-items-start gap-2 py-2 ' + colors[result.state];
+          detail.querySelector('i').className = 'bi ' + icons[result.state];
+          const required = detail.dataset.requiredVersion + '+';
+          translated(document.querySelector('#mysql-detail-status'),
+            !driverAvailable ? 'Required mysqli extension missing' : result.state === 'pending' ? 'Version to verify at step 2' : result.state === 'passed' ? result.version + ' - compatible version' : result.version + ' - required: ' + required,
+            !driverAvailable ? 'Estensione mysqli richiesta assente' : result.state === 'pending' ? 'Versione da verificare al punto 2' : result.state === 'passed' ? result.version + ' - versione compatibile' : result.version + ' - richiesto: ' + required);
+          if (result.state === 'error') document.querySelector('#requirements-details').open = true;
+        }
+        function passwordMask(id) {
+          return value(id).length ? '\u2022'.repeat(8) : text('Not set', 'Non impostata');
+        }
+        function stepSummary(index) {
+          if (index === 0) return [
+            ['Database', value('db_name')], ['Host', value('db_host')],
+            ['Username', value('db_user')], ['Password', passwordMask('db_pass')],
+            [text('Check', 'Verifica'), remoteMessages[0]?.[text('message_en', 'message_it')] || text('Connection verified', 'Connessione verificata')]
+          ];
+          if (index === 1) return [
+            [text('Name', 'Nome'), value('admin_first') + ' ' + value('admin_last')],
+            ['Username', value('admin_username')], ['Email', value('admin_email')],
+            ['Password', customPassword() ? passwordMask('admin_password') + text(' (personal)', ' (personale)')
+              : text('Automatic, ' + generatedLength + ' characters. Will be generated during installation and shown at the end.', 'Automatica, ' + generatedLength + " caratteri. Verra generata durante l'installazione e mostrata alla fine.")]
+          ];
+          if (!smtpEnabled()) return [
+            ['SMTP', text('Not configured', 'Non configurato')],
+            [text('Access', 'Accesso'), text('Username and password', 'Username e password')]
+          ];
+          return [
+            ['Gmail', value('gmail_email')], ['Password', passwordMask('gmail_app_password')],
+            [text('Check', 'Verifica'), text('Valid data format; SMTP service reachable', 'Formato dei dati corretto; servizio SMTP raggiungibile')],
+            [text('Access', 'Accesso'), text('Username and password', 'Username e password')]
+          ];
+        }
+        function renderSteps() {
+          syncOptions();
+          renderMysqlRequirement();
+          sections.forEach((section, index) => {
+            const enabled = requirementsDone && completed.slice(0, index).every(Boolean);
+            const done = index < 3 && completed[index];
+            controls[index].disabled = !enabled;
+            controls[index].hidden = !enabled || done;
+            section.dataset.state = !enabled ? 'locked' : done ? 'complete' : 'active';
+            states[index].hidden = !enabled;
+            translated(states[index], done ? 'Confirmed' : 'Ready to complete', done ? 'Confermato' : 'Da completare');
+            if (done) states[index].insertAdjacentHTML('afterbegin', '<i class="bi bi-check-circle-fill" aria-hidden="true"></i>');
+            const recovered = draftSectionFields[index].some(name => draft.restoredFields.includes(name));
+            draftNotices[index].hidden = done || !recovered;
+            translated(draftNotices[index], 'Data restored \u00b7 Verify again', 'Dati recuperati \u00b7 Da verificare');
+            draftNotices[index].insertAdjacentHTML('afterbegin', '<i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>');
+            edits[index].hidden = !done || !enabled;
+            translated(edits[index].querySelector('span'), 'Edit', 'Modifica');
+            edits[index].setAttribute('aria-label', text('Edit ', 'Modifica ') + section.querySelector('h2').textContent.trim());
+            recaps[index].replaceChildren();
+            if (done && enabled) {
+              stepSummary(index).forEach(([label, content]) => {
+                const dt = document.createElement('dt'), dd = document.createElement('dd');
+                dt.textContent = label;
+                dd.textContent = content;
+                recaps[index].append(dt, dd);
+              });
+            }
+          });
+          databaseAction.disabled = pending[0];
+          emailAction.disabled = pending[2];
+          translated(emailAction, smtpEnabled() ? 'Verify and continue' : 'Continue without SMTP', smtpEnabled() ? 'Verifica e continua' : 'Continua senza SMTP');
+          const ready = requirementsDone && completed.every(Boolean) && !pending.some(Boolean);
+          footer.hidden = !ready;
+          footer.querySelector('button').disabled = !ready || installing;
+          requirementsAction.hidden = requirementsDone;
+          requirementsAction.title = text('Continue to database', 'Continua al database');
+        }
+        requirementsAction.addEventListener('click', () => {
+          if (form.dataset.requirementsOk !== 'true') return;
+          requirementsDone = true;
+          renderSteps();
+          focusStep(0);
+        });
+        function validateAll() {
+          if (!requirementsDone || !completed.every(Boolean) || pending.some(Boolean)) return false;
+          for (let index = 0; index < controls.length; index++) {
+            if (!validateSection(index)) {
+              if (index < 3) completed.fill(false, index);
+              renderSteps();
+              return false;
+            }
+          }
+          return true;
+        }
+        form.addEventListener('submit', event => {
+          event.preventDefault();
+          beginInstallation();
+        });
+        function beginInstallation() {
+          if (installing || !validateAll()) return;
+          installing = true;
+          form.elements.installer_lang.value = language;
+          form.inert = true;
+          form.querySelectorAll('button').forEach(button => button.disabled = true);
+          document.querySelector('#install-waiting').hidden = false;
+          HTMLFormElement.prototype.submit.call(form);
+        }
+        window.addEventListener('pageshow', () => {
+          installing = false;
+          form.inert = false;
+          form.querySelectorAll('button').forEach(button => button.disabled = false);
+          document.querySelector('#install-waiting').hidden = true;
+          renderSteps();
+        });
+        refreshSteps = () => {
+          renderSteps();
+          controls.forEach((fieldset, index) => {
+            if (fieldset.dataset.attempted && !completed[index]) validateSection(index, false);
+            const remote = remoteMessages[index];
+            if (remote && !remote.success) showFeedback(index, remote['message_' + language] || text('Connection failed.', 'Connessione fallita.'));
+          });
+        };
+        document.querySelectorAll('.field').forEach(field => {
+          const hint = field.querySelector(':scope > .hint');
+          const input = field.querySelector(':scope > input, :scope > .password-input');
+          if (hint && input) input.before(hint);
+        });
+        setLanguage(language);
+        if (document.querySelector('#server-errors')) document.querySelector('#server-errors').focus();
+      })();
     </script>
-</body>
+  </body>
 </html>

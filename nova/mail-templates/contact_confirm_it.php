@@ -29,6 +29,6 @@ Il nostro team esaminerà la tua richiesta e ti risponderà entro 24-48 ore.
 
 Grazie per averci contattato.
 
-{site_name} Team
+{site_name}
 {site_url}
 EOT;

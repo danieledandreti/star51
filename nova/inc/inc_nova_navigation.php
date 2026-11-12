@@ -37,7 +37,7 @@ if (!defined('NOVA_BASE_PATH')) {
          data-bs-target="#mobileCollectionMenu"
          aria-label="<?= __admin('nav.collection') ?>"
          title="<?= __admin('nav.collection') ?>">
-        <i class="bi bi-archive"></i>
+        <i class="bi bi-collection"></i>
       </a>
       <a href="<?= $nova_base ?>/requests/requests_list.php"
          class="mobile-nav-icon"
@@ -115,7 +115,7 @@ if (!defined('NOVA_BASE_PATH')) {
              aria-haspopup="true"
              aria-label="<?= __admin('nav.collection') ?>"
              title="<?= __admin('nav.collection') ?>">
-            <i class="bi bi-archive" aria-hidden="true"></i>
+            <i class="bi bi-collection" aria-hidden="true"></i>
             <span class="d-lg-inline d-none ms-1"><?= __admin('nav.collection') ?></span>
           </a>
           <ul class="dropdown-menu nova-dropdown"
@@ -140,7 +140,7 @@ if (!defined('NOVA_BASE_PATH')) {
               <a class="dropdown-item"
                  href="<?= $nova_base ?>/articles/articles_list.php"
                  aria-label="<?= __admin('nav.articles') ?>">
-                <i class="bi bi-collection me-2" aria-hidden="true"></i>
+                <i class="bi bi-card-heading me-2" aria-hidden="true"></i>
                 <span class="dropdown-item-text"><?= __admin('nav.articles') ?></span>
               </a>
             </li>
@@ -269,7 +269,7 @@ if (!defined('NOVA_BASE_PATH')) {
      aria-labelledby="mobileCollectionMenuLabel">
   <div class="offcanvas-header nova-bg-offcanvas-header">
     <h5 class="offcanvas-title" id="mobileCollectionMenuLabel">
-      <i class="bi bi-archive me-2"></i><?= __admin('nav.collection') ?>
+      <i class="bi bi-collection me-2"></i><?= __admin('nav.collection') ?>
     </h5>
     <button type="button"
             class="btn-close"
@@ -288,7 +288,7 @@ if (!defined('NOVA_BASE_PATH')) {
       </a>
       <a href="<?= $nova_base ?>/articles/articles_list.php"
          class="list-group-item list-group-item-action">
-        <i class="bi bi-collection me-2"></i><?= __admin('nav.articles') ?>
+        <i class="bi bi-card-heading me-2"></i><?= __admin('nav.articles') ?>
       </a>
     </div>
   </div>

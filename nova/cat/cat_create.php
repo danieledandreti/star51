@@ -73,7 +73,7 @@ include '../inc/inc_nova_form_helpers.php';
                   <!-- CSRF Token Protection -->
                   <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
 
-                  <!-- Row 1: Category Name + Placeholder -->
+                  <!-- Row 1: Category Name -->
                   <div class="row mb-3">
                     <!-- Category Name -->
                     <div class="col-md-6">
@@ -88,13 +88,6 @@ include '../inc/inc_nova_form_helpers.php';
                       <div class="form-text">
                         <?= __admin('categories.form.help_name') ?>
                       </div>
-                    </div>
-
-                    <!-- Placeholder Column -->
-                    <div class="col-md-6">
-                      <label class="form-label fw-bold nova-form-placeholder-label">Placeholder</label>
-                      <div class="nova-form-placeholder-box"></div>
-                      <div class="form-text nova-form-placeholder-text">Placeholder text</div>
                     </div>
                   </div>
 

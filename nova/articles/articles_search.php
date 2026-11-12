@@ -11,6 +11,7 @@ $page_description = __admin('articles.page.desc_search');
 $search_query = '';
 $search_results = [];
 $total_results = 0;
+$total_pages = 0;
 $error_message = '';
 $success_message = '';
 
@@ -20,32 +21,35 @@ $current_page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $offset = ($current_page - 1) * $articles_per_page;
 
 // Search logic
-if (isset($_GET['as']) && !empty(trim($_GET['as']))) {
-  $search_query = trim($_GET['as']);
+if (isset($_GET['as']) && is_string($_GET['as']) && trim($_GET['as']) !== '') {
+  $search_query = mb_substr(trim($_GET['as']), 0, 255, 'UTF-8');
+  $words = preg_split('/[^\p{L}\p{N}]+/u', $search_query, -1, PREG_SPLIT_NO_EMPTY);
 
-  // Validate minimum 3 characters
-  if (strlen($search_query) < 3) {
-    $error_message = __admin('articles.search.min_chars');
+  if (empty($words)) {
+    $error_message = __admin('articles.search.invalid_query');
   } else {
-    // Split search query into words
-    $words = explode(' ', $search_query);
-
-    // Build WHERE clause for LIKE search
-    // Search in: article_title, article_summary
+    // Require every term in title, summary or extended content, regardless of visibility.
     $where_conditions = [];
     $params = [];
     $types = '';
+    $title_words = 'CONCAT(\' \', REGEXP_REPLACE(a.article_title, \'[^[:alnum:]]+\', \' \'), \' \')';
+    $summary_words = 'CONCAT(\' \', REGEXP_REPLACE(a.article_summary, \'[^[:alnum:]]+\', \' \'), \' \')';
+    $content_words = 'CONCAT(\' \', REGEXP_REPLACE(a.article_content, \'[^[:alnum:]]+\', \' \'), \' \')';
 
     foreach ($words as $word) {
-      $word = trim($word);
-      if (!empty($word)) {
+      if (mb_strlen($word, 'UTF-8') <= 2) {
+        // Constant separator normalization prevents short terms matching inside other words.
+        $where_conditions[] = '(' . $title_words . ' LIKE ? OR ' . $summary_words . ' LIKE ? OR ' . $content_words . ' LIKE ?)';
+        $search_param = '% ' . $word . ' %';
+      } else {
         $where_conditions[] =
-          '(a.article_title LIKE ? OR a.article_summary LIKE ?)';
+          '(a.article_title LIKE ? OR a.article_summary LIKE ? OR a.article_content LIKE ?)';
         $search_param = '%' . $word . '%';
-        $params[] = $search_param;
-        $params[] = $search_param;
-        $types .= 'ss';
       }
+      $params[] = $search_param;
+      $params[] = $search_param;
+      $params[] = $search_param;
+      $types .= 'sss';
     }
 
     if (!empty($where_conditions)) {
@@ -93,7 +97,7 @@ if (isset($_GET['as']) && !empty(trim($_GET['as']))) {
         WHERE ' .
         $where_clause .
         '
-        ORDER BY a.article_title ASC
+        ORDER BY a.article_title ASC, a.id_article DESC
         LIMIT ? OFFSET ?';
 
       $stmt = mysqli_prepare($conn, $query);

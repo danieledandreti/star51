@@ -11,6 +11,7 @@ $page_description = __admin('requests.page.desc_search');
 $search_query = '';
 $search_results = [];
 $total_results = 0;
+$total_pages = 0;
 $error_message = '';
 $success_message = '';
 
@@ -20,15 +21,14 @@ $current_page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $offset = ($current_page - 1) * $requests_per_page;
 
 // Search logic
-if (isset($_GET['rs']) && !empty(trim($_GET['rs']))) {
-  $search_query = trim($_GET['rs']);
+if (isset($_GET['rs']) && is_string($_GET['rs']) && trim($_GET['rs']) !== '') {
+  $search_query = mb_substr(trim($_GET['rs']), 0, 255, 'UTF-8');
 
-  // Validate minimum 3 characters
-  if (strlen($search_query) < 3) {
-    $error_message = __admin('requests.search.min_chars');
+  if (!preg_match('/[\p{L}\p{N}]/u', $search_query)) {
+    $error_message = __admin('requests.search.invalid_query');
   } else {
-    // Split search query into words
-    $words = explode(' ', $search_query);
+    // Preserve punctuation inside email addresses and surnames; split whitespace only.
+    $words = preg_split('/\s+/u', $search_query, -1, PREG_SPLIT_NO_EMPTY);
 
     // Build WHERE clause for LIKE search
     // Search in: first_name, last_name, email, request_message
@@ -37,17 +37,15 @@ if (isset($_GET['rs']) && !empty(trim($_GET['rs']))) {
     $types = '';
 
     foreach ($words as $word) {
-      $word = trim($word);
-      if (!empty($word)) {
-        $where_conditions[] =
-          '(r.first_name LIKE ? OR r.last_name LIKE ? OR r.email LIKE ? OR r.request_message LIKE ?)';
-        $search_param = '%' . $word . '%';
-        $params[] = $search_param;
-        $params[] = $search_param;
-        $params[] = $search_param;
-        $params[] = $search_param;
-        $types .= 'ssss';
-      }
+      $where_conditions[] =
+        "(r.first_name LIKE ? ESCAPE '!' OR r.last_name LIKE ? ESCAPE '!' OR r.email LIKE ? ESCAPE '!' OR r.request_message LIKE ? ESCAPE '!')";
+      // Explicit LIKE escaping keeps percent, underscore and the escape character literal.
+      $search_param = '%' . strtr($word, ['!' => '!!', '%' => '!%', '_' => '!_']) . '%';
+      $params[] = $search_param;
+      $params[] = $search_param;
+      $params[] = $search_param;
+      $params[] = $search_param;
+      $types .= 'ssss';
     }
 
     if (!empty($where_conditions)) {

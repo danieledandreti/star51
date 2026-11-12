@@ -2,6 +2,7 @@
 // Nova Head Include - Modular HTML head section
 // Simple procedural PHP with English comments
 // Based on Star50 pattern adapted for Nova design
+require_once __DIR__ . '/inc_nova_version.php';
 
 // Default page title if not set
 if (!isset($page_title)) {
@@ -34,6 +35,8 @@ if (!defined('NOVA_WEB_PATH')) {
 } else {
     $nova_web_path = NOVA_WEB_PATH;
 }
+// Content-based cache key for this visual trial; cookies and application settings stay unchanged.
+$nova_css_revision = substr(hash_file('sha256', __DIR__ . '/../css/nova-system.css'), 0, 12);
 ?>
 <!-- Nova System CSS -->
-<link href="<?= $nova_web_path ?>/css/nova-system.css" rel="stylesheet">
+<link href="<?= $nova_web_path ?>/css/nova-system.css?v=<?= $nova_css_revision ?>" rel="stylesheet">

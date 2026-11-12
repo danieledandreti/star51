@@ -23,10 +23,10 @@ IMPORTANT:
 - If you did not request this reset, please ignore this email
 
 For security, we recommend:
-1. Using a strong password (at least 8 characters)
+1. Using a strong password (at least 12 characters)
 2. Never sharing your credentials
 3. Logging out when you finish working
 
-{site_name} Solo
+{site_name}
 {site_url}
 EOT;

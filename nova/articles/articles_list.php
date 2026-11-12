@@ -105,7 +105,7 @@ $varie_count = mysqli_fetch_assoc(mysqli_stmt_get_result($varie_stmt))['total'];
         <div class="d-flex justify-content-between align-items-center">
           <div>
             <h1 class="page-title">
-              <i class="bi bi-collection me-2"></i>
+              <i class="bi bi-card-heading me-2"></i>
               <?= __admin('pages.articles_management') ?>
             </h1>
           </div>

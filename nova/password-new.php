@@ -3,6 +3,7 @@ require_once 'inc/inc_nova_session_start.php';
 
 // Load database connection
 require_once 'legas/nova_config.php';
+require_once 'inc/inc_nova_constants.php';
 
 // Language System (i18n)
 require_once 'inc/inc_nova_lang.php';
@@ -126,7 +127,7 @@ $page_description = 'Nova Administration - New Password';
                            id="password"
                            name="password"
                            placeholder="<?= __admin('password_reset.new_password') ?>"
-                           minlength="8"
+                           minlength="<?= NOVA_PASSWORD_MIN_LENGTH ?>"
                            required
                            autofocus>
                     <label for="password">
@@ -148,7 +149,7 @@ $page_description = 'Nova Administration - New Password';
                            id="password_confirm"
                            name="password_confirm"
                            placeholder="<?= __admin('password_reset.confirm_password') ?>"
-                           minlength="8"
+                           minlength="<?= NOVA_PASSWORD_MIN_LENGTH ?>"
                            required>
                     <label for="password_confirm">
                       <i class="bi bi-key-fill me-2"></i><?= __admin('password_reset.confirm_password') ?>

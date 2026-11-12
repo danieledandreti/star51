@@ -1,3 +1,81 @@
+# Star51 v1.3.0
+
+## English
+
+- **New installer.** The redesigned EN/IT wizard guides database,
+  administrator, optional email and site URL setup. After a reload it
+  restores non-sensitive fields, not passwords; restored steps must be
+  verified again. Site URLs can use a non-standard port.
+- **Better Nova search.** Article search requires all terms across titles,
+  summaries and extended text. One- and two-character terms match whole
+  words. Request search also finds partial names, email addresses and messages.
+  Public search is unchanged.
+- **Clearer Nova interface.** Counts and update dates appear in one responsive
+  overview. Desktop navigation icons have better contrast against the
+  translucent bar. Universal Collection System and the Collection menu
+  share an icon; articles use a distinct card icon. Category forms no longer
+  display empty boxes that look like fields.
+- **Administrator passwords.** New passwords require at least 12 characters.
+  The installer generates a 12-character password from a pool of uppercase
+  letters, lowercase letters and digits. Password and confirmation can be
+  revealed independently. Existing passwords still work at sign-in.
+
+### Upgrade from v1.2.1
+
+**Do not overwrite `nova/conf/nova_config_values.php` or replace
+`nova/logs/`. Leave everything outside `nova/` unchanged.**
+
+1. Back up the site files and the database.
+2. Upload the contents of the new `nova/` over the existing `nova/`,
+   excluding the configuration file and log directory above. Merge
+   directories and overwrite application files; do not delete the old
+   `nova/` directory.
+3. Sign in with your current password and confirm the Nova footer shows
+   **v1.3.0**. Check that public pages and uploaded images still appear.
+
+Do not run the installer or import the SQL file. No database migration is
+required from v1.2.1. Requirements remain PHP 8.0+ and MySQL 8.0+.
+
+## Italiano
+
+- **Nuovo installer.** Il percorso guidato IT/EN è stato rifatto e accompagna
+  nella configurazione di database, amministratore, posta opzionale e
+  indirizzo del sito. Dopo un ricaricamento recupera i campi non sensibili,
+  ma non le password; i passaggi ripristinati vanno verificati di nuovo.
+  Sono supportati gli indirizzi con porte non standard.
+- **Ricerca interna migliorata.** Nova cerca gli articoli per titolo,
+  riassunto e testo esteso: tutte le parole devono comparire, anche in
+  campi diversi. I termini di uno o due caratteri valgono come parole
+  intere. Nelle richieste si trovano anche parti di nome, cognome, email
+  e messaggio. La ricerca pubblica non cambia.
+- **Nova più leggibile.** Conteggi e date stanno in un unico riepilogo
+  responsive. Migliorato il contrasto delle icone sulla barra di navigazione
+  desktop, mantenendola trasparente. Universal Collection System e il menu
+  Collezione condividono un simbolo; gli Articoli hanno un'icona a scheda.
+  Rimossi i riquadri vuoti che sembravano campi nei moduli delle categorie.
+- **Password amministratore.** Le nuove password richiedono almeno 12
+  caratteri. L'installer ne genera una di 12 caratteri da un insieme di
+  maiuscole, minuscole e numeri. Password e conferma si possono mostrare
+  separatamente. Le password già impostate restano valide per l'accesso.
+
+### Aggiornamento dalla 1.2.1
+
+**Non sovrascrivere `nova/conf/nova_config_values.php` e non sostituire
+`nova/logs/`. Non toccare i file fuori da `nova/`.**
+
+1. Fai un backup dei file del sito e del database.
+2. Carica il contenuto della nuova `nova/` sopra quella esistente, escludendo
+   il file di configurazione e la cartella dei log indicati sopra.
+   Unisci le cartelle e sovrascrivi i file applicativi; non cancellare
+   la vecchia `nova/`.
+3. Accedi con la password attuale e verifica che nel footer di Nova compaia
+   **v1.3.0**. Controlla che le pagine pubbliche e le immagini si vedano ancora.
+
+Non avviare l'installer e non importare il file SQL. Dalla 1.2.1 non serve
+una migrazione del database. Restano richiesti PHP 8.0+ e MySQL 8.0+.
+
+---
+
 # Star51 v1.2.1 - Search Documentation Update
 
 Released on 16 October 2026.

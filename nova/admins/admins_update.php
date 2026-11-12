@@ -53,7 +53,7 @@ if ($change_password) {
   $password = $_POST['password'] ?? '';
   $password_confirm = $_POST['password_confirm'] ?? '';
 
-  if (strlen($password) < 8) {
+  if (strlen($password) < NOVA_PASSWORD_MIN_LENGTH) {
     $errors[] = __admin('admins.val.password_min');
   } elseif ($password !== $password_confirm) {
     $errors[] = __admin('admins.val.password_mismatch');

@@ -64,7 +64,7 @@ if ($article_content_editor_json === false) {
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <h1 class="page-title">
-                            <i class="bi bi-collection me-2"></i>
+                            <i class="bi bi-card-heading me-2"></i>
                             <?= __admin('articles.page.create_title') ?>
                         </h1>
                     </div>

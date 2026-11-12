@@ -1,4 +1,4 @@
-# Star51 Solo - Apache Configuration
+# Star51 - Apache Configuration
 # Error pages, compression, caching, security
 
 # ===== ERROR PAGES =====
@@ -53,6 +53,9 @@ Options -Indexes
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteRule ^nova/(conf|logs|legas|inc)/ - [F,L]
+    # Allow the first installation; deny the wizard once its project is locked.
+    RewriteCond %{REQUEST_FILENAME} ^(.*/)?install(?:/.*)?$
+    RewriteCond %1.installed -f
     RewriteRule ^install/ - [F,L]
 </IfModule>
 

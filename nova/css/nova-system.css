@@ -1193,22 +1193,6 @@ footer.nova-footer {
 }
 
 /* === FORM PLACEHOLDER SYSTEM === */
-/* Visible placeholder for disabled/unavailable form fields */
-.nova-form-placeholder-label {
-  visibility: hidden;
-}
-
-.nova-form-placeholder-box {
-  background-color: #f8f9fa;
-  border: 1px solid var(--nova-gray-border);
-  border-radius: 4px;
-  height: 38px;
-}
-
-.nova-form-placeholder-text {
-  visibility: hidden;
-}
-
 /* === LAYOUT UTILITIES === */
 
 /* Card with mint accent border top */
@@ -1298,7 +1282,7 @@ footer.nova-footer {
 /* Universal Collection System Subtitle */
 .universal-subtitle {
   color: var(--nova-mint-dark);
-  font-size: 0.95rem;
+  font-size: 1.125rem;
   margin-bottom: 0.5rem;
   font-weight: 500;
 }
@@ -1381,15 +1365,47 @@ button.btn[data-bs-toggle="collapse"]:not(.collapsed) i.bi-chevron-up {
   border-bottom: 1px solid rgba(0, 0, 0, 0.125); /* Separator line between title and content */
 }
 
-.nova-stats-card .card-header .card-title a {
+.nova-stats-card .card-header .card-title a,
+.nova-overview-link {
   color: #ff5b19; /* Star51 brand orange - more specific than Bootstrap */
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
-.nova-stats-card .card-header .card-title a:hover {
+.nova-stats-card .card-header .card-title a:hover,
+.nova-overview-link:hover {
   color: #e64a0e; /* Darker orange on hover */
   text-decoration: none;
+}
+
+.nova-overview-icon {
+  color: var(--nova-mint-dark);
+  flex-shrink: 0;
+}
+
+.nova-overview-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 1rem;
+}
+
+@media (min-width: 1200px) {
+  .nova-overview-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2rem;
+  }
+
+  .nova-overview-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+
+.nova-overview-link:focus-visible {
+  outline: 2px solid var(--nova-mint-dark);
+  outline-offset: 2px;
 }
 
 /* ============================================================
@@ -1495,4 +1511,48 @@ input.nova-file-input::file-selector-button {
 .list-group-item.active {
   background-color: var(--nova-brand-orange);
   border-color: var(--nova-brand-orange);
+}
+
+/* Desktop navigation readability trial: small adjustments to the original palette. */
+@media (min-width: 992px) {
+  .navbar.nova-navbar {
+    --nova-orange-soft: #ff784d;
+    --nova-golden: #ffe066;
+    --nova-desktop-nav-icon: rgba(87, 138, 143, 0.85);
+  }
+
+  .nova-navbar .nav-link i,
+  .nova-navbar .dropdown-menu .dropdown-item i {
+    color: var(--nova-desktop-nav-icon);
+  }
+
+  .nova-navbar .nav-link.active i {
+    color: var(--nova-desktop-nav-icon);
+  }
+
+  .nova-navbar .nav-link:hover i,
+  .nova-navbar .dropdown-menu .dropdown-item:hover i,
+  .nova-navbar .dropdown-menu .dropdown-item:focus i,
+  .nova-navbar .dropdown-menu .dropdown-item.active i {
+    color: var(--nova-golden);
+  }
+
+  .nova-navbar .nav-link.active:hover i {
+    color: var(--nova-desktop-nav-icon);
+  }
+
+  .nova-navbar .dropdown-menu .dropdown-item:focus {
+    background-color: var(--nova-orange-soft);
+    color: var(--nova-white);
+  }
+
+  .nova-navbar .dropdown-menu .dropdown-item:focus .dropdown-item-text {
+    color: var(--nova-white);
+  }
+
+  .nova-navbar .navbar-nav .nav-link:focus-visible,
+  .nova-navbar .dropdown-menu .dropdown-item:focus-visible {
+    outline: 2px solid var(--nova-mint-dark);
+    outline-offset: 3px;
+  }
 }

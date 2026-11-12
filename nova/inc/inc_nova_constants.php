@@ -73,7 +73,7 @@ define('NOVA_YEAR_MAX', 2155);         // MySQL YEAR type maximum
 // ========================================
 define('NOVA_TITLE_MAX_LENGTH', 255);          // Article/Category title max length
 define('NOVA_COLLECTION_MAX_LENGTH', 255);     // item_collection max length
-define('NOVA_PASSWORD_MIN_LENGTH', 8);         // Password minimum length
+define('NOVA_PASSWORD_MIN_LENGTH', 12);        // Minimum for new or changed passwords; login is unchanged
 
 // ========================================
 // PAGINATION

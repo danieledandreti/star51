@@ -8,11 +8,11 @@ A lightweight, self-hosted collection manager for individuals. Catalog your movi
 
 **Star51** is the free edition of the Star51 ecosystem. Simple to install, easy to use, zero recurring costs.
 
-**Current stable release: [v1.2.1](https://github.com/danieledandreti/star51/releases/tag/v1.2.1)** — consolidated search documentation. Application behavior is unchanged from v1.2.0. No database migration is required.
+**Package version: v1.3.0.** A new bilingual installer, improved Nova search, and a more compact administration overview. Public search is unchanged from v1.2.1.
 
 [Release notes](https://github.com/danieledandreti/star51/releases/latest) · [Changelog](CHANGELOG.md)
 
-See the [release notes and search behavior](RELEASE_NOTES.md).
+See the [bilingual release notes and upgrade instructions](RELEASE_NOTES.md).
 
 ## Features
 
@@ -27,10 +27,12 @@ See the [release notes and search behavior](RELEASE_NOTES.md).
 - **SEO Ready** — Sitemap, robots.txt, Open Graph, JSON-LD structured data
 - **Secure** — Isolated admin sessions, CSRF protection, prepared statements, rate limiting, and security headers
 
-## What's New in v1.2.1
+## What's New in v1.3.0
 
-- Search explanations are consolidated in the bilingual release notes.
-- Documentation-only update; no application code, configuration or database changes.
+- Redesigned EN/IT installer with step-by-step checks and recovery of non-sensitive fields after a reload.
+- Improved Nova article and request searches, plus a single overview for counts and update dates.
+- Clearer desktop navigation icons and a 12-character minimum for new administrator passwords.
+- Upgrading from v1.2.1? [Read what to preserve before copying any files](RELEASE_NOTES.md#upgrade-from-v121).
 
 ## Search Improvements in v1.2.0
 

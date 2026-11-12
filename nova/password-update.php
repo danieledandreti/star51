@@ -3,6 +3,7 @@ require_once 'inc/inc_nova_session_start.php';
 
 // Load database connection
 require_once 'legas/nova_config.php';
+require_once 'inc/inc_nova_constants.php';
 
 // Language System (i18n)
 require_once 'inc/inc_nova_lang.php';
@@ -39,7 +40,7 @@ try {
     exit();
   }
 
-  if (strlen($password) < 8) {
+  if (strlen($password) < NOVA_PASSWORD_MIN_LENGTH) {
     $_SESSION['password_errors'] = [__admin('password_reset.password_min_length')];
     header('Location: password-new.php?token=' . urlencode($token));
     exit();

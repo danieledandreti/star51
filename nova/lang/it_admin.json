@@ -84,9 +84,9 @@
     },
     "search": {
         "articles_placeholder": "Cerca articoli...",
-        "articles_hint": "Cerca tra gli articoli per titolo o testo breve.",
+        "articles_hint": "Cerca parole nel titolo, nel riassunto o nel testo esteso. I termini di 1-2 caratteri sono cercati come parole intere.",
         "requests_placeholder": "Cerca richieste...",
-        "requests_hint": "Cerca tra le richieste per nome, cognome, email o messaggio."
+        "requests_hint": "Cerca anche parti di nome, cognome, email o messaggio, senza lunghezza minima. Tutte le parole inserite devono essere presenti."
     },
     "dashboard": {
         "search_articles": "Ricerca tra gli articoli",
@@ -96,6 +96,10 @@
         "articles": "Articolo/i",
         "requests": "Richiesta/e",
         "articles_misc": "Articolo/i in Varie",
+        "overview_list": {
+            "title": "Riepilogo",
+            "articles_misc": "Articoli in Varie"
+        },
         "updated_at": "Aggiornato al",
         "universal_collection": "Universal Collection System"
     },
@@ -124,7 +128,7 @@
         "page": {
             "title": "Configurazione di Sistema",
             "subtitle": "Gestione configurazioni globali del sistema Star51",
-            "access": "Accesso: Solo Super Admin",
+            "access": "Super Admin",
             "config_file": "File config:",
             "back_to_list": "Torna alla Lista"
         },
@@ -216,7 +220,7 @@
             "password_new": "Nuova Password",
             "password_new_confirm": "Conferma Nuova Password",
             "help_email": "L'email deve essere unica nel sistema",
-            "help_password_edit": "Lascia vuoto per non modificare. Minimo 8 caratteri.",
+            "help_password_edit": "Lascia vuoto per non modificare. Minimo 12 caratteri.",
             "help_username_readonly": "L'username non può essere modificato",
             "invalid_first_name": "Inserisci il nome dell'amministratore",
             "invalid_last_name": "Inserisci il cognome dell'amministratore",
@@ -253,7 +257,7 @@
             "email_format": "Formato email non valido",
             "email_max": "L'email non può superare i 100 caratteri",
             "email_exists_other": "Esiste già un altro amministratore con questa email",
-            "password_min": "La password deve essere di almeno 8 caratteri",
+            "password_min": "La password deve essere di almeno 12 caratteri",
             "password_mismatch": "Le password non coincidono",
             "current_password_required": "La password attuale è obbligatoria per salvare le modifiche",
             "current_password_wrong": "La password attuale non è corretta"
@@ -283,7 +287,7 @@
         "enter_new_password": "Inserisci la tua nuova password.",
         "new_password": "Nuova Password",
         "confirm_password": "Conferma Password",
-        "password_hint": "Minimo 8 caratteri. Usa lettere, numeri e simboli.",
+        "password_hint": "Minimo 12 caratteri. Usa lettere, numeri e simboli.",
         "update_password": "Aggiorna Password",
         "single_use_link": "Questo link può essere utilizzato una sola volta. Dopo l'aggiornamento, effettua il login con la nuova password.",
         "strength_very_weak": "Molto Debole",
@@ -306,7 +310,7 @@
         "token_missing": "Token mancante. Richiedi un nuovo recupero password.",
         "all_fields_required": "Tutti i campi sono obbligatori.",
         "passwords_not_match": "Le password non coincidono.",
-        "password_min_length": "La password deve contenere almeno 8 caratteri.",
+        "password_min_length": "La password deve contenere almeno 12 caratteri.",
         "password_update_error": "Errore durante l'aggiornamento della password",
         "password_updated": "Password aggiornata con successo! Ora puoi effettuare il login con la nuova password.",
         "system_error": "Si è verificato un errore di sistema. Riprova più tardi."
@@ -502,7 +506,7 @@
             "no_results": "La ricerca del termine &quot;<strong>{query}</strong>&quot; non ha generato nessun risultato.",
             "no_results_title": "Nessun risultato trovato",
             "no_results_desc": "La ricerca di &quot;<strong>{query}</strong>&quot; non ha prodotto risultati.<br>Prova con parole chiave diverse o più generiche.",
-            "min_chars": "Per effettuare una ricerca immettere almeno 3 caratteri."
+            "invalid_query": "Inserisci almeno una parola o un numero da cercare."
         },
 
         "form": {
@@ -820,7 +824,7 @@
             "no_results": "La ricerca del termine &quot;<strong>{query}</strong>&quot; non ha generato nessun risultato.",
             "no_results_title": "Nessun risultato trovato",
             "no_results_desc": "La ricerca di &quot;<strong>{query}</strong>&quot; non ha prodotto risultati.<br>Prova con parole chiave diverse o più generiche.",
-            "min_chars": "Per effettuare una ricerca immettere almeno 3 caratteri."
+            "invalid_query": "Inserisci almeno una lettera o un numero da cercare."
         },
 
         "confirm": {

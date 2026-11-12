@@ -38,6 +38,7 @@ if (!file_exists(__DIR__ . '/../.installed')) {
 require_once 'inc/inc_nova_session_start.php';
 require_once 'legas/nova_config.php';
 require_once 'inc/inc_nova_constants.php';
+require_once __DIR__ . '/inc/inc_nova_version.php';
 
 // ============================================================================
 // Language System (i18n)
@@ -143,7 +144,7 @@ $page_description = __admin('pages.dashboard_overview') . ' ' . $nova_settings['
                 <i class="bi bi-star-fill"></i>
               </div>
               <h1 class="h4 mb-2"><?= __admin('login.title') ?></h1>
-              <p class="text-muted mb-0"><?= __admin('login.subtitle') ?></p>
+              <p class="text-muted mb-0">Star51 v<?= htmlspecialchars(STAR51_VERSION, ENT_QUOTES, 'UTF-8') ?></p>
             </div>
 
             <!-- Card Body -->
@@ -243,7 +244,7 @@ $page_description = __admin('pages.dashboard_overview') . ' ' . $nova_settings['
             <!-- Card Footer -->
             <div class="nova-card-footer login-footer-neutral d-flex justify-content-between align-items-center">
               <small class="text-muted">
-                NovaStar51 Solo
+                NovaStar51
               </small>
               <small class="text-muted">
                 <a href="https://medium.com/@daniele.dandreti" target="_blank" rel="noopener noreferrer" title="Passione + Tecnologia + Sogni = Daniele D'Andreti" class="footer-icons-link">

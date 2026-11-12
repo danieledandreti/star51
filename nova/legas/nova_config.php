@@ -90,27 +90,46 @@ $nova_base = NOVA_BASE_PATH;
 // DATABASE CONNECTION
 // ============================================
 
-// Database connection with friendly error handling (PHP 8+)
-try {
-  $conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-} catch (mysqli_sql_exception $e) {
-  // Fresh install detection
-  $not_installed = file_exists(__DIR__ . "/../../install/index.php") && !file_exists(__DIR__ . "/../../.installed");
+// Offer setup only when the installer is available and database settings are incomplete.
+$setup_project_root = dirname(__DIR__, 2);
+$setup_required = is_file($setup_project_root . '/install/index.php')
+  && !file_exists($setup_project_root . '/.installed')
+  && (DB_HOST === '' || DB_USER === '' || DB_NAME === '');
+$conn = false;
 
-  // Log error only if not a fresh install (avoid noise pre-install)
-  if (!$not_installed) {
-    error_log("[" . date("Y-m-d H:i:s") . "] DB Error: " . $e->getMessage() . " - Host: " . DB_HOST . " - User: " . DB_USER);
+if (!$setup_required) {
+  try {
+    $conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+  } catch (mysqli_sql_exception $e) {
+    error_log('[' . date('Y-m-d H:i:s') . '] DB Error: ' . $e->getMessage() . ' - Host: ' . DB_HOST . ' - User: ' . DB_USER);
+  }
+}
+
+if (!$conn) {
+  $setup_url = '/install/';
+  if ($setup_required) {
+    // Derive the project URL from the entry script, including nested Nova routes.
+    $setup_script_file = str_replace('\\', '/', (string)($_SERVER['SCRIPT_FILENAME'] ?? ''));
+    $setup_script_name = str_replace('\\', '/', (string)($_SERVER['SCRIPT_NAME'] ?? ''));
+    $setup_root_path = str_replace('\\', '/', $setup_project_root);
+    if (str_starts_with($setup_script_file, $setup_root_path . '/')) {
+      $setup_relative_script = substr($setup_script_file, strlen($setup_root_path));
+      if (str_ends_with($setup_script_name, $setup_relative_script)) {
+        $setup_web_base = substr($setup_script_name, 0, -strlen($setup_relative_script));
+        $setup_url = '/' . ltrim($setup_web_base . '/install/', '/');
+      }
+    }
   }
 
-  // User-friendly error page — no sensitive info
-  http_response_code($not_installed ? 200 : 503);
+  // Keep first-run guidance separate from failures on an already configured site.
+  http_response_code($setup_required ? 200 : 503);
   ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><?= $not_installed ? "Star51 — Setup" : "Database Error" ?></title>
+  <title><?= $setup_required ? 'Star51 — Setup' : 'Database Error' ?></title>
   <style>
     body {
       font-family: system-ui, -apple-system, sans-serif;
@@ -130,6 +149,7 @@ try {
       max-width: 400px;
     }
     h1 {
+      color: #dc3545;
       font-size: 1.3rem;
       margin: 0 0 16px;
     }
@@ -138,26 +158,28 @@ try {
       margin: 0;
       line-height: 1.8;
     }
+    .setup-title { color: #333; }
     a { color: #0d6efd; }
   </style>
 </head>
 <body>
   <div class="msg">
-  <?php if ($not_installed): ?>
-    <h1 style="color:#333">Star51 — Setup Required</h1>
-    <p>Welcome!<br>Get started by running the<br><a href="install/">installation wizard</a>.</p>
-  <?php else: ?>
-    <h1 style="color:#dc3545">Database Connection Error</h1>
-    <p>Please check access credentials.</p>
-  <?php endif; ?>
+    <?php if ($setup_required): ?>
+      <h1 class="setup-title">Star51 — Setup Required</h1>
+      <p>Welcome!<br>Get started by running the<br><a href="<?= htmlspecialchars($setup_url, ENT_QUOTES, 'UTF-8') ?>">installation wizard</a>.</p>
+    <?php else: ?>
+      <h1>Database Connection Error</h1>
+      <p>Please check access credentials.</p>
+    <?php endif; ?>
   </div>
 </body>
 </html>
-<?php exit();
+<?php
+  exit();
 }
 
 if ($conn) {
-  mysqli_set_charset($conn, "utf8mb4");
+  mysqli_set_charset($conn, 'utf8mb4');
 }
 
 // ============================================

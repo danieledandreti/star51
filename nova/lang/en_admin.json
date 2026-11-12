@@ -84,9 +84,9 @@
     },
     "search": {
         "articles_placeholder": "Search articles...",
-        "articles_hint": "Search articles by title or summary.",
+        "articles_hint": "Search words in the title, summary or extended text. Terms of 1-2 characters match whole words only.",
         "requests_placeholder": "Search requests...",
-        "requests_hint": "Search requests by name, surname, email or message."
+        "requests_hint": "Search parts of a name, surname, email or message, with no minimum length. All entered words must be present."
     },
     "dashboard": {
         "search_articles": "Search among articles",
@@ -96,6 +96,10 @@
         "articles": "Article(s)",
         "requests": "Request(s)",
         "articles_misc": "Article(s) in Miscellaneous",
+        "overview_list": {
+            "title": "Overview",
+            "articles_misc": "Articles in Miscellaneous"
+        },
         "updated_at": "Updated at",
         "universal_collection": "Universal Collection System"
     },
@@ -124,7 +128,7 @@
         "page": {
             "title": "System Configuration",
             "subtitle": "Star51 global system configuration management",
-            "access": "Access: Super Admin Only",
+            "access": "Super Admin",
             "config_file": "Config file:",
             "back_to_list": "Back to List"
         },
@@ -216,7 +220,7 @@
             "password_new": "New Password",
             "password_new_confirm": "Confirm New Password",
             "help_email": "Email must be unique in the system",
-            "help_password_edit": "Leave empty to keep current password. Minimum 8 characters.",
+            "help_password_edit": "Leave empty to keep current password. Minimum 12 characters.",
             "help_username_readonly": "Username cannot be modified",
             "invalid_first_name": "Enter administrator first name",
             "invalid_last_name": "Enter administrator last name",
@@ -253,7 +257,7 @@
             "email_format": "Invalid email format",
             "email_max": "Email cannot exceed 100 characters",
             "email_exists_other": "Another administrator with this email already exists",
-            "password_min": "Password must be at least 8 characters",
+            "password_min": "Password must be at least 12 characters",
             "password_mismatch": "Passwords do not match",
             "current_password_required": "Current password is required to save changes",
             "current_password_wrong": "Current password is incorrect"
@@ -283,7 +287,7 @@
         "enter_new_password": "Enter your new password.",
         "new_password": "New Password",
         "confirm_password": "Confirm Password",
-        "password_hint": "Minimum 8 characters. Use letters, numbers and symbols.",
+        "password_hint": "Minimum 12 characters. Use letters, numbers and symbols.",
         "update_password": "Update Password",
         "single_use_link": "This link can only be used once. After updating, login with your new password.",
         "strength_very_weak": "Very Weak",
@@ -306,7 +310,7 @@
         "token_missing": "Missing token. Request a new password recovery.",
         "all_fields_required": "All fields are required.",
         "passwords_not_match": "Passwords do not match.",
-        "password_min_length": "Password must be at least 8 characters.",
+        "password_min_length": "Password must be at least 12 characters.",
         "password_update_error": "Error updating password",
         "password_updated": "Password updated successfully! You can now login with your new password.",
         "system_error": "A system error occurred. Please try again later."
@@ -502,7 +506,7 @@
             "no_results": "The search for &quot;<strong>{query}</strong>&quot; did not return any results.",
             "no_results_title": "No results found",
             "no_results_desc": "The search for &quot;<strong>{query}</strong>&quot; produced no results.<br>Try different or more generic keywords.",
-            "min_chars": "Enter at least 3 characters to search."
+            "invalid_query": "Enter at least one word or number to search."
         },
 
         "form": {
@@ -820,7 +824,7 @@
             "no_results": "The search for &quot;<strong>{query}</strong>&quot; returned no results.",
             "no_results_title": "No results found",
             "no_results_desc": "The search for &quot;<strong>{query}</strong>&quot; returned no results.<br>Try different or more generic keywords.",
-            "min_chars": "Please enter at least 3 characters to search."
+            "invalid_query": "Enter at least one letter or number to search."
         },
 
         "confirm": {

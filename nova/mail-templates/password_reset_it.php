@@ -23,10 +23,10 @@ IMPORTANTE:
 - Se non hai richiesto tu questo recupero, ignora questa email
 
 Per sicurezza, ti consigliamo di:
-1. Utilizzare una password robusta (almeno 8 caratteri)
+1. Utilizzare una password robusta (almeno 12 caratteri)
 2. Non condividere mai le tue credenziali
 3. Effettuare il logout quando finisci di lavorare
 
-{site_name} Solo
+{site_name}
 {site_url}
 EOT;
